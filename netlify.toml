@@ -2,3 +2,8 @@
   from = "/*"
   to = "/index.html"
   status = 200
+  
+[[redirects]]
+  from = "/*"
+  to = "https://zaal.no-ip.info:8083/api/$1"
+  status = 301
