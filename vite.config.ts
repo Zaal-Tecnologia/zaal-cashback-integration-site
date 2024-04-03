@@ -12,27 +12,31 @@ const defaultConfig = {
   },
 }
 
-export default defineConfig(({ mode, command }) => {
-  const target =
-    mode === 'development'
-      ? 'http://zaal.no-ip.info:8083'
-      : 'http://zaal.no-ip.info:8083'
-
+export default defineConfig(({ command }) => {
   if (command === 'serve') {
     return {
+      ...defaultConfig,
       server: {
         port: 3000,
         proxy: {
           '/api': {
-            target,
+            target: 'http://zaal.no-ip.info:8083',
             changeOrigin: false,
             secure: false,
           },
         },
       },
-      ...defaultConfig,
     }
   } else {
-    return defaultConfig
+    return {
+      ...defaultConfig,
+      proxy: {
+        '/api': {
+          target: 'http://zaal.no-ip.info:8083',
+          changeOrigin: false,
+          secure: false,
+        },
+      },
+    }
   }
 })
