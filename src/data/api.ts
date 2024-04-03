@@ -6,8 +6,13 @@ export function api(path: string, init?: RequestInit) {
     authorization: authorization ?? '',
   }
 
-  return fetch('/api/v1/'.concat(path), {
-    ...init,
-    headers,
-  })
+  return import.meta.env.MODE === 'development'
+    ? fetch('/api/v1/'.concat(path), {
+        ...init,
+        headers,
+      })
+    : fetch('http://zaal.no-ip.info:8083/api/v1/'.concat(path), {
+        ...init,
+        headers,
+      })
 }

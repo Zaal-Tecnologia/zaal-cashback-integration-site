@@ -9,6 +9,7 @@ import { Input } from '../ui/input'
 
 import { useStep } from '../../contexts/step'
 import { useNavigate } from 'react-router-dom'
+import { api } from '@/data/api'
 
 const FormSchema = z.object({
   usuario: z.string(),
@@ -36,7 +37,7 @@ export function CreateGroupForm() {
   const { isPending, mutate } = useMutation<MutationResponse, FormInput>(
     ['get-token-mutation'],
     async (input) => {
-      const response = await fetch('/api/v1/login/empresa', {
+      const response = await api('login/empresa', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(input),
