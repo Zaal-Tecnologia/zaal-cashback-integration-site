@@ -6,8 +6,13 @@ export function api(path: string, init?: RequestInit) {
     authorization: authorization ?? '',
   }
 
-  return fetch('/api/v1/'.concat(path), {
-    ...init,
-    headers,
-  })
+  return fetch(
+    import.meta.env.MODE === 'development'
+      ? '/api/v1/'.concat(path)
+      : `${import.meta.env.BASE_URL}/v1/`.concat(path),
+    {
+      ...init,
+      headers,
+    },
+  )
 }
