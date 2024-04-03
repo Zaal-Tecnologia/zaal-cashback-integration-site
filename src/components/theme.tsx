@@ -13,7 +13,7 @@ export function Theme() {
   }
 
   return (
-    <button onClick={toggleTheme} className="sm:flex hidden">
+    <button onClick={toggleTheme} className="sm:flex hidden ml-5">
       {theme === 'dark' ? (
         <Moon size={20} weight="duotone" />
       ) : (

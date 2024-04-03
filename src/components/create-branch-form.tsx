@@ -88,7 +88,7 @@ export function CreateBranchForm(props: Props) {
     return json.id
   }
 
-  const { isPending, mutate } = useMutation<unknown, FormInput>(
+  const { isPending } = useMutation<unknown, FormInput>(
     ['create-branch-mutation'],
     async (input) => {
       const code = input.cnpj.replace(/[^\d]/g, '')
@@ -125,9 +125,10 @@ export function CreateBranchForm(props: Props) {
   )
 
   async function onSubmit(input: FormInput) {
-    mutate(input)
+    // mutate(input)
+    console.log(input)
 
-    // props.onEnd()
+    props.onEnd()
   }
 
   function handleSelectImage(e: ChangeEvent<HTMLInputElement>) {

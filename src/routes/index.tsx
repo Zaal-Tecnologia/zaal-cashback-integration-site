@@ -10,7 +10,7 @@ export function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/onboarding" element={<Onboarding />} />
+        <Route path="/" element={<Onboarding />} />
 
         <Route path="/" element={<Layout />}>
           <Route path="/ads" element={<Ads />} />

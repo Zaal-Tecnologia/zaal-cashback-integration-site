@@ -8,6 +8,7 @@ import { useMutation } from '../../hooks/use-mutation'
 import { Input } from '../ui/input'
 
 import { useStep } from '../../contexts/step'
+import { useNavigate } from 'react-router-dom'
 
 const FormSchema = z.object({
   usuario: z.string(),
@@ -22,6 +23,7 @@ interface MutationResponse {
 
 export function CreateGroupForm() {
   const { setStep } = useStep()
+  const navigate = useNavigate()
 
   const { register, handleSubmit } = useForm<FormInput>({
     resolver: zodResolver(FormSchema),
@@ -50,6 +52,7 @@ export function CreateGroupForm() {
 
       return json
     },
+    () => navigate('ads'),
   )
 
   async function onSubmit(input: FormInput) {
@@ -58,7 +61,7 @@ export function CreateGroupForm() {
 
   return (
     <div className="flex items-start flex-col">
-      <p className="text-zinc-700 font-secondary font-medium text-sm">1 de 2</p>
+      <p className="text-zinc-700 font-secondary font-medium text-sm">1 de 1</p>
 
       <div className="mb-10">
         <h1 className="text-[24px] font-bold font-secondary text-zinc-700 -tracking-wide leading-[60px] mt-10">

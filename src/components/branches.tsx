@@ -44,15 +44,16 @@ export function Branches() {
       <SheetTrigger asChild>
         <button
           className={clsx(
-            'flex items-center h-10 px-5 hover:bg-zinc-100 dark:bg-zinc-800 hover:dark:bg-zinc-700 rounded-full',
+            'flex items-center h-8 px-2.5 hover:bg-zinc-100 dark:bg-zinc-800 hover:dark:bg-zinc-700',
             {
-              'border border-zinc-200 dark:border-zinc-700 px-0 pl-1.5 pr-5':
+              'rounded-full bg-zinc-100 dark:bg-zinc-800 px-0 pl-1 pr-5':
                 !!branch,
+              'rounded-md': !branch,
             },
           )}
         >
           {branch && (
-            <span className="sm:flex text-[10px] items-center justify-center flex tracking-wider uppercase h-7 w-7 bg-[#305a96] text-white rounded-full mr-2.5">
+            <span className="sm:flex text-[10px] items-center justify-center flex tracking-wider uppercase h-6 w-6 bg-[#305a96] text-white rounded-full mr-2.5">
               {branch.razao.slice(0, 2)}
             </span>
           )}

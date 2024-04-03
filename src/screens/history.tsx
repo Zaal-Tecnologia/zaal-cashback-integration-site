@@ -1,4 +1,3 @@
-import { VictoryPie } from 'victory'
 import { useToast } from '@/components/ui/use-toast'
 
 import { AdsImage } from '@/components/ads-image'
@@ -32,6 +31,7 @@ import {
 import { DialogClose } from '@radix-ui/react-dialog'
 import { useMutation } from '@/hooks/use-mutation'
 import { client } from '@/App'
+import { Title } from '@/components/title'
 
 export function History() {
   const { branch } = useBranch()
@@ -92,9 +92,7 @@ export function History() {
       className="sm:w-[1120px] sm:mx-auto relative"
     >
       <header className="mt-10 mb-20 flex items-center justify-between">
-        <h3 className="text-2xl font-light text-zinc-700 dark:text-zinc-50">
-          Seu histórico
-        </h3>
+        <Title>Seu histórico</Title>
 
         <span className="text-xs font-semibold font-urbanist text-zinc-700 dark:text-zinc-50">
           {ads?.length}
@@ -102,7 +100,7 @@ export function History() {
       </header>
 
       {isLoading ? (
-        <div className="grid grid-cols-3 gap-x-2 gap-y-2 pb-40 animate-pulse">
+        <div className="grid grid-cols-3 gap-x-5 gap-y-4 pb-40 animate-pulse">
           <div className="group relative h-[355px] w-[355px] bg-zinc-100 dark:bg-zinc-800/50 rounded-md flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
           <div className="group relative h-[355px] w-[355px] bg-zinc-100 dark:bg-zinc-800/50 rounded-md flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
           <div className="group relative h-[355px] w-[355px] bg-zinc-100 dark:bg-zinc-800/50 rounded-md flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
@@ -121,10 +119,8 @@ export function History() {
             >
               <AdsImage adsId={item.id} />
 
-              <div className="group-hover:opacity-100 absolute bottom-0 will-change-transform duration-300 p-5 opacity-0">
-                <span className="text-sm text-zinc-700 dark:text-zinc-50">
-                  {item.conteudo}
-                </span>
+              <div className="bg-zinc-800/20 backdrop-blur-md rounded-b-md w-full group-hover:opacity-100 absolute bottom-0 will-change-transform duration-300 p-5 opacity-0">
+                <span className="text-sm text-zinc-50">{item.conteudo}</span>
               </div>
             </button>
           ))}

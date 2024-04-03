@@ -54,9 +54,13 @@ export function AdsImage(props: Props) {
   // const data = null
 
   return (
-    <div className="relative h-16 rounded-3xl w-16 flex items-center justify-center">
+    <div className="relative h-[350px] w-[350px] rounded-3xl flex items-center justify-center bg-contain">
       {image ? (
-        <img src={`data:image/png;base64, ${image}`} alt="" />
+        <img
+          src={`data:image/png;base64, ${image}`}
+          alt=""
+          className="h-[320px] w-[320px]"
+        />
       ) : (
         <div className="flex flex-col items-center">
           <Images weight="duotone" size={25} />
