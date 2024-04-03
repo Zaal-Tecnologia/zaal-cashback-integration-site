@@ -23,7 +23,7 @@ import { CreateBranchForm } from './create-branch-form'
 export function Branches() {
   const { setBranch, branch } = useBranch()
 
-  const { data } = useQuery<API<BranchDTO>>(
+  const { data, isLoading } = useQuery<API<BranchDTO>>(
     ['get-all-branches-query'],
     async (): Promise<API<BranchDTO>> => {
       const response = await api('filiais')
@@ -38,6 +38,8 @@ export function Branches() {
   )
 
   const [create, setCreate] = useState(false)
+
+  console.log(import.meta.env.MODE)
 
   return (
     <Sheet>
@@ -115,6 +117,18 @@ export function Branches() {
         </div>
 
         <ul data-create={create} className="data-[create=true]:hidden mt-10">
+          {isLoading && (
+            <div className="animate-pulse">
+              <div className="group relative h-14 w-14 mb-5 bg-zinc-100 dark:bg-zinc-800/50 rounded-full flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
+              <div className="group relative h-14 w-14 mb-5 bg-zinc-100 dark:bg-zinc-800/50 rounded-full flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
+              <div className="group relative h-14 w-14 mb-5 bg-zinc-100 dark:bg-zinc-800/50 rounded-full flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
+              <div className="group relative h-14 w-14 mb-5 bg-zinc-100 dark:bg-zinc-800/50 rounded-full flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
+              <div className="group relative h-14 w-14 mb-5 bg-zinc-100 dark:bg-zinc-800/50 rounded-full flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
+
+              <span className="sr-only">Loading...</span>
+            </div>
+          )}
+
           {data ? (
             data.content.map((item) => (
               <li
@@ -137,7 +151,7 @@ export function Branches() {
               </li>
             ))
           ) : (
-            <p>loading</p>
+            <p>lista vazia</p>
           )}
         </ul>
       </SheetContent>
