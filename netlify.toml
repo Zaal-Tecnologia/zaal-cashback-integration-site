@@ -2,8 +2,11 @@
   from = "/*"
   to = "/index.html"
   status = 200
-  
+
 [[redirects]]
-  from = "/*"
+  from = "/api"
   to = "https://zaal.no-ip.info:8083/api/$1"
-  status = 301
+  status = 200
+  force = true
+  headers = {X-From = "Netlify"}
+  signed = "API_SIGNATURE_TOKEN"
