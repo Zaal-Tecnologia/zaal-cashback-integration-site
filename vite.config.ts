@@ -12,31 +12,21 @@ const defaultConfig = {
   },
 }
 
-export default defineConfig(({ command }) => {
-  if (command === 'serve') {
-    return {
-      ...defaultConfig,
-      server: {
-        port: 3000,
-        proxy: {
-          '/api': {
-            target: 'http://zaal.no-ip.info:8083',
-            changeOrigin: false,
-            secure: false,
-          },
-        },
-      },
-    }
-  } else {
-    return {
-      ...defaultConfig,
+export default defineConfig(({ mode }) => {
+  return {
+    ...defaultConfig,
+    server: {
+      port: 3000,
       proxy: {
         '/api': {
-          target: 'http://zaal.no-ip.info:8083',
+          target:
+            mode === 'development'
+              ? 'http://zaal.no-ip.info:8083/api/'
+              : 'https://test-cashback.netlify.app/api/',
           changeOrigin: false,
-          secure: false,
+          rewrite: (path) => path.replace(/^\/api/, ''),
         },
       },
-    }
+    },
   }
 })
