@@ -101,11 +101,11 @@ export function History() {
 
       {isLoading ? (
         <div className="grid grid-cols-3 gap-x-5 gap-y-4 pb-40 animate-pulse">
-          <div className="group relative h-[355px] w-[355px] bg-zinc-100 dark:bg-zinc-800/50 rounded-md flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
-          <div className="group relative h-[355px] w-[355px] bg-zinc-100 dark:bg-zinc-800/50 rounded-md flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
-          <div className="group relative h-[355px] w-[355px] bg-zinc-100 dark:bg-zinc-800/50 rounded-md flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
-          <div className="group relative h-[355px] w-[355px] bg-zinc-100 dark:bg-zinc-800/50 rounded-md flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
-          <div className="group relative h-[355px] w-[355px] bg-zinc-100 dark:bg-zinc-800/50 rounded-md flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
+          <div className="group relative h-[355px] w-[355px] bg-zinc-100 dark:bg-zinc-700/50 rounded-md flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
+          <div className="group relative h-[355px] w-[355px] bg-zinc-100 dark:bg-zinc-700/50 rounded-md flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
+          <div className="group relative h-[355px] w-[355px] bg-zinc-100 dark:bg-zinc-700/50 rounded-md flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
+          <div className="group relative h-[355px] w-[355px] bg-zinc-100 dark:bg-zinc-700/50 rounded-md flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
+          <div className="group relative h-[355px] w-[355px] bg-zinc-100 dark:bg-zinc-700/50 rounded-md flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
 
           <span className="sr-only">Loading...</span>
         </div>
@@ -115,7 +115,7 @@ export function History() {
             <button
               key={item.id}
               onClick={() => setSelectedAds(item)}
-              className="group relative h-[365px] w-[365px] bg-zinc-100 dark:bg-zinc-800/50 rounded-md flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"
+              className="group relative h-[365px] w-[365px] bg-zinc-100 dark:bg-zinc-700/50 rounded-md flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"
             >
               <AdsImage adsId={item.id} />
 

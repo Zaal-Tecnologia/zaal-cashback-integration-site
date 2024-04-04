@@ -9,7 +9,7 @@ export function Auth() {
   const { step } = useStep()
 
   return (
-    <div className="w-[560px] flex flex-col items-center shadow-md justify-center min-h-screen h-auto border-x border-zinc-200 bg-white">
+    <div className="w-[560px] flex flex-col items-center shadow-md justify-center min-h-screen h-auto border-x border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-800">
       {COMPONENTS[step]}
     </div>
   )

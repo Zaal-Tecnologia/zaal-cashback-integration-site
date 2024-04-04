@@ -3,7 +3,7 @@ import { useState } from 'react'
 
 export function Theme() {
   const [theme, setTheme] = useState(
-    window.localStorage.getItem('@zaal-cashback:theme') || 'light',
+    window.localStorage.getItem('@zaalcashback:theme') || 'light',
   )
 
   function toggleTheme() {
@@ -13,12 +13,16 @@ export function Theme() {
   }
 
   return (
-    <button onClick={toggleTheme} className="sm:flex hidden ml-5">
+    <button
+      onClick={toggleTheme}
+      className="sm:flex min-h-28 items-start bg-zinc-50 rounded-md p-7 dark:bg-zinc-700/40 hidden flex-col justify-between"
+    >
       {theme === 'dark' ? (
-        <Moon size={20} weight="duotone" />
+        <Moon size={24} weight="duotone" />
       ) : (
-        <Sun size={20} weight="duotone" />
+        <Sun size={24} weight="duotone" />
       )}
+      <span className="text-[12px]">TROCAR TEMA</span>
     </button>
   )
 }

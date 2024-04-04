@@ -303,12 +303,12 @@ export function Ads() {
 
             <AccordionContent>
               <div className="grid grid-cols-2 gap-5 px-2.5">
-                <div className="col-span-2 flex items-center justify-between bg-zinc-50 p-5 rounded-md">
+                <div className="col-span-2 flex items-center justify-between bg-zinc-50 p-5 rounded-md dark:bg-zinc-700/50">
                   <div className="flex flex-col">
                     <span className="font-medium text-[13px]">
                       Desconto em porcentagem
                     </span>
-                    <span className="text-[11px] text-zinc-500 font-medium">
+                    <span className="text-[11px] text-zinc-500 font-medium dark:text-zinc-400">
                       Ao fazer isso o valor do desconto vai ser feito por
                       porcentagem
                     </span>
@@ -383,12 +383,12 @@ export function Ads() {
 
             <AccordionContent>
               <div className="grid grid-cols-2 gap-5 px-2.5">
-                <div className="col-span-2 flex items-center justify-between bg-zinc-50 p-5 rounded-md">
+                <div className="col-span-2 flex items-center justify-between bg-zinc-50 p-5 rounded-md dark:bg-zinc-700/50">
                   <div className="flex flex-col">
                     <span className="font-medium text-[13px]">
                       Começar hoje
                     </span>
-                    <span className="text-[11px] text-zinc-500 font-medium">
+                    <span className="text-[11px] text-zinc-500 font-medium dark:text-zinc-400">
                       Começar a promoção a partir de hoje
                     </span>
                   </div>

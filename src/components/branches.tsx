@@ -90,7 +90,7 @@ export function Branches() {
           <button
             onClick={() => setCreate(false)}
             data-create={create}
-            className="data-[create=true]:flex hidden h-14 rounded-full w-14 justify-center border border-zinc-200 items-center cursor-pointer"
+            className="data-[create=true]:flex hidden h-14 rounded-full w-14 justify-center border border-zinc-200 items-center cursor-pointer dark:border-zinc-700"
           >
             <X weight="bold" size={18} />
           </button>

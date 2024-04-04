@@ -7,6 +7,7 @@ import { History } from '@/screens/history'
 import { Layout } from '@/components/layout'
 import { NotFound } from '@/screens/not-found'
 import { Protected } from '@/components/protected'
+import { Profile } from '@/screens/profile'
 
 export function AppRouter() {
   return (
@@ -30,6 +31,15 @@ export function AppRouter() {
             element={
               <Protected to="/">
                 <History />
+              </Protected>
+            }
+          />
+
+          <Route
+            path="/profile"
+            element={
+              <Protected to="/">
+                <Profile />
               </Protected>
             }
           />

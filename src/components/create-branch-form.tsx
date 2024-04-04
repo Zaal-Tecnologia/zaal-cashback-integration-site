@@ -159,7 +159,7 @@ export function CreateBranchForm(props: Props) {
           <Input.Label>Logo</Input.Label>
           <div
             className={clsx(
-              'relative rounded-md p-2.5 mb-5 flex items-center gap-5 border border-dashed',
+              'relative rounded-md p-2.5 mb-5 flex items-center gap-5 border border-dashed dark:bg-zinc-800/50',
               {
                 'bg-zinc-50': !image,
                 'border-green-500 bg-green-200/50': image,
@@ -176,7 +176,7 @@ export function CreateBranchForm(props: Props) {
               className={clsx(
                 'rounded-md h-[50px] w-[50px] flex items-center justify-center',
                 {
-                  'bg-zinc-200 shadow-inner': !image,
+                  'bg-zinc-200 dark:bg-zinc-700 shadow-inner': !image,
                 },
               )}
             >
@@ -191,7 +191,7 @@ export function CreateBranchForm(props: Props) {
               <p
                 className={clsx('text-green-700 font-medium text-xs', {
                   'text-green-500': image,
-                  'text-zinc-900': !image,
+                  'text-zinc-900 dark:text-white': !image,
                 })}
               >
                 {image

@@ -29,9 +29,12 @@ export function CreateGroupForm() {
   const navigate = useNavigate()
   const { toast } = useToast()
 
+  const name = localStorage.getItem('@zaalcashback:group-name')
+
   const { register, handleSubmit } = useForm<FormInput>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
+      name: name || '',
       usuario: '101',
       senha: 'HSH501BY17',
     },
@@ -75,14 +78,16 @@ export function CreateGroupForm() {
 
   return (
     <div className="flex items-start flex-col">
-      <p className="text-zinc-700 font-secondary font-medium text-sm">1 de 1</p>
+      <p className="font-secondary font-medium text-sm">1 de 1</p>
 
       <div className="mb-10">
-        <h1 className="text-[24px] font-bold font-secondary text-zinc-700 -tracking-wide leading-[60px] mt-10">
+        <h1 className="text-[24px] font-bold font-secondary -tracking-wide leading-[60px] mt-10">
           Faça seu login
         </h1>
 
-        <p className="text-zinc-700 text-sm">Preencha o formulário abaixo</p>
+        <p className="text-sm text-zinc-700 dark:text-zinc-300">
+          Preencha o formulário abaixo
+        </p>
       </div>
 
       <form action="" className="gap-5 flex flex-col">

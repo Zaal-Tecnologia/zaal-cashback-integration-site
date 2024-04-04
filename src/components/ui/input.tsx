@@ -37,7 +37,7 @@ const Write = forwardRef<ElementRef<'input'>, ComponentProps<'input'>>(
       <input
         ref={ref}
         type="text"
-        className="text-[13px] focus:outline-none w-full flex bg-zinc-100/30 dark:bg-zinc-800/50 dark:border-zinc-700/50 h-12 border focus:border-[#305a96] focus:ring-2 focus:ring-blue-300/50 rounded-md px-2.5"
+        className="text-[13px] focus:outline-none w-full flex bg-zinc-100/30 dark:bg-zinc-700/50 dark:border-zinc-600/50 h-12 border focus:border-[#305a96] focus:ring-2 focus:ring-blue-300/50 rounded-md px-2.5"
         {...props}
       />
     )
@@ -49,7 +49,7 @@ const Area = forwardRef<ElementRef<'textarea'>, ComponentProps<'textarea'>>(
     return (
       <textarea
         ref={ref}
-        className="resize-none h-32 text-[13px] focus:outline-none w-full flex bg-zinc-100/30 dark:bg-zinc-800/50 dark:border-zinc-700/50 border focus:border-blue-500 focus:ring-2 focus:ring-blue-200/50 rounded-md p-2.5"
+        className="resize-none h-32 text-[13px] focus:outline-none w-full flex bg-zinc-100/30 dark:bg-zinc-700/50 dark:border-zinc-600/50 border focus:border-blue-500 focus:ring-2 focus:ring-blue-200/50 rounded-md p-2.5"
         {...props}
       />
     )
@@ -62,7 +62,7 @@ const Mask = forwardRef<
 >((props, ref) => (
   <InputMask
     ref={ref}
-    className="text-[13px] focus:outline-none w-full flex bg-zinc-100/30 h-12 dark:bg-zinc-800/50 dark:border-zinc-700/50 border focus:border-blue-500 focus:ring-2 focus:ring-blue-200/50 rounded-md px-2.5"
+    className="text-[13px] focus:outline-none w-full flex bg-zinc-100/30 h-12 dark:bg-zinc-700/50 dark:border-zinc-600/50 border focus:border-blue-500 focus:ring-2 focus:ring-blue-200/50 rounded-md px-2.5"
     maskChar="_"
     {...props}
   />

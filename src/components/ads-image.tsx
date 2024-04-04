@@ -59,7 +59,7 @@ export function AdsImage(props: Props) {
         <img
           src={`data:image/png;base64, ${image}`}
           alt=""
-          className="h-[320px] w-[320px]"
+          className="h-[320px] w-[320px] rounded"
         />
       ) : (
         <div className="flex flex-col items-center">

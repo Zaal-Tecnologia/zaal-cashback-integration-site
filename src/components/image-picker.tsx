@@ -18,7 +18,7 @@ export function ImagePicker({ image, onSelect }: Props) {
   return (
     <div className="relative">
       <div className="flex sm:flex-wrap items-start sm:items-center sticky top-10 gap-2.5">
-        <div className="group relative hover:bg-zinc-200/50 transition-all duration-300 items-center justify-center flex border-dashed h-[300px] sm:h-[500px] w-[300px] sm:w-[500px] bg-zinc-50 dark:bg-zinc-800/50 dark:border-zinc-700/50 rounded-md border border-zinc-200">
+        <div className="group relative hover:bg-zinc-200/50 transition-all duration-300 items-center justify-center flex border-dashed h-[300px] sm:h-[500px] w-[300px] sm:w-[500px] bg-zinc-50 dark:bg-zinc-700/50 dark:border-zinc-600/50 rounded-md border border-zinc-200">
           {image ? (
             <>
               <div className="flex flex-col items-center absolute top-0 -right-12 gap-y-1.5">
@@ -59,8 +59,8 @@ export function ImagePicker({ image, onSelect }: Props) {
             <div className="flex flex-col items-center">
               <p className="text-xs">Imagem JPG com 400x400</p>
 
-              <div className="bg-white h-10 pl-1 pr-10 flex items-center justify-center rounded-full absolute bottom-0 group-hover:visible group-hover:opacity-1 group-hover:-translate-y-10 duration-300 invisible text-xs">
-                <div className="h-8 w-8 flex items-center justify-center bg-zinc-200 rounded-full mr-2.5">
+              <div className="bg-white dark:bg-zinc-900 h-10 pl-1 pr-10 flex items-center justify-center rounded-full absolute bottom-0 group-hover:visible group-hover:opacity-1 group-hover:-translate-y-10 duration-300 invisible text-xs">
+                <div className="h-8 w-8 flex items-center justify-center bg-zinc-200 dark:bg-zinc-800 rounded-full mr-2.5">
                   <Camera size={14} weight="bold" />
                 </div>
                 <p>Escolha uma imagem da sua galeria.</p>
