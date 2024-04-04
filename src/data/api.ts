@@ -3,6 +3,7 @@ export function api(path: string, init?: RequestInit) {
 
   const headers = {
     ...init?.headers,
+    'Access-Control-Allow-Origin': 'no-cors',
     authorization: authorization ?? '',
   }
 
