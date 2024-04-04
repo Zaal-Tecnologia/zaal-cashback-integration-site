@@ -3,7 +3,7 @@ export function api(path: string, init?: RequestInit) {
 
   const headers = {
     ...init?.headers,
-    // 'Access-Control-Allow-Origin': 'no-cors',
+    'Access-Control-Allow-Origin': 'cors',
     authorization: authorization ?? '',
   }
 
@@ -14,7 +14,7 @@ export function api(path: string, init?: RequestInit) {
         ...init,
         headers,
       })
-    : fetch('https://1290-200-164-236-60.ngrok-free.app/api/v1/'.concat(path), {
+    : fetch('/api/v1/'.concat(path), {
         ...init,
         headers,
       })
