@@ -171,11 +171,7 @@ export function Ads() {
     },
   )
 
-  console.log(formState.errors)
-
   async function onSubmit(input: FormData) {
-    console.log(input)
-
     mutate({
       ...(input as FormData),
       filialCnpj: branch?.cnpj,
@@ -203,6 +199,30 @@ export function Ads() {
             Ainda existem 4 anúncios disponíveis para {branch?.razao}
           </span>
         ) : null}
+
+        {/** <button
+          onClick={() =>
+            toast({
+              title: 'Toast',
+              description: 'toast description here',
+              variant: 'success',
+            })
+          }
+        >
+          success toast
+        </button>
+
+        <button
+          onClick={() =>
+            toast({
+              title: 'Toast',
+              description: 'toast description here',
+              variant: 'error',
+            })
+          }
+        >
+          error toast
+        </button> */}
       </div>
 
       <ImagePicker image={image} onSelect={onSelect} />

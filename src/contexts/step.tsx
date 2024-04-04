@@ -9,9 +9,11 @@ const StepContext = createContext({} as StepContextData)
 
 export function StepProvider({ children }: { children: ReactNode }) {
   const [step, setStep] = useState(() => {
-    const storage = localStorage.getItem('@zaalcashback:token')
+    // const storage = localStorage.getItem('@zaalcashback:token')
 
-    return !storage ? 0 : 1
+    // return !storage ? 0 : 1
+
+    return 0
   })
 
   return (

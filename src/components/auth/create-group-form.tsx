@@ -10,6 +10,7 @@ import { Input } from '../ui/input'
 import { useStep } from '../../contexts/step'
 import { useNavigate } from 'react-router-dom'
 import { api } from '@/data/api'
+import { useToast } from '../ui/use-toast'
 
 const FormSchema = z.object({
   usuario: z.string(),
@@ -25,6 +26,7 @@ interface MutationResponse {
 export function CreateGroupForm() {
   const { setStep } = useStep()
   const navigate = useNavigate()
+  const { toast } = useToast()
 
   const { register, handleSubmit } = useForm<FormInput>({
     resolver: zodResolver(FormSchema),
@@ -43,7 +45,15 @@ export function CreateGroupForm() {
         body: JSON.stringify(input),
       })
 
-      if (!response.ok) console.log(response.status)
+      if (!response.ok) {
+        toast({
+          variant: 'error',
+          title: 'Ocorreu um erro.',
+          description: 'Tivemos um problema com o seu login' + response.status,
+        })
+
+        return
+      }
 
       const json = await response.json()
 
