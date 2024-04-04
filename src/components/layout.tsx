@@ -4,10 +4,15 @@ import { Plus } from '@phosphor-icons/react'
 import { white } from 'tailwindcss/colors'
 import clsx from 'clsx'
 import { useEffect, useRef } from 'react'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 
 import { Toaster } from '@/components/ui/toaster'
 
-import { Theme } from './theme'
 import { Branches } from './branches'
 
 const MESSAGE = {
@@ -62,11 +67,11 @@ export function Layout() {
             </span>
           </div>
 
-          <nav className="flex items-center space-x-5">
+          <nav className="flex items-center">
             <Link
               to="/history"
               className={clsx(
-                'flex items-center h-8 px-2.5 hover:bg-zinc-100 dark:bg-zinc-800 hover:dark:bg-zinc-700 rounded-md',
+                'flex items-center mr-2.5 h-8 px-2.5 hover:bg-zinc-100 dark:bg-zinc-800 hover:dark:bg-zinc-700 rounded-md',
                 {
                   'bg-zinc-100 dark:bg-zinc-800': path === 'history',
                 },
@@ -86,7 +91,23 @@ export function Layout() {
               </div>
             </Link>
 
-            <Theme />
+            {/** <Theme /> */}
+
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Link
+                    to="/profile"
+                    className="ml-7 h-8 w-8 hover:opacity-90 border-2 border-[#305a96] rounded-full flex items-center justify-center"
+                  >
+                    <span className="text-xs text-zinc-800 font-medium">A</span>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="text-xs">Andres dos Santos</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </nav>
         </div>
       </header>

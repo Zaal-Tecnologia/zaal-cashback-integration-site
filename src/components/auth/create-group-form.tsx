@@ -14,6 +14,7 @@ import { useToast } from '../ui/use-toast'
 
 const FormSchema = z.object({
   usuario: z.string(),
+  name: z.string(),
   senha: z.string(),
 })
 
@@ -67,6 +68,8 @@ export function CreateGroupForm() {
   )
 
   async function onSubmit(input: FormInput) {
+    localStorage.setItem('@zaalcashback:group-name', input.name)
+
     mutate(input)
   }
 
@@ -83,6 +86,11 @@ export function CreateGroupForm() {
       </div>
 
       <form action="" className="gap-5 flex flex-col">
+        <Input.Root>
+          <Input.Label>Nome do grupo</Input.Label>
+          <Input.Write placeholder="Nome do grupo" {...register('name')} />
+        </Input.Root>
+
         <Input.Root>
           <Input.Label>Código</Input.Label>
           <Input.Write placeholder="Seu código" {...register('usuario')} />

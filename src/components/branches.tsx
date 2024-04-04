@@ -39,14 +39,12 @@ export function Branches() {
 
   const [create, setCreate] = useState(false)
 
-  console.log(import.meta.env.MODE)
-
   return (
     <Sheet>
       <SheetTrigger asChild>
         <button
           className={clsx(
-            'flex items-center h-8 px-2.5 hover:bg-zinc-100 dark:bg-zinc-800 hover:dark:bg-zinc-700',
+            'flex items-center h-8 px-2.5 mr-2.5 hover:bg-zinc-100 dark:bg-zinc-800 hover:dark:bg-zinc-700',
             {
               'rounded-full bg-zinc-100 dark:bg-zinc-800 px-0 pl-1 pr-5':
                 !!branch,

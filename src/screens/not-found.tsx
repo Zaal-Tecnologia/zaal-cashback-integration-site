@@ -1,3 +1,4 @@
+import { Headphones } from '@phosphor-icons/react'
 import { Link } from 'react-router-dom'
 
 export function NotFound() {
@@ -13,14 +14,23 @@ export function NotFound() {
         Página não encontrada, volte para um lugar seguro.
       </span>
 
-      <Link
-        to="/history"
-        className="h-10 bg-[#305a96] flex items-center justify-center rounded-full px-10 ring-4 ring-[#305a96]/50"
-      >
-        <span className="text-[13px] text-white -tracking-wide">
-          Sair daqui
-        </span>
-      </Link>
+      <div className="flex items-center gap-x-10">
+        <Link
+          to="/history"
+          className="h-10 bg-[#305a96] flex items-center justify-center rounded-full px-10 ring-4 ring-[#305a96]/50"
+        >
+          <span className="text-[13px] text-white -tracking-wide">
+            Sair daqui
+          </span>
+        </Link>
+
+        <button className="flex items-center gap-x-2">
+          <Headphones weight="bold" />
+          <span className="text-[13px] -tracking-wide text-zinc-700 font-medium">
+            Entrar em contato com suporte
+          </span>
+        </button>
+      </div>
     </div>
   )
 }
