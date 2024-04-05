@@ -16,6 +16,7 @@ export function api(path: string, init?: RequestInit) {
 
   return fetch(BASE_URL.concat(path), {
     ...init,
+    mode: 'no-cors',
     headers,
     referrerPolicy: 'no-referrer',
   })
