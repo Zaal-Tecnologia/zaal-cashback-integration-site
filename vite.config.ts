@@ -12,14 +12,14 @@ const defaultConfig = {
 }
 
 export default defineConfig(({ mode }) => {
-  process.env = { ...process.env, ...loadEnv(mode, process.cwd()) }
+  const env = loadEnv(mode, process.cwd(), '')
 
   return {
     ...defaultConfig,
     server: {
       proxy: {
         '/api': {
-          target: process.env.VITE_BASE_URL,
+          target: env.VITE_BASE_URL,
           changeOrigin: true,
           secure: false,
           rewrite: (p) => p.replace(/^\/api/, ''),
@@ -30,7 +30,7 @@ export default defineConfig(({ mode }) => {
     preview: {
       proxy: {
         '/api': {
-          target: process.env.VITE_BASE_URL,
+          target: env.VITE_BASE_URL,
           changeOrigin: true,
           secure: false,
           rewrite: (p) => p.replace(/^\/api/, ''),
