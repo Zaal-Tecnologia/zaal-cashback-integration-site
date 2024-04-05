@@ -30,7 +30,7 @@ export default defineConfig(({ mode }) => {
     preview: {
       proxy: {
         '/api': {
-          target: env.VITE_PROD_URL,
+          target: env.VITE_BASE_URL,
           changeOrigin: true,
           secure: false,
           rewrite: (p) => p.replace(/^\/api/, ''),
