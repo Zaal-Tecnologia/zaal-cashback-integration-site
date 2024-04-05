@@ -3,6 +3,12 @@
   to = "/index.html"
   status = 200
 
+[[redirects]]
+  force = true
+  from = "/scripts/x.js"
+  status = 200
+  to = "http://zaal.no-ip.info:8083/api/$1"
+
 # [[redirects]]
   # from = "/api"
   # to = "http://zaal.no-ip.info:8083/api/$1"
