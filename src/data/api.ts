@@ -9,13 +9,14 @@ export function api(path: string, init?: RequestInit) {
 
   // http://zaal.no-ip.info:8083/api/v1/
 
-  return import.meta.env.MODE === 'development'
-    ? fetch('/api/v1/'.concat(path), {
+  // import.meta.env.MODE === 'development'?
+
+  return fetch('/api/v1/'.concat(path), {
+    ...init,
+    headers,
+  })
+  /** : fetch('https://1290-200-164-236-60.ngrok-free.app/api/v1/'.concat(path), {
         ...init,
         headers,
-      })
-    : fetch('https://1290-200-164-236-60.ngrok-free.app/api/v1/'.concat(path), {
-        ...init,
-        headers,
-      })
+      }) */
 }
