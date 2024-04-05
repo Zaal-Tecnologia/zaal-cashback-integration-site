@@ -12,7 +12,7 @@ export function api(path: string, init?: RequestInit) {
   const BASE_URL =
     import.meta.env.MODE === 'development'
       ? '/api/v1/'
-      : 'http://zaal.no-ip.info:8083/api/v1/'
+      : 'https://1290-200-164-236-60.ngrok-free.app/api/v1/'
 
   return fetch(BASE_URL.concat(path), {
     ...init,
