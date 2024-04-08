@@ -3,7 +3,7 @@
   to = "/index.html"
   status = 200
 
-[redirects]
+[[redirects]]
   # Redireciona todas as solicitações para o backend Ngrok
   /* = "https://1290-200-164-236-60.ngrok-free.app/api/v1/"
 
