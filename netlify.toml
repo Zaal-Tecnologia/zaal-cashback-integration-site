@@ -1,13 +1,8 @@
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
+  from = "/api/*"
+  to = "https://1290-200-164-236-60.ngrok-free.app/api:splat"
   status = 200
-
-[[redirects]]
-  # Redireciona todas as solicitações para o backend Ngrok
-  /* = "https://1290-200-164-236-60.ngrok-free.app/api/v1/"
-
-
+  force = true
 
 [[headers]]
   for = "/*"
