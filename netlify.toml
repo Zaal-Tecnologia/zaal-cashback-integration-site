@@ -4,8 +4,8 @@
   status = 200
 
 [[redirects]]
-  from = "https://zaalcashback.netlify.app/"
-  to = "http://zaal.no-ip.info:8083/:splat"
+  from = "https://zaalcashback.netlify.app/api/v1/"
+  to = "http://zaal.no-ip.info:8083/api/v1/:splat"
   status = 200
   force = true
 
