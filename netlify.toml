@@ -5,7 +5,8 @@
 
 [[redirects]]
   from = "/api/*"
-  to = "http://zaal.no-ip.info:8083/:splat"
+  # to = "http://zaal.no-ip.info:8083/:splat"
+  to = "https://1290-200-164-236-60.ngrok-free.app/:splat"
   status = 200
   force = true
 
