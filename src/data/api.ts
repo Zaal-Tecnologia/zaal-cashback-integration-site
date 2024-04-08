@@ -7,7 +7,8 @@ export function api(path: string, init?: RequestInit) {
     Authorization: authorization ?? '',
   }
 
-  const BASE_URL = '/api/v1/'
+  const BASE_URL =
+    import.meta.env.MODE === 'development' ? '/api/v1/' : 'api/v1/'
   /** const BASE_URL =
     import.meta.env.MODE === 'development'
       ? '/api/v1/'
