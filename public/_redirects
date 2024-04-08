@@ -1,0 +1,2 @@
+/api/* http://zaal.no-ip.info:8083/:splat 200
+/* /index.html 200
