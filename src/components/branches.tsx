@@ -29,6 +29,7 @@ export function Branches() {
   )
 
   const [create, setCreate] = useState(false)
+  console.log(create)
 
   return (
     <div className="overflow-hidden col-span-3 border-r border-zinc-200 flex flex-col px-8 pt-10">
