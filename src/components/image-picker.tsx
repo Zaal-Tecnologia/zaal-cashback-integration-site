@@ -18,7 +18,7 @@ export function ImagePicker({ image, onSelect }: Props) {
   return (
     <div className="relative">
       <div className="flex sm:flex-wrap items-start sm:items-center sticky top-10 gap-2.5">
-        <div className="group relative hover:bg-zinc-200/50 transition-all duration-300 items-center justify-center flex border-dashed h-[300px] sm:h-[500px] w-[300px] sm:w-[500px] bg-zinc-50 dark:bg-zinc-700/50 dark:border-zinc-600/50 rounded-md border border-zinc-200">
+        <div className="group relative hover:bg-zinc-200/50 transition-all duration-300 items-center justify-center flex min-w-full border-dashed h-[300px] sm:h-[500px] w-[300px] sm:w-[500px] bg-zinc-50 dark:bg-zinc-700/50 dark:border-zinc-600/50 rounded-md border border-zinc-200">
           {image ? (
             <>
               <div className="flex flex-col items-center absolute top-0 -right-12 gap-y-1.5">
@@ -51,7 +51,7 @@ export function ImagePicker({ image, onSelect }: Props) {
                 <img
                   src={image.base64}
                   alt=""
-                  className="w-[440px] h-[440px] rounded-md"
+                  className="w-[480px] h-[480px] rounded-md"
                 />
               )}
             </>

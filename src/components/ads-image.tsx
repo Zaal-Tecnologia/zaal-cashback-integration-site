@@ -5,9 +5,11 @@ import { useToast } from './ui/use-toast'
 import { useQuery } from '@/hooks/use-query'
 
 import { useImage } from '@/contexts/image'
+// import { AdsDTO } from '@/@types/dto/ads-dto'
 
 interface Props {
   adsId: number
+  onSelectAds(src: string): void
 }
 
 export function AdsImage(props: Props) {
@@ -43,13 +45,16 @@ export function AdsImage(props: Props) {
   )
 
   return data ? (
-    <img
-      className="ring-2 ring-zinc-200 rounded-md"
-      // src={`data:image/png;base64, ${image}`}
-      src={URL.createObjectURL(data as Blob)}
-      alt=""
-    />
+    <button
+      onClick={() => props.onSelectAds(URL.createObjectURL(data as Blob))}
+    >
+      <img
+        className="ring-2 ring-zinc-200 rounded-md"
+        src={URL.createObjectURL(data as Blob)}
+        alt=""
+      />
+    </button>
   ) : (
-    <div className="min-h-[160px] min-w-[160px] bg-zinc-100 dark:bg-zinc-700/50 rounded-md"></div>
+    <div className="min-h-[320px] min-w-[320px] bg-zinc-100 dark:bg-zinc-700/50 rounded-md"></div>
   )
 }

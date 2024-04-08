@@ -36,9 +36,14 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { useUpdateForm } from '@/hooks/use-update-form'
+
+import { useNavigate } from 'react-router-dom'
 
 export function History() {
   const { branch } = useBranch()
+  const navigate = useNavigate()
+  const { setForm } = useUpdateForm()
 
   const { data: ads, isLoading } = useQuery<AdsDTO[]>(
     ['get-ads-by-branch-id-query', String(branch?.id)],
@@ -56,7 +61,9 @@ export function History() {
     }, */
   )
 
-  const [selectedAds, setSelectedAds] = useState<AdsDTO | null>(null)
+  const [selectedAds, setSelectedAds] = useState<
+    (AdsDTO & { src: string }) | null
+  >(null)
 
   const handleCloseModal = useCallback(() => {
     setSelectedAds(null)
@@ -67,6 +74,19 @@ export function History() {
   const handleCloseLightbox = useCallback(() => {
     setOpenLightbox(false)
   }, [])
+
+  const handleGetDefaultValuesToUpdateForm = useCallback(() => {
+    const [day, month, year] = selectedAds
+      ? selectedAds.validade.split('-')
+      : []
+
+    setForm({
+      ...selectedAds!,
+      validade: `${year}-${month}-${day}`,
+    })
+
+    navigate('/ads', { replace: true })
+  }, [navigate, selectedAds, setForm])
 
   return (
     <motion.div
@@ -118,10 +138,13 @@ export function History() {
             {ads.map((item) => (
               <li
                 key={item.id}
-                onClick={() => setSelectedAds(item)}
-                className="cursor-pointer first:col-span-2 first:row-span-2"
+                // onClick={() => setSelectedAds(item)}
+                className="cursor-pointer first:col-span-2 first:row-span-2 first:h-full first:w-full first:min-h-[330px] first:min-w-[320px]"
               >
-                <AdsImage adsId={item.id} />
+                <AdsImage
+                  adsId={item.id}
+                  onSelectAds={(src) => setSelectedAds({ ...item, src })}
+                />
               </li>
             ))}
           </ul>
@@ -155,7 +178,7 @@ export function History() {
                     <Tooltip>
                       <TooltipTrigger>
                         <button
-                          onClick={() => setOpenLightbox(true)}
+                          onClick={handleGetDefaultValuesToUpdateForm}
                           className="h-12 w-12 rounded-full hover:bg-zinc-200/50 flex items-center justify-center translate-all duration-300 font-urbanist"
                         >
                           <Pencil

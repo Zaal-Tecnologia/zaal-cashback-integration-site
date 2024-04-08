@@ -25,6 +25,7 @@ import {
 } from '@/components/ui/sheet'
 import { DeviceMockup } from '@/components/device-mockup'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { useUpdateForm } from '@/hooks/use-update-form'
 
 const FormSchema = z.object({
   ativo: z.boolean().default(true),
@@ -80,10 +81,11 @@ const FormSchema = z.object({
   }),
 })
 
-type FormData = z.input<typeof FormSchema>
+export type FormData = z.input<typeof FormSchema>
 
 export function Ads() {
   const { branch } = useBranch()
+  const { form, setForm } = useUpdateForm()
   const { toast } = useToast()
 
   const [image, setImage] = useState<Image | null>(null)
@@ -91,7 +93,11 @@ export function Ads() {
   const { register, handleSubmit, formState, reset, setValue, watch } =
     useForm<FormData>({
       resolver: zodResolver(FormSchema),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      defaultValues: form as any,
     })
+
+  const isUpdate = !!form
 
   const onSelect = useCallback(
     (e: ChangeEvent<HTMLInputElement> | null) => {
@@ -112,13 +118,7 @@ export function Ads() {
       const size = file.size
       const lastModified = file.lastModified
 
-      setImage({
-        name,
-        type,
-        size,
-        lastModified,
-        base64: '',
-      })
+      setImage({ name, type, size, lastModified, base64: '' })
 
       const reader = new FileReader()
 
@@ -193,7 +193,7 @@ export function Ads() {
       <header className="mb-20 flex items-center justify-between w-full">
         <div className="flex items-center">
           <span className="text-sm group-hover:translate-x-2 font-medium transition-transform duration-300">
-            CRIAR ANÚNCIO
+            {isUpdate ? 'ATUALIZAR ANÚNCIO' : 'CRIAR ANÚNCIO'}
           </span>
           <div className="h-5 mx-5 w-[1px] bg-zinc-200" />
           <span className="text-sm text-zinc-500">
@@ -225,29 +225,57 @@ export function Ads() {
         className="flex flex-col space-y-8 relative w-full"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className="flex items-center space-x-2">
-          <div className="flex items-center bg-[#305a96] border border-[#305a96] rounded-full h-8 pl-[3px] pr-5">
-            <div className="h-6 w-6 bg-white flex items-center justify-center rounded-full mr-2.5">
-              <span className="text-[12px] text-[#305a96] font-bold font-urbanist">
-                1
-              </span>
+        {isUpdate && (
+          <div className="grid grid-cols-2 gap-5 px-2.5">
+            <div className="col-span-2 flex items-center justify-between bg-zinc-100 p-5 rounded-md dark:bg-zinc-700/50">
+              <div className="flex flex-col">
+                <span className="font-medium text-[13px]">Ativo</span>
+                <span className="text-[11px] text-zinc-500 font-medium dark:text-zinc-400">
+                  Manter o anúncio ativo
+                </span>
+              </div>
+
+              <Switch
+                onChecked={(e) =>
+                  setValue('tipoDesconto', e ? 'PORCENTAGEM' : 'VALOR')
+                }
+                checked={watch('tipoDesconto') === 'PORCENTAGEM'}
+              />
             </div>
-            <span className="text-[10px] text-white font-medium">IMAGEM</span>
           </div>
+        )}
 
-          <div className="h-[1px] w-full bg-zinc-200"></div>
-        </div>
+        {!isUpdate ? (
+          <>
+            <div className="flex items-center space-x-2">
+              <div className="flex items-center rounded-full h-8 pl-[3px] pr-5">
+                <div className="h-6 w-6 bg-zinc-800 flex items-center justify-center rounded-full mr-2.5">
+                  <span className="text-[12px] text-white font-bold font-urbanist">
+                    1
+                  </span>
+                </div>
+                <span className="text-[11px] text-zinc-700 font-semibold">
+                  IMAGEM
+                </span>
+              </div>
 
-        <ImagePicker image={image} onSelect={onSelect} />
+              <div className="h-[1px] w-full bg-zinc-200"></div>
+            </div>
+
+            <ImagePicker image={image} onSelect={onSelect} />
+          </>
+        ) : null}
 
         <div className="flex items-center space-x-2">
-          <div className="flex items-center bg-[#305a96] border border-[#305a96] rounded-full h-8 pl-[3px] pr-5">
-            <div className="h-6 w-6 bg-white flex items-center justify-center rounded-full mr-2.5">
-              <span className="text-[12px] text-[#305a96] font-bold font-urbanist">
+          <div className="flex items-center rounded-full h-8 pl-[3px] pr-5">
+            <div className="h-6 w-6 bg-zinc-800 flex items-center justify-center rounded-full mr-2.5">
+              <span className="text-[12px] text-white font-bold font-urbanist">
                 2
               </span>
             </div>
-            <span className="text-[10px] text-white font-medium">CONTEÚDO</span>
+            <span className="text-[11px] text-zinc-700 font-semibold">
+              CONTEÚDO
+            </span>
           </div>
 
           <div className="h-[1px] w-full bg-zinc-200"></div>
@@ -300,20 +328,22 @@ export function Ads() {
         </div>
 
         <div className="flex items-center space-x-2">
-          <div className="flex items-center bg-[#305a96] border border-[#305a96] rounded-full h-8 pl-[3px] pr-5">
-            <div className="h-6 w-6 bg-white flex items-center justify-center rounded-full mr-2.5">
-              <span className="text-[12px] text-[#305a96] font-bold font-urbanist">
+          <div className="flex items-center rounded-full h-8 pl-[3px] pr-5">
+            <div className="h-6 w-6 bg-zinc-800 flex items-center justify-center rounded-full mr-2.5">
+              <span className="text-[12px] text-white font-bold font-urbanist">
                 3
               </span>
             </div>
-            <span className="text-[10px] text-white font-medium">VALORES</span>
+            <span className="text-[11px] text-zinc-700 font-semibold">
+              VALORES
+            </span>
           </div>
 
           <div className="h-[1px] w-full bg-zinc-200"></div>
         </div>
 
         <div className="grid grid-cols-2 gap-5 px-2.5">
-          <div className="col-span-2 flex items-center justify-between bg-zinc-50 p-5 rounded-md dark:bg-zinc-700/50">
+          <div className="col-span-2 flex items-center justify-between bg-zinc-100 p-5 rounded-md dark:bg-zinc-700/50">
             <div className="flex flex-col">
               <span className="font-medium text-[13px]">
                 Desconto em porcentagem
@@ -378,87 +408,111 @@ export function Ads() {
           </Input.Root>
         </div>
 
-        <div className="flex items-center space-x-2">
-          <div className="flex items-center bg-[#305a96] border border-[#305a96] rounded-full h-8 pl-[3px] pr-5">
-            <div className="h-6 w-6 bg-white flex items-center justify-center rounded-full mr-2.5">
-              <span className="text-[12px] text-[#305a96] font-bold font-urbanist">
-                4
-              </span>
-            </div>
-            <span className="text-[10px] text-white font-medium">DATAS</span>
-          </div>
+        {!isUpdate && (
+          <>
+            <div className="flex items-center space-x-2">
+              <div className="flex items-center rounded-full h-8 pl-[3px] pr-5">
+                <div className="h-6 w-6 bg-zinc-800 flex items-center justify-center rounded-full mr-2.5">
+                  <span className="text-[12px] text-white font-bold font-urbanist">
+                    4
+                  </span>
+                </div>
+                <span className="text-[11px] text-zinc-700 font-semibold">
+                  DATAS
+                </span>
+              </div>
 
-          <div className="h-[1px] w-full bg-zinc-200"></div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-5 px-2.5">
-          <div className="col-span-2 flex items-center justify-between bg-zinc-50 p-5 rounded-md dark:bg-zinc-700/50">
-            <div className="flex flex-col">
-              <span className="font-medium text-[13px]">Começar hoje</span>
-              <span className="text-[11px] text-zinc-500 font-medium dark:text-zinc-400">
-                Começar a promoção a partir de hoje
-              </span>
+              <div className="h-[1px] w-full bg-zinc-200"></div>
             </div>
 
-            <Switch
-              onChecked={(e) =>
-                e
-                  ? setValue('inicio', dayjs().format('DD-MM-YYYY'))
-                  : setValue('inicio', '')
-              }
-              checked={watch('inicio') !== ''}
-            />
-          </div>
+            <div className="grid grid-cols-2 gap-5 px-2.5">
+              <div className="col-span-2 flex items-center justify-between bg-zinc-100 p-5 rounded-md dark:bg-zinc-700/50">
+                <div className="flex flex-col">
+                  <span className="font-medium text-[13px]">Começar hoje</span>
+                  <span className="text-[11px] text-zinc-500 font-medium dark:text-zinc-400">
+                    Começar a promoção a partir de hoje
+                  </span>
+                </div>
 
-          <Input.Root>
-            <Input.Label
-              required
-              errorMessage={formState.errors?.inicio?.message}
+                <Switch
+                  onChecked={(e) =>
+                    e
+                      ? setValue('inicio', dayjs().format('DD-MM-YYYY'))
+                      : setValue('inicio', '')
+                  }
+                  checked={watch('inicio') !== ''}
+                />
+              </div>
+
+              <Input.Root>
+                <Input.Label
+                  required
+                  errorMessage={formState.errors?.inicio?.message}
+                >
+                  Data de início
+                </Input.Label>
+
+                <Input.Mask
+                  mask="99/99/9999"
+                  placeholder="Data de início"
+                  {...register('inicio')}
+                />
+              </Input.Root>
+
+              <Input.Root>
+                <Input.Label
+                  required
+                  errorMessage={formState.errors?.validade?.message}
+                >
+                  Data de validade
+                </Input.Label>
+
+                <Input.Mask
+                  mask="99/99/9999"
+                  placeholder="Data de validade"
+                  {...register('validade')}
+                />
+              </Input.Root>
+            </div>
+          </>
+        )}
+
+        <footer className="flex-row flex items-center space-x-2.5 mt-5 pb-10">
+          {isUpdate ? (
+            <button
+              type="button"
+              onClick={() => {
+                setForm(null)
+
+                reset()
+              }}
+              className="h-[50px] min-h-[50px] w-full transition-all duration-300 hover:bg-opacity-90 flex items-center justify-between px-5 border border-[#305a96] rounded-md ring-4 ring-[#305a96]/50"
             >
-              Data de início
-            </Input.Label>
+              <p className="-tracking-wide text-[13px] font-medium text-[#305a96]">
+                Cancelar atualização
+              </p>
+            </button>
+          ) : null}
 
-            <Input.Mask
-              mask="99/99/9999"
-              placeholder="Data de início"
-              {...register('inicio')}
-            />
-          </Input.Root>
+          <button
+            type="submit"
+            className="h-[50px] min-h-[50px] w-full transition-all duration-300 hover:bg-opacity-90 flex items-center justify-between px-5 bg-[#305a96] rounded-md ring-4 ring-[#305a96]/50"
+          >
+            <p className="-tracking-wide text-[13px] font-medium text-white">
+              Enviar anúncio
+            </p>
 
-          <Input.Root>
-            <Input.Label
-              required
-              errorMessage={formState.errors?.validade?.message}
-            >
-              Data de validade
-            </Input.Label>
-
-            <Input.Mask
-              mask="99/99/9999"
-              placeholder="Data de validade"
-              {...register('validade')}
-            />
-          </Input.Root>
-        </div>
-
-        <button
-          type="submit"
-          className="h-[50px] mt-5 mb-20 min-h-[50px] w-full transition-all duration-300 hover:bg-opacity-90 flex items-center justify-between px-5 bg-[#305a96] rounded-md ring-4 ring-[#305a96]/50"
-        >
-          <p className="-tracking-wide text-[13px] font-medium text-white">
-            Enviar anúncio
-          </p>
-
-          {isPending ? (
-            <CircleNotch
-              weight="bold"
-              size={20}
-              className="text-white animate-spin"
-            />
-          ) : (
-            <ArrowUpRight weight="bold" className="text-white" />
-          )}
-        </button>
+            {isPending ? (
+              <CircleNotch
+                weight="bold"
+                size={20}
+                className="text-white animate-spin"
+              />
+            ) : (
+              <ArrowUpRight weight="bold" className="text-white" />
+            )}
+          </button>
+        </footer>
       </form>
     </motion.div>
   )
