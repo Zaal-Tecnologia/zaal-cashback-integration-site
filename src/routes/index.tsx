@@ -18,14 +18,7 @@ export function AppRouter() {
         <Route path="/" element={<Onboarding />} />
 
         <Route path="/" element={<Layout />}>
-          <Route
-            path="/ads"
-            element={
-              <Protected to="/">
-                <Ads />
-              </Protected>
-            }
-          />
+          <Route path="/ads" element={<Ads />} />
           <Route
             path="/history"
             element={

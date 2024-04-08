@@ -1,5 +1,3 @@
-import { useToast } from '@/components/ui/use-toast'
-
 import { AdsImage } from '@/components/ads-image'
 
 import { api } from '@/data/api'
@@ -20,22 +18,27 @@ import dayjs from 'dayjs'
 import { useCallback, useState } from 'react'
 import { green, orange } from 'tailwindcss/colors'
 import {
-  ArrowUpRight,
-  CircleNotch,
   CurrencyDollar,
+  Pencil,
+  Slideshow,
   Ticket,
   Timer,
-  Trash,
   X,
 } from '@phosphor-icons/react'
 import { DialogClose } from '@radix-ui/react-dialog'
-import { useMutation } from '@/hooks/use-mutation'
-import { client } from '@/App'
-import { Title } from '@/components/title'
+
+import { RemoveBranch } from '@/components/remove-branch'
+import { ImageProvider } from '@/contexts/image'
+import { Lightbox } from '@/components/lightbox'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 
 export function History() {
   const { branch } = useBranch()
-  const { toast } = useToast()
 
   const { data: ads, isLoading } = useQuery<AdsDTO[]>(
     ['get-ads-by-branch-id-query', String(branch?.id)],
@@ -55,33 +58,14 @@ export function History() {
 
   const [selectedAds, setSelectedAds] = useState<AdsDTO | null>(null)
 
-  /** REMOVE */
-  const { isPending, mutate } = useMutation(
-    ['remove-ads-by-id-mutation', String(selectedAds?.id)],
-    async (id) => {
-      const response = await api(`/anuncios/${id}`, {
-        method: 'DELETE',
-      })
-
-      return response.status
-    },
-    async () => {
-      toast({
-        title: 'Removido com sucesso!',
-        description: `O anúncio ${selectedAds?.conteudo} foi removido com sucesso!`,
-        variant: 'success',
-      })
-
-      setSelectedAds(null)
-
-      await client.invalidateQueries({
-        queryKey: ['get-ads-by-branch-id-query'],
-      })
-    },
-  )
-
   const handleCloseModal = useCallback(() => {
     setSelectedAds(null)
+  }, [])
+
+  const [openLightbox, setOpenLightbox] = useState(false)
+
+  const handleCloseLightbox = useCallback(() => {
+    setOpenLightbox(false)
   }, [])
 
   return (
@@ -89,42 +73,59 @@ export function History() {
       animate={{ translateY: 0, opacity: 1 }}
       initial={{ translateY: 200, opacity: 0 }}
       transition={{ type: 'time' }}
-      className="sm:w-[1120px] sm:mx-auto relative"
+      className="h-screen py-10 px-5 flex flex-col items-center"
     >
-      <header className="mt-10 mb-20 flex items-center justify-between">
-        <Title>Seu histórico</Title>
+      <header className="mb-20 flex items-center justify-between w-full">
+        <div className="flex items-center">
+          <span className="text-sm group-hover:translate-x-2 font-medium transition-transform duration-300">
+            HISTÓRICO
+          </span>
+          <div className="h-5 mx-5 w-[1px] bg-zinc-200" />
+          <span className="text-sm text-zinc-500">Veja seu histórico</span>
+        </div>
 
-        <span className="text-xs font-semibold font-urbanist text-zinc-700 dark:text-zinc-50">
-          {ads?.length}
-        </span>
+        <div className="flex items-center">
+          <button
+            onClick={() => setOpenLightbox(true)}
+            className="h-12 w-12 rounded-full hover:bg-zinc-200/50 flex items-center justify-center translate-all duration-300 font-urbanist"
+          >
+            <Slideshow size={18} />
+          </button>
+          <button
+            // onClick={() => setCreate((prev) => !prev)}
+            className="h-12 w-12 rounded-full hover:bg-zinc-200/50 flex items-center justify-center translate-all duration-300 font-urbanist"
+          >
+            {ads?.length}
+          </button>
+        </div>
       </header>
 
       {isLoading ? (
-        <div className="grid grid-cols-3 gap-x-5 gap-y-4 pb-40 animate-pulse">
-          <div className="group relative h-[355px] w-[355px] bg-zinc-100 dark:bg-zinc-700/50 rounded-md flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
-          <div className="group relative h-[355px] w-[355px] bg-zinc-100 dark:bg-zinc-700/50 rounded-md flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
-          <div className="group relative h-[355px] w-[355px] bg-zinc-100 dark:bg-zinc-700/50 rounded-md flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
-          <div className="group relative h-[355px] w-[355px] bg-zinc-100 dark:bg-zinc-700/50 rounded-md flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
-          <div className="group relative h-[355px] w-[355px] bg-zinc-100 dark:bg-zinc-700/50 rounded-md flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
+        <ul className="grid grid-cols-3 gap-2 animate-pulse">
+          <li className="min-h-[320px] min-w-[320px] col-span-2 row-span-2 bg-zinc-100 dark:bg-zinc-700/50 rounded-md"></li>
+          <li className="min-h-[160px] min-w-[160px] bg-zinc-100 dark:bg-zinc-700/50 rounded-md"></li>
+          <li className="min-h-[160px] min-w-[160px] bg-zinc-100 dark:bg-zinc-700/50 rounded-md"></li>
+          <li className="min-h-[160px] min-w-[160px] bg-zinc-100 dark:bg-zinc-700/50 rounded-md"></li>
+          <li className="min-h-[160px] min-w-[160px] bg-zinc-100 dark:bg-zinc-700/50 rounded-md"></li>
 
           <span className="sr-only">Loading...</span>
-        </div>
+        </ul>
       ) : ads && ads.length > 0 ? (
-        <div className="grid grid-cols-3 gap-x-5 gap-y-4 pb-40">
-          {ads.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setSelectedAds(item)}
-              className="group relative h-[365px] w-[365px] bg-zinc-100 dark:bg-zinc-700/50 rounded-md flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"
-            >
-              <AdsImage adsId={item.id} />
+        <ImageProvider>
+          <Lightbox onClose={handleCloseLightbox} open={openLightbox} />
 
-              <div className="bg-zinc-800/20 backdrop-blur-md rounded-b-md w-full group-hover:opacity-100 absolute bottom-0 will-change-transform duration-300 p-5 opacity-0">
-                <span className="text-sm text-zinc-50">{item.conteudo}</span>
-              </div>
-            </button>
-          ))}
-        </div>
+          <ul className="grid grid-cols-3 gap-2">
+            {ads.map((item) => (
+              <li
+                key={item.id}
+                onClick={() => setSelectedAds(item)}
+                className="cursor-pointer first:col-span-2 first:row-span-2"
+              >
+                <AdsImage adsId={item.id} />
+              </li>
+            ))}
+          </ul>
+        </ImageProvider>
       ) : (
         <div className="w-full h-[calc(100vh_-_120px)] flex items-center justify-center">
           <span className="text-sm -tracking-wide text-zinc-700">
@@ -138,16 +139,42 @@ export function History() {
         onOpenChange={(event) => event === false && handleCloseModal()}
       >
         <DialogContent>
-          <DialogClose
-            onClick={() => setSelectedAds(null)}
-            className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
-          >
-            <X className="h-4 w-4" />
-            <span className="sr-only">Close</span>
-          </DialogClose>
-
           {selectedAds ? (
             <>
+              <div className="flex items-center justify-between">
+                <DialogClose
+                  onClick={() => setSelectedAds(null)}
+                  className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
+                >
+                  <X className="h-4 w-4" weight="bold" />
+                  <span className="sr-only">Close</span>
+                </DialogClose>
+
+                <div className="flex items-center">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <button
+                          onClick={() => setOpenLightbox(true)}
+                          className="h-12 w-12 rounded-full hover:bg-zinc-200/50 flex items-center justify-center translate-all duration-300 font-urbanist"
+                        >
+                          <Pencil
+                            className="w-4 h-4 text-blue-500"
+                            weight="bold"
+                            size={18}
+                          />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p className="text-xs">Editar anúncio</p>
+                      </TooltipContent>
+                    </Tooltip>
+
+                    <RemoveBranch id={selectedAds.id} />
+                  </TooltipProvider>
+                </div>
+              </div>
+
               <DialogHeader>
                 <DialogTitle>{selectedAds.conteudo}</DialogTitle>
                 <DialogDescription>
@@ -205,7 +232,7 @@ export function History() {
                 </div>
               </div>
 
-              <footer className="flex items-center gap-5">
+              {/** <footer className="flex items-center gap-5">
                 <button
                   type="submit"
                   className="mt-5 h-[50px] flex items-center justify-between px-5 bg-[#305a96] w-full rounded-md ring-2 ring-[#305a96]/50"
@@ -217,25 +244,8 @@ export function History() {
                   <ArrowUpRight weight="bold" className="text-white" />
                 </button>
 
-                <button
-                  onClick={() => mutate(selectedAds.id)}
-                  className="mt-5 h-[50px] flex items-center justify-between px-5 bg-red-500 w-full rounded-md ring-2 ring-red-500/50"
-                >
-                  <p className="-tracking-wide text-[13px] font-medium text-white">
-                    Remover anúncio
-                  </p>
-
-                  {isPending ? (
-                    <CircleNotch
-                      weight="bold"
-                      size={20}
-                      className="text-white animate-spin"
-                    />
-                  ) : (
-                    <Trash weight="bold" className="text-white" />
-                  )}
-                </button>
-              </footer>
+                <RemoveBranch id={selectedAds?.id} />
+              </footer> */}
             </>
           ) : null}
         </DialogContent>

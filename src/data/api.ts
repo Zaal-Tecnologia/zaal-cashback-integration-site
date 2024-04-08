@@ -4,10 +4,8 @@ export function api(path: string, init?: RequestInit) {
   const headers = {
     ...init?.headers,
     'Access-Control-Allow-Origin': '*',
-    authorization: authorization ?? '',
+    Authorization: authorization ?? '',
   }
-
-  // http://zaal.no-ip.info:8083/api/v1/
 
   const BASE_URL =
     import.meta.env.MODE === 'development'
@@ -16,7 +14,6 @@ export function api(path: string, init?: RequestInit) {
 
   return fetch(BASE_URL.concat(path), {
     ...init,
-    // mode: 'no-cors',
     headers,
     referrerPolicy: 'no-referrer',
   })

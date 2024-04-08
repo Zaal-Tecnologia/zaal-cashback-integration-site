@@ -1,24 +1,15 @@
-import { ArrowLeft, ArrowUpRight, Plus, X } from '@phosphor-icons/react'
+import { CaretRight, Plus } from '@phosphor-icons/react'
 import { useState } from 'react'
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet'
-import { useBranch } from '@/hooks/use-branch'
 
-import clsx from 'clsx'
-import { api } from '@/data/api'
-import { BranchDTO } from '@/@types/dto/branch-dto'
-import { API } from '@/@types/dto/api'
 import { BranchImage } from './branch-image'
+
+import { useBranch } from '@/hooks/use-branch'
 import { useQuery } from '@/hooks/use-query'
 
-import { CreateBranchForm } from './create-branch-form'
+import { api } from '@/data/api'
+
+import type { API } from '@/@types/dto/api'
+import type { BranchDTO } from '@/@types/dto/branch-dto'
 
 export function Branches() {
   const { setBranch, branch } = useBranch()
@@ -40,7 +31,65 @@ export function Branches() {
   const [create, setCreate] = useState(false)
 
   return (
-    <Sheet>
+    <div className="overflow-hidden col-span-3 border-r border-zinc-200 flex flex-col px-8 pt-10">
+      <header className="flex items-center justify-between mb-20">
+        <span className="text-sm group-hover:translate-x-2 font-medium transition-transform duration-300">
+          SUAS FILIAIS
+        </span>
+
+        <button
+          onClick={() => setCreate((prev) => !prev)}
+          className="h-12 w-12 rounded-full hover:bg-zinc-200/50 flex items-center justify-center translate-all duration-300"
+        >
+          <Plus weight="bold" size={18} />
+        </button>
+      </header>
+
+      <ul className="space-y-5">
+        {isLoading ? (
+          <li className="animate-pulse flex items-center gap-x-5 group cursor-pointer">
+            <div className="relative group rounded-full w-[45px] h-[45px] flex items-center justify-center bg-zinc-200/50 ring-4 ring-zinc-200/50" />
+
+            <div className="flex flex-col items-start">
+              <span className="h-[14px] w-40 bg-zinc-200/50 mb-1.5 rounded-md"></span>
+              <span className="h-[12px] w-32 bg-zinc-200/50 rounded-md"></span>
+            </div>
+          </li>
+        ) : (
+          data?.content.map((item) => (
+            <li
+              key={item.id}
+              data-selected={!branch ? true : item.id === branch?.id}
+              className="data-[selected=false]:opacity-50 transition-[opacity] duration-300 flex items-center gap-x-5 group cursor-pointer"
+              onClick={() =>
+                item.id === branch?.id ? setBranch(null) : setBranch(item)
+              }
+            >
+              <BranchImage id={item.id} razao={item.razao} />
+
+              <div className="flex flex-col items-start">
+                <span className="text-sm group-hover:underline">
+                  {item.razao}
+                </span>
+                <span className="text-xs text-zinc-400">
+                  {item.endereco.cidadeNome}, {item.endereco.bairro}
+                </span>
+              </div>
+
+              <CaretRight
+                weight="bold"
+                data-selected={branch?.id === item.id}
+                className="data-[selected=true]:opacity-100 data-[selected=true]:translate-x-0 ml-auto group-hover:opacity-100 group-hover:translate-x-0 -translate-x-2 opacity-0 transition-all duration-150"
+              />
+            </li>
+          ))
+        )}
+      </ul>
+    </div>
+  )
+}
+
+/** <Sheet>
       <SheetTrigger asChild>
         <button
           className={clsx(
@@ -153,6 +202,4 @@ export function Branches() {
           )}
         </ul>
       </SheetContent>
-    </Sheet>
-  )
-}
+    </Sheet> */

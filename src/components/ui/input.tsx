@@ -49,7 +49,7 @@ const Area = forwardRef<ElementRef<'textarea'>, ComponentProps<'textarea'>>(
     return (
       <textarea
         ref={ref}
-        className="resize-none h-32 text-[13px] focus:outline-none w-full flex bg-zinc-100/30 dark:bg-zinc-700/50 dark:border-zinc-600/50 border focus:border-blue-500 focus:ring-2 focus:ring-blue-200/50 rounded-md p-2.5"
+        className="resize-none h-32 text-[13px] focus:outline-none w-full flex bg-zinc-100/30 dark:bg-zinc-700/50 dark:border-zinc-600/50 border focus:border-[#305a96] focus:ring-2 focus:ring-blue-200/50 rounded-md p-2.5"
         {...props}
       />
     )

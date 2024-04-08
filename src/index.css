@@ -69,6 +69,8 @@
 @layer base {
   * {
     @apply border-border;
+    --webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 
   body {
@@ -76,8 +78,6 @@
   }
 
   body {
-    --webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
     font-family: 'Inter';
   }
 }

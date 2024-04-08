@@ -1,4 +1,4 @@
-import { ArrowUpRight, CircleNotch } from '@phosphor-icons/react'
+import { ArrowUpRight, CircleNotch, Info } from '@phosphor-icons/react'
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { z } from 'zod'
 import dayjs from 'dayjs'
@@ -9,23 +9,22 @@ import { motion } from 'framer-motion'
 import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion'
-
 import { useBranch } from '@/hooks/use-branch'
 import { useMutation } from '@/hooks/use-mutation'
 
 import { api } from '@/data/api'
 import { useToast } from '@/components/ui/use-toast'
-import { Title } from '@/components/title'
-import { DateSVG } from '@/components/svgs/date-svg'
-import { DollarSVG } from '@/components/svgs/dollar-svg'
-import { FileSVG } from '@/components/svgs/file-svg'
 import { Image, ImagePicker } from '@/components/image-picker'
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
+import { DeviceMockup } from '@/components/device-mockup'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 const FormSchema = z.object({
   ativo: z.boolean().default(true),
@@ -189,272 +188,277 @@ export function Ads() {
       animate={{ translateY: 0, opacity: 1 }}
       initial={{ translateY: 200, opacity: 0 }}
       transition={{ type: 'time' }}
-      className="h-screen sm:w-[1120px] sm:mx-auto grid-rows-10 grid sm:grid-cols-2"
+      className="h-screen py-10 px-5 flex flex-col items-center"
     >
-      <div className="col-span-2 row-span-1 flex items-center">
-        <Title>Criar anúncio</Title>
-
-        {branch ? (
-          <span className="ml-5 text-[13px] -tracking-wide text-zinc-700 dark:text-zinc-50">
-            Ainda existem 4 anúncios disponíveis para {branch?.razao}
+      <header className="mb-20 flex items-center justify-between w-full">
+        <div className="flex items-center">
+          <span className="text-sm group-hover:translate-x-2 font-medium transition-transform duration-300">
+            CRIAR ANÚNCIO
           </span>
-        ) : null}
+          <div className="h-5 mx-5 w-[1px] bg-zinc-200" />
+          <span className="text-sm text-zinc-500">
+            Preencha o formulário abaixo
+          </span>
+        </div>
 
-        {/** <button
-          onClick={() =>
-            toast({
-              title: 'Toast',
-              description: 'toast description here',
-              variant: 'success',
-            })
-          }
-        >
-          success toast
-        </button>
+        <Sheet>
+          <SheetTrigger className="h-12 w-12 rounded-full hover:bg-zinc-200/50 flex items-center justify-center translate-all duration-300">
+            <Info weight="bold" size={18} />
+          </SheetTrigger>
 
-        <button
-          onClick={() =>
-            toast({
-              title: 'Toast',
-              description: 'toast description here',
-              variant: 'error',
-            })
-          }
-        >
-          error toast
-        </button> */}
-      </div>
+          <SheetContent className="pb-20">
+            <ScrollArea>
+              <SheetHeader className="mb-10">
+                <SheetTitle>Are you absolutely sure?</SheetTitle>
+                <SheetDescription>
+                  Informaçoes sobre o form e mockup
+                </SheetDescription>
+              </SheetHeader>
 
-      <ImagePicker image={image} onSelect={onSelect} />
+              <DeviceMockup />
+            </ScrollArea>
+          </SheetContent>
+        </Sheet>
+      </header>
 
       <form
-        className="flex flex-col gap-y-5 sm:ml-5 p-5 relative"
+        className="flex flex-col space-y-8 relative w-full"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <Accordion type="single" collapsible>
-          <AccordionItem value="item-1">
-            <AccordionTrigger>
-              <div className="flex items-center space-x-2">
-                <FileSVG />
-                <span className="text-sm uppercase -tracking-wider text-zinc-700 dark:text-zinc-50">
-                  Conteúdo
-                </span>
-              </div>
-            </AccordionTrigger>
+        <div className="flex items-center space-x-2">
+          <div className="flex items-center bg-[#305a96] border border-[#305a96] rounded-full h-8 pl-[3px] pr-5">
+            <div className="h-6 w-6 bg-white flex items-center justify-center rounded-full mr-2.5">
+              <span className="text-[12px] text-[#305a96] font-bold font-urbanist">
+                1
+              </span>
+            </div>
+            <span className="text-[10px] text-white font-medium">IMAGEM</span>
+          </div>
 
-            <AccordionContent>
-              <div className="gap-3 grid px-2.5">
-                <Input.Root>
-                  <Input.Label
-                    required
-                    errorMessage={formState.errors?.descricao?.message}
-                  >
-                    Descrição
-                  </Input.Label>
+          <div className="h-[1px] w-full bg-zinc-200"></div>
+        </div>
 
-                  <Input.Area
-                    {...register('descricao')}
-                    placeholder="Faça uma breve descrição do anúncio"
-                  />
-                </Input.Root>
+        <ImagePicker image={image} onSelect={onSelect} />
 
-                <div className="grid grid-cols-2 gap-x-3">
-                  <Input.Root>
-                    <Input.Label
-                      required
-                      errorMessage={formState.errors?.conteudo?.message}
-                    >
-                      Conteúdo
-                    </Input.Label>
+        <div className="flex items-center space-x-2">
+          <div className="flex items-center bg-[#305a96] border border-[#305a96] rounded-full h-8 pl-[3px] pr-5">
+            <div className="h-6 w-6 bg-white flex items-center justify-center rounded-full mr-2.5">
+              <span className="text-[12px] text-[#305a96] font-bold font-urbanist">
+                2
+              </span>
+            </div>
+            <span className="text-[10px] text-white font-medium">CONTEÚDO</span>
+          </div>
 
-                    <Input.Write
-                      {...register('conteudo')}
-                      placeholder="Qual o conteúdo do anúncio?"
-                    />
-                  </Input.Root>
+          <div className="h-[1px] w-full bg-zinc-200"></div>
+        </div>
 
-                  <Input.Root>
-                    <Input.Label
-                      required
-                      errorMessage={formState.errors?.cupom?.message}
-                    >
-                      Cupom
-                    </Input.Label>
+        <div className="gap-3 grid px-2.5">
+          <Input.Root>
+            <Input.Label
+              required
+              errorMessage={formState.errors?.descricao?.message}
+            >
+              Descrição
+            </Input.Label>
 
-                    <Input.Write
-                      {...register('cupom')}
-                      placeholder="Cupom de desconto"
-                    />
-                  </Input.Root>
-                </div>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
+            <Input.Area
+              {...register('descricao')}
+              placeholder="Faça uma breve descrição do anúncio"
+            />
+          </Input.Root>
 
-          <AccordionItem value="item-2">
-            <AccordionTrigger>
-              <div className="flex items-center space-x-2">
-                <DollarSVG />
-                <span className="text-sm uppercase -tracking-wider text-zinc-700 dark:text-zinc-50">
-                  Valores
-                </span>
-              </div>
-            </AccordionTrigger>
+          <div className="grid grid-cols-2 gap-x-3">
+            <Input.Root>
+              <Input.Label
+                required
+                errorMessage={formState.errors?.conteudo?.message}
+              >
+                Conteúdo
+              </Input.Label>
 
-            <AccordionContent>
-              <div className="grid grid-cols-2 gap-5 px-2.5">
-                <div className="col-span-2 flex items-center justify-between bg-zinc-50 p-5 rounded-md dark:bg-zinc-700/50">
-                  <div className="flex flex-col">
-                    <span className="font-medium text-[13px]">
-                      Desconto em porcentagem
-                    </span>
-                    <span className="text-[11px] text-zinc-500 font-medium dark:text-zinc-400">
-                      Ao fazer isso o valor do desconto vai ser feito por
-                      porcentagem
-                    </span>
-                  </div>
-
-                  <Switch
-                    onChecked={(e) =>
-                      setValue('tipoDesconto', e ? 'PORCENTAGEM' : 'VALOR')
-                    }
-                    checked={watch('tipoDesconto') === 'PORCENTAGEM'}
-                  />
-                </div>
-
-                <Input.Root>
-                  <Input.Label
-                    required
-                    errorMessage={formState.errors?.valorMinimo?.message}
-                  >
-                    Valor mínimo • R$
-                  </Input.Label>
-
-                  <Input.Write
-                    type="number"
-                    placeholder="Valor mínimo"
-                    {...register('valorMinimo', { valueAsNumber: true })}
-                  />
-                </Input.Root>
-
-                <Input.Root>
-                  <Input.Label
-                    required
-                    errorMessage={formState.errors?.valorMaximo?.message}
-                  >
-                    Valor máximo • R$
-                  </Input.Label>
-
-                  <Input.Write
-                    type="number"
-                    placeholder="Valor máximo"
-                    {...register('valorMaximo', { valueAsNumber: true })}
-                  />
-                </Input.Root>
-
-                <Input.Root>
-                  <Input.Label
-                    required
-                    errorMessage={formState.errors?.valorDesconto?.message}
-                  >
-                    Valor do desconto •{' '}
-                    {watch('tipoDesconto') === 'VALOR' ? 'R$' : '%'}
-                  </Input.Label>
-
-                  <Input.Write
-                    type="number"
-                    placeholder="Valor do desconto"
-                    {...register('valorDesconto', { valueAsNumber: true })}
-                  />
-                </Input.Root>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-
-          <AccordionItem value="item-3">
-            <AccordionTrigger>
-              <div className="flex items-center space-x-2">
-                <DateSVG />
-                <span className="text-sm uppercase -tracking-wider text-zinc-700 dark:text-zinc-50">
-                  Datas
-                </span>
-              </div>
-            </AccordionTrigger>
-
-            <AccordionContent>
-              <div className="grid grid-cols-2 gap-5 px-2.5">
-                <div className="col-span-2 flex items-center justify-between bg-zinc-50 p-5 rounded-md dark:bg-zinc-700/50">
-                  <div className="flex flex-col">
-                    <span className="font-medium text-[13px]">
-                      Começar hoje
-                    </span>
-                    <span className="text-[11px] text-zinc-500 font-medium dark:text-zinc-400">
-                      Começar a promoção a partir de hoje
-                    </span>
-                  </div>
-
-                  <Switch
-                    onChecked={(e) =>
-                      e
-                        ? setValue('inicio', dayjs().format('DD-MM-YYYY'))
-                        : setValue('inicio', '')
-                    }
-                    checked={watch('inicio') !== ''}
-                  />
-                </div>
-
-                <Input.Root>
-                  <Input.Label
-                    required
-                    errorMessage={formState.errors?.inicio?.message}
-                  >
-                    Data de início
-                  </Input.Label>
-
-                  <Input.Mask
-                    mask="99/99/9999"
-                    placeholder="Data de início"
-                    {...register('inicio')}
-                  />
-                </Input.Root>
-
-                <Input.Root>
-                  <Input.Label
-                    required
-                    errorMessage={formState.errors?.validade?.message}
-                  >
-                    Data de validade
-                  </Input.Label>
-
-                  <Input.Mask
-                    mask="99/99/9999"
-                    placeholder="Data de validade"
-                    {...register('validade')}
-                  />
-                </Input.Root>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-
-          <button
-            type="submit"
-            className="h-[50px] mt-5 min-h-[50px] w-full transition-all duration-300 hover:bg-opacity-90 flex items-center justify-between px-5 bg-[#305a96] rounded-md ring-4 ring-[#305a96]/50"
-          >
-            <p className="-tracking-wide text-[13px] font-medium text-white">
-              Enviar anúncio
-            </p>
-
-            {isPending ? (
-              <CircleNotch
-                weight="bold"
-                size={20}
-                className="text-white animate-spin"
+              <Input.Write
+                {...register('conteudo')}
+                placeholder="Qual o conteúdo do anúncio?"
               />
-            ) : (
-              <ArrowUpRight weight="bold" className="text-white" />
-            )}
-          </button>
-        </Accordion>
+            </Input.Root>
+
+            <Input.Root>
+              <Input.Label
+                required
+                errorMessage={formState.errors?.cupom?.message}
+              >
+                Cupom
+              </Input.Label>
+
+              <Input.Write
+                {...register('cupom')}
+                placeholder="Cupom de desconto"
+              />
+            </Input.Root>
+          </div>
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <div className="flex items-center bg-[#305a96] border border-[#305a96] rounded-full h-8 pl-[3px] pr-5">
+            <div className="h-6 w-6 bg-white flex items-center justify-center rounded-full mr-2.5">
+              <span className="text-[12px] text-[#305a96] font-bold font-urbanist">
+                3
+              </span>
+            </div>
+            <span className="text-[10px] text-white font-medium">VALORES</span>
+          </div>
+
+          <div className="h-[1px] w-full bg-zinc-200"></div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-5 px-2.5">
+          <div className="col-span-2 flex items-center justify-between bg-zinc-50 p-5 rounded-md dark:bg-zinc-700/50">
+            <div className="flex flex-col">
+              <span className="font-medium text-[13px]">
+                Desconto em porcentagem
+              </span>
+              <span className="text-[11px] text-zinc-500 font-medium dark:text-zinc-400">
+                Ao fazer isso o valor do desconto vai ser feito por porcentagem
+              </span>
+            </div>
+
+            <Switch
+              onChecked={(e) =>
+                setValue('tipoDesconto', e ? 'PORCENTAGEM' : 'VALOR')
+              }
+              checked={watch('tipoDesconto') === 'PORCENTAGEM'}
+            />
+          </div>
+
+          <Input.Root>
+            <Input.Label
+              required
+              errorMessage={formState.errors?.valorMinimo?.message}
+            >
+              Valor mínimo • R$
+            </Input.Label>
+
+            <Input.Write
+              type="number"
+              placeholder="Valor mínimo"
+              {...register('valorMinimo', { valueAsNumber: true })}
+            />
+          </Input.Root>
+
+          <Input.Root>
+            <Input.Label
+              required
+              errorMessage={formState.errors?.valorMaximo?.message}
+            >
+              Valor máximo • R$
+            </Input.Label>
+
+            <Input.Write
+              type="number"
+              placeholder="Valor máximo"
+              {...register('valorMaximo', { valueAsNumber: true })}
+            />
+          </Input.Root>
+
+          <Input.Root>
+            <Input.Label
+              required
+              errorMessage={formState.errors?.valorDesconto?.message}
+            >
+              Valor do desconto •{' '}
+              {watch('tipoDesconto') === 'VALOR' ? 'R$' : '%'}
+            </Input.Label>
+
+            <Input.Write
+              type="number"
+              placeholder="Valor do desconto"
+              {...register('valorDesconto', { valueAsNumber: true })}
+            />
+          </Input.Root>
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <div className="flex items-center bg-[#305a96] border border-[#305a96] rounded-full h-8 pl-[3px] pr-5">
+            <div className="h-6 w-6 bg-white flex items-center justify-center rounded-full mr-2.5">
+              <span className="text-[12px] text-[#305a96] font-bold font-urbanist">
+                4
+              </span>
+            </div>
+            <span className="text-[10px] text-white font-medium">DATAS</span>
+          </div>
+
+          <div className="h-[1px] w-full bg-zinc-200"></div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-5 px-2.5">
+          <div className="col-span-2 flex items-center justify-between bg-zinc-50 p-5 rounded-md dark:bg-zinc-700/50">
+            <div className="flex flex-col">
+              <span className="font-medium text-[13px]">Começar hoje</span>
+              <span className="text-[11px] text-zinc-500 font-medium dark:text-zinc-400">
+                Começar a promoção a partir de hoje
+              </span>
+            </div>
+
+            <Switch
+              onChecked={(e) =>
+                e
+                  ? setValue('inicio', dayjs().format('DD-MM-YYYY'))
+                  : setValue('inicio', '')
+              }
+              checked={watch('inicio') !== ''}
+            />
+          </div>
+
+          <Input.Root>
+            <Input.Label
+              required
+              errorMessage={formState.errors?.inicio?.message}
+            >
+              Data de início
+            </Input.Label>
+
+            <Input.Mask
+              mask="99/99/9999"
+              placeholder="Data de início"
+              {...register('inicio')}
+            />
+          </Input.Root>
+
+          <Input.Root>
+            <Input.Label
+              required
+              errorMessage={formState.errors?.validade?.message}
+            >
+              Data de validade
+            </Input.Label>
+
+            <Input.Mask
+              mask="99/99/9999"
+              placeholder="Data de validade"
+              {...register('validade')}
+            />
+          </Input.Root>
+        </div>
+
+        <button
+          type="submit"
+          className="h-[50px] mt-5 mb-20 min-h-[50px] w-full transition-all duration-300 hover:bg-opacity-90 flex items-center justify-between px-5 bg-[#305a96] rounded-md ring-4 ring-[#305a96]/50"
+        >
+          <p className="-tracking-wide text-[13px] font-medium text-white">
+            Enviar anúncio
+          </p>
+
+          {isPending ? (
+            <CircleNotch
+              weight="bold"
+              size={20}
+              className="text-white animate-spin"
+            />
+          ) : (
+            <ArrowUpRight weight="bold" className="text-white" />
+          )}
+        </button>
       </form>
     </motion.div>
   )

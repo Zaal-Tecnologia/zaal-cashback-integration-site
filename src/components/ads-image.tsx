@@ -1,9 +1,10 @@
-import { Images } from '@phosphor-icons/react'
-import { useEffect, useState } from 'react'
-
 import { api } from '@/data/api'
 
 import { useToast } from './ui/use-toast'
+
+import { useQuery } from '@/hooks/use-query'
+
+import { useImage } from '@/contexts/image'
 
 interface Props {
   adsId: number
@@ -11,11 +12,11 @@ interface Props {
 
 export function AdsImage(props: Props) {
   const { toast } = useToast()
+  const { setImages } = useImage()
 
-  const [image, setImage] = useState<string | undefined>(undefined)
-
-  useEffect(() => {
-    async function getBranchLogo() {
+  const { data } = useQuery(
+    ['get-image-query', String(props.adsId)],
+    async () => {
       const response = await api(`anuncios/${props.adsId}/imagem`, {
         headers: {
           'Content-Type': 'image/jpeg',
@@ -30,42 +31,25 @@ export function AdsImage(props: Props) {
           variant: 'error',
         })
 
-        return
+        return null
       }
 
       const data = await response.blob()
 
-      const reader = new FileReader()
+      setImages(data as Blob)
 
-      reader.onloadend = () => {
-        const base = reader.result?.toString().split(',')[1]
+      return data
+    },
+  )
 
-        setImage(base)
-      }
-
-      reader.readAsDataURL(data)
-    }
-
-    getBranchLogo()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  // const data = null
-
-  return (
-    <div className="relative h-[350px] w-[350px] rounded-3xl flex items-center justify-center bg-contain">
-      {image ? (
-        <img
-          src={`data:image/png;base64, ${image}`}
-          alt=""
-          className="h-[320px] w-[320px] rounded"
-        />
-      ) : (
-        <div className="flex flex-col items-center">
-          <Images weight="duotone" size={25} />
-        </div>
-      )}
-    </div>
+  return data ? (
+    <img
+      className="ring-2 ring-zinc-200 rounded-md"
+      // src={`data:image/png;base64, ${image}`}
+      src={URL.createObjectURL(data as Blob)}
+      alt=""
+    />
+  ) : (
+    <div className="min-h-[160px] min-w-[160px] bg-zinc-100 dark:bg-zinc-700/50 rounded-md"></div>
   )
 }
