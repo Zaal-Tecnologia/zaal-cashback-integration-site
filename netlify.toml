@@ -3,16 +3,9 @@
   to = "/index.html"
   status = 200
 
-[[redirects]]
-  force = true
-  from = "/scripts/x.js"
-  status = 200
-  to = "http://zaal.no-ip.info:8083/api/$1"
-
-# [[redirects]]
-  # from = "/api"
-  # to = "http://zaal.no-ip.info:8083/api/$1"
-  # status = 200
-  # force = true
-  # headers = {X-From = "Netlify"}
-  # signed = "API_SIGNATURE_TOKEN"
+[[headers]]
+  for = "/*"
+    [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+    Access-Control-Allow-Headers = "Origin, X-Requested-With, Content-Type, Accept"
