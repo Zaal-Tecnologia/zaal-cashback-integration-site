@@ -4,8 +4,8 @@
   status = 200
 
 [[redirects]]
-  from = "/*"
-  to = "https://1290-200-164-236-60.ngrok-free.app/:splat"
+  from = "/api/*"
+  to = "https://1290-200-164-236-60.ngrok-free.app/api/v1/:splat"
   status = 200
   force = true
 
