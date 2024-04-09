@@ -3,21 +3,15 @@
   to = "/index.html"
   status = 200
 
+[build]
+  command = "bun run build"
+  publish = "public"
+
 [[redirects]]
-  from = "https://zaalcashback.netlify.app/api/v1/login/empresa"
+  from = "/api/v1/login/empresa"
   to = "http://zaal.no-ip.info:8083/api/v1/login/empresa"
   status = 200
-  headers = { "Access-Control-Allow-Origin" = "*", "Content-Type" = "application/json" }
-
-[[redirects]]
-  from = "/api/*"
-  to = "http://zaal.no-ip.info:8083/api/v1/:splat"
-  status = 200
-  headers = { "Access-Control-Allow-Origin" = "http://zaal.no-ip.info:8083/api/v1/" }
 
 [[headers]]
-  for = "/*"
-    [headers.values]
-    Access-Control-Allow-Origin = "*"
-    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
-    Access-Control-Allow-Headers = "Origin, X-Requested-With, Content-Type, Accept"
+  for = "/api/*"
+  headers = ["Access-Control-Allow-Origin: *"]
