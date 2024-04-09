@@ -8,9 +8,10 @@
   publish = "public"
 
 [[redirects]]
-  from = "/api/v1/login/empresa"
+  from = "https://zaalcashback.netlify.app/api/v1/login/empresa"
   to = "http://zaal.no-ip.info:8083/api/v1/login/empresa"
   status = 200
+  method = "POST"
 
 [[headers]]
   for = "/api/*"
