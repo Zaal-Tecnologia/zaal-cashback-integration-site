@@ -8,3 +8,7 @@
   to = "http://zaal.no-ip.info:8083/api/v1/login/empresa"
   status = 200
   method = "POST"
+
+[[headers]]
+  for = "/api/*"
+  headers = ["Access-Control-Allow-Origin: *"]
