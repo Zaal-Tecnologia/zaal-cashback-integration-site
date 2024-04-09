@@ -11,7 +11,7 @@ function Root({ to, onAction, ...props }: RootProps) {
   return to ? (
     <Link
       to={to}
-      className="flex items-center h-8 hover:text-zinc-900 gap-x-5 group"
+      className="flex items-center h-8 hover:text-zinc-900 dark:hover:text-zinc-200 gap-x-5 group"
       {...props}
     >
       {props.children}
@@ -19,7 +19,7 @@ function Root({ to, onAction, ...props }: RootProps) {
   ) : (
     <button
       onClick={onAction!}
-      className="flex items-center h-8 hover:text-zinc-900 gap-x-5 group"
+      className="flex items-center h-8 hover:text-zinc-900 dark:hover:text-zinc-200 gap-x-5 group"
       {...props}
     >
       {props.children}

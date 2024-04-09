@@ -32,7 +32,7 @@ export function Branches() {
   console.log(create)
 
   return (
-    <div className="overflow-hidden col-span-3 border-r border-zinc-200 flex flex-col px-8 pt-10">
+    <div className="overflow-hidden col-span-3 border-r border-zinc-200 dark:border-zinc-700 flex flex-col px-8 pt-10">
       <header className="flex items-center justify-between mb-20">
         <span className="text-sm group-hover:translate-x-2 font-medium transition-transform duration-300">
           SUAS FILIAIS
@@ -69,9 +69,7 @@ export function Branches() {
               <BranchImage id={item.id} razao={item.razao} />
 
               <div className="flex flex-col items-start">
-                <span className="text-sm group-hover:underline">
-                  {item.razao}
-                </span>
+                <span className="text-sm">{item.razao}</span>
                 <span className="text-xs text-zinc-400">
                   {item.endereco.cidadeNome}, {item.endereco.bairro}
                 </span>

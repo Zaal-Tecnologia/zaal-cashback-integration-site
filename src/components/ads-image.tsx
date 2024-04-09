@@ -49,7 +49,7 @@ export function AdsImage(props: Props) {
       onClick={() => props.onSelectAds(URL.createObjectURL(data as Blob))}
     >
       <img
-        className="ring-2 ring-zinc-200 rounded-md"
+        className="ring-2 ring-zinc-200 dark:ring-zinc-700 rounded-md"
         src={URL.createObjectURL(data as Blob)}
         alt=""
       />

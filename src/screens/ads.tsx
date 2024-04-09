@@ -26,6 +26,11 @@ import {
 import { DeviceMockup } from '@/components/device-mockup'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useUpdateForm } from '@/hooks/use-update-form'
+import {
+  FormDivider,
+  FormDividerLine,
+  FormDividerTitle,
+} from '@/components/form-divider'
 
 const FormSchema = z.object({
   ativo: z.boolean().default(true),
@@ -195,8 +200,8 @@ export function Ads() {
           <span className="text-sm group-hover:translate-x-2 font-medium transition-transform duration-300">
             {isUpdate ? 'ATUALIZAR ANÚNCIO' : 'CRIAR ANÚNCIO'}
           </span>
-          <div className="h-5 mx-5 w-[1px] bg-zinc-200" />
-          <span className="text-sm text-zinc-500">
+          <div className="h-5 mx-5 w-[1px] bg-zinc-200 dark:bg-zinc-700" />
+          <span className="text-sm text-zinc-500 dark:font-light dark:text-zinc-300">
             Preencha o formulário abaixo
           </span>
         </div>
@@ -247,39 +252,19 @@ export function Ads() {
 
         {!isUpdate ? (
           <>
-            <div className="flex items-center space-x-2">
-              <div className="flex items-center rounded-full h-8 pl-[3px] pr-5">
-                <div className="h-6 w-6 bg-zinc-800 flex items-center justify-center rounded-full mr-2.5">
-                  <span className="text-[12px] text-white font-bold font-urbanist">
-                    1
-                  </span>
-                </div>
-                <span className="text-[11px] text-zinc-700 font-semibold">
-                  IMAGEM
-                </span>
-              </div>
-
-              <div className="h-[1px] w-full bg-zinc-200"></div>
-            </div>
+            <FormDivider>
+              <FormDividerTitle position="1">IMAGEM</FormDividerTitle>
+              <FormDividerLine />
+            </FormDivider>
 
             <ImagePicker image={image} onSelect={onSelect} />
           </>
         ) : null}
 
-        <div className="flex items-center space-x-2">
-          <div className="flex items-center rounded-full h-8 pl-[3px] pr-5">
-            <div className="h-6 w-6 bg-zinc-800 flex items-center justify-center rounded-full mr-2.5">
-              <span className="text-[12px] text-white font-bold font-urbanist">
-                2
-              </span>
-            </div>
-            <span className="text-[11px] text-zinc-700 font-semibold">
-              CONTEÚDO
-            </span>
-          </div>
-
-          <div className="h-[1px] w-full bg-zinc-200"></div>
-        </div>
+        <FormDivider>
+          <FormDividerTitle position="2">CONTEÚDO</FormDividerTitle>
+          <FormDividerLine />
+        </FormDivider>
 
         <div className="gap-3 grid px-2.5">
           <Input.Root>
@@ -327,20 +312,10 @@ export function Ads() {
           </div>
         </div>
 
-        <div className="flex items-center space-x-2">
-          <div className="flex items-center rounded-full h-8 pl-[3px] pr-5">
-            <div className="h-6 w-6 bg-zinc-800 flex items-center justify-center rounded-full mr-2.5">
-              <span className="text-[12px] text-white font-bold font-urbanist">
-                3
-              </span>
-            </div>
-            <span className="text-[11px] text-zinc-700 font-semibold">
-              VALORES
-            </span>
-          </div>
-
-          <div className="h-[1px] w-full bg-zinc-200"></div>
-        </div>
+        <FormDivider>
+          <FormDividerTitle position="3">VALORES</FormDividerTitle>
+          <FormDividerLine />
+        </FormDivider>
 
         <div className="grid grid-cols-2 gap-5 px-2.5">
           <div className="col-span-2 flex items-center justify-between bg-zinc-100 p-5 rounded-md dark:bg-zinc-700/50">
@@ -410,20 +385,10 @@ export function Ads() {
 
         {!isUpdate && (
           <>
-            <div className="flex items-center space-x-2">
-              <div className="flex items-center rounded-full h-8 pl-[3px] pr-5">
-                <div className="h-6 w-6 bg-zinc-800 flex items-center justify-center rounded-full mr-2.5">
-                  <span className="text-[12px] text-white font-bold font-urbanist">
-                    4
-                  </span>
-                </div>
-                <span className="text-[11px] text-zinc-700 font-semibold">
-                  DATAS
-                </span>
-              </div>
-
-              <div className="h-[1px] w-full bg-zinc-200"></div>
-            </div>
+            <FormDivider>
+              <FormDividerTitle position="4">DATAS</FormDividerTitle>
+              <FormDividerLine />
+            </FormDivider>
 
             <div className="grid grid-cols-2 gap-5 px-2.5">
               <div className="col-span-2 flex items-center justify-between bg-zinc-100 p-5 rounded-md dark:bg-zinc-700/50">

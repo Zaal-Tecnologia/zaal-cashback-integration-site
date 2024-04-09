@@ -100,17 +100,21 @@ export function History() {
           <span className="text-sm group-hover:translate-x-2 font-medium transition-transform duration-300">
             HISTÓRICO
           </span>
-          <div className="h-5 mx-5 w-[1px] bg-zinc-200" />
-          <span className="text-sm text-zinc-500">Veja seu histórico</span>
+          <div className="h-5 mx-5 w-[1px] bg-zinc-200 dark:bg-zinc-700" />
+          <span className="text-sm text-zinc-500 dark:text-zinc-300 dark:font-light">
+            Veja seu histórico
+          </span>
         </div>
 
         <div className="flex items-center">
-          <button
-            onClick={() => setOpenLightbox(true)}
-            className="h-12 w-12 rounded-full hover:bg-zinc-200/50 flex items-center justify-center translate-all duration-300 font-urbanist"
-          >
-            <Slideshow size={18} />
-          </button>
+          {ads && ads.length > 1 ? (
+            <button
+              onClick={() => setOpenLightbox(true)}
+              className="h-12 w-12 rounded-full hover:bg-zinc-200/50 flex items-center justify-center translate-all duration-300 font-urbanist"
+            >
+              <Slideshow size={18} />
+            </button>
+          ) : null}
           <button
             // onClick={() => setCreate((prev) => !prev)}
             className="h-12 w-12 rounded-full hover:bg-zinc-200/50 flex items-center justify-center translate-all duration-300 font-urbanist"

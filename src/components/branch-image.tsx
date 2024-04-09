@@ -40,7 +40,7 @@ export function BranchImage(props: Props) {
   }, [])
 
   return (
-    <div className="relative group rounded-full w-[45px] h-[45px] flex items-center justify-center ring-4 ring-zinc-200/50">
+    <div className="relative group rounded-full w-[45px] h-[45px] flex items-center justify-center ring-4 ring-zinc-200/50 dark:ring-zinc-700/50">
       {logo ? (
         <img
           src={`data:image/png;base64, ${logo}`}
