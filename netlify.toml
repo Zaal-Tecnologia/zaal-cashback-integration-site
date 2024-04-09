@@ -3,16 +3,8 @@
   to = "/index.html"
   status = 200
 
-[build]
-  command = "bun run build"
-  publish = "public"
-
 [[redirects]]
   from = "https://zaalcashback.netlify.app/api/v1/login/empresa"
   to = "http://zaal.no-ip.info:8083/api/v1/login/empresa"
   status = 200
   method = "POST"
-
-[[headers]]
-  for = "/api/*"
-  headers = ["Access-Control-Allow-Origin: *"]
