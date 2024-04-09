@@ -4,6 +4,12 @@
   status = 200
 
 [[redirects]]
+  from = "https://zaalcashback.netlify.app/api/v1/login/empresa"
+  to = "http://zaal.no-ip.info:8083/api/v1/login/empresa"
+  status = 200
+  headers = { "Access-Control-Allow-Origin" = "*", "Content-Type" = "application/json" }
+
+[[redirects]]
   from = "/api/*"
   to = "http://zaal.no-ip.info:8083/api/v1/:splat"
   status = 200
