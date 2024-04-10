@@ -40,12 +40,15 @@ export function BranchImage(props: Props) {
   }, [])
 
   return (
-    <div className="relative group rounded-full w-[45px] h-[45px] flex items-center justify-center ring-4 ring-zinc-200/50 dark:ring-zinc-700/50">
+    <div
+      data-logo={!logo}
+      className="data-[logo=true]:rounded-full data-[logo=true]:border border-zinc-900 relative group w-[45px] h-[45px] min-w-[45px] min-h-[45px] flex items-center justify-center"
+    >
       {logo ? (
         <img
           src={`data:image/png;base64, ${logo}`}
           alt=""
-          className="h-[45px] w-[45px] group-hover:scale-110 rounded-full transition-all duration-300"
+          className="h-[45px] w-[45px] group-hover:scale-110 rounded-full min-w-[45px] min-h-[45px] transition-all duration-300 object-fill"
         />
       ) : (
         <span className="text-[13px] font-medium uppercase text-zinc-700 dark:text-white">

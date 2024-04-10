@@ -1,4 +1,4 @@
-import { SignOut } from '@phosphor-icons/react'
+import { User } from '@phosphor-icons/react'
 import { useNavigate } from 'react-router-dom'
 
 import { MenuItem } from './menu-item'
@@ -16,8 +16,8 @@ export function Logout() {
 
   return (
     <MenuItem.Root onAction={handleLogout}>
-      <SignOut size={20} weight="bold" />
-      <MenuItem.Title>SAIR</MenuItem.Title>
+      <User size={20} weight="bold" />
+      <MenuItem.Title>PERFIL</MenuItem.Title>
     </MenuItem.Root>
   )
 }

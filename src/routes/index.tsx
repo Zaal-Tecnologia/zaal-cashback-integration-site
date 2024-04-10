@@ -8,6 +8,7 @@ import { Layout } from '@/components/layout'
 import { NotFound } from '@/screens/not-found'
 import { Protected } from '@/components/protected'
 import { Profile } from '@/screens/profile'
+import { Branch } from '@/screens/branch'
 
 export function AppRouter() {
   return (
@@ -33,6 +34,15 @@ export function AppRouter() {
             element={
               <Protected to="/">
                 <Profile />
+              </Protected>
+            }
+          />
+
+          <Route
+            path="/branch"
+            element={
+              <Protected to="/">
+                <Branch />
               </Protected>
             }
           />

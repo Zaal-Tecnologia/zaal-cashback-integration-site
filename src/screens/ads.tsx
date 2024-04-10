@@ -211,12 +211,13 @@ export function Ads() {
             <Info weight="bold" size={18} />
           </SheetTrigger>
 
-          <SheetContent className="pb-20">
+          <SheetContent>
             <ScrollArea>
               <SheetHeader className="mb-10">
-                <SheetTitle>Are you absolutely sure?</SheetTitle>
+                <SheetTitle>Preview</SheetTitle>
                 <SheetDescription>
-                  Informaçoes sobre o form e mockup
+                  Aqui você pode ver um preview de como seus anúncios vão
+                  aparecer no aplicativo.
                 </SheetDescription>
               </SheetHeader>
 

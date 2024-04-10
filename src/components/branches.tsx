@@ -1,5 +1,5 @@
-import { CaretRight, Plus } from '@phosphor-icons/react'
-import { useState } from 'react'
+import { Plus } from '@phosphor-icons/react'
+import { Link } from 'react-router-dom'
 
 import { BranchImage } from './branch-image'
 
@@ -10,6 +10,7 @@ import { api } from '@/data/api'
 
 import type { API } from '@/@types/dto/api'
 import type { BranchDTO } from '@/@types/dto/branch-dto'
+import { useEffect } from 'react'
 
 export function Branches() {
   const { setBranch, branch } = useBranch()
@@ -28,28 +29,30 @@ export function Branches() {
     },
   )
 
-  const [create, setCreate] = useState(false)
-  console.log(create)
+  useEffect(() => {
+    if (data) setBranch(data.content[0])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data])
 
   return (
-    <div className="overflow-hidden col-span-3 border-r border-zinc-200 dark:border-zinc-700 flex flex-col px-8 pt-10">
+    <div className="overflow-hidden shadow-sm col-span-3 border-x border-zinc-200 dark:border-zinc-700 flex flex-col px-8 pt-10">
       <header className="flex items-center justify-between mb-20">
         <span className="text-sm group-hover:translate-x-2 font-medium transition-transform duration-300">
           SUAS FILIAIS
         </span>
 
-        <button
-          onClick={() => setCreate((prev) => !prev)}
+        <Link
+          to="branch"
           className="h-12 w-12 rounded-full hover:bg-zinc-200/50 flex items-center justify-center translate-all duration-300"
         >
           <Plus weight="bold" size={18} />
-        </button>
+        </Link>
       </header>
 
       <ul className="space-y-5">
         {isLoading ? (
           <li className="animate-pulse flex items-center gap-x-5 group cursor-pointer">
-            <div className="relative group rounded-full w-[45px] h-[45px] flex items-center justify-center bg-zinc-200/50 ring-4 ring-zinc-200/50" />
+            <div className="relative group bg-zinc-200/50 rounded-full w-[45px] h-[45px] flex items-center justify-center" />
 
             <div className="flex flex-col items-start">
               <span className="h-[14px] w-40 bg-zinc-200/50 mb-1.5 rounded-md"></span>
@@ -59,27 +62,66 @@ export function Branches() {
         ) : (
           data?.content.map((item) => (
             <li
-              key={item.id}
               data-selected={!branch ? true : item.id === branch?.id}
-              className="data-[selected=false]:opacity-50 transition-[opacity] duration-300 flex items-center gap-x-5 group cursor-pointer"
-              onClick={() =>
-                item.id === branch?.id ? setBranch(null) : setBranch(item)
-              }
+              key={item.id}
+              className="relative flex flex-col items-center group"
             >
-              <BranchImage id={item.id} razao={item.razao} />
+              <button
+                className="group-data-[selected='false']:opacity-70 transition-[opacity] duration-300 flex items-center gap-x-5 group cursor-pointer"
+                onClick={() =>
+                  item.id === branch?.id ? setBranch(null) : setBranch(item)
+                }
+              >
+                <BranchImage id={item.id} razao={item.razao} />
 
-              <div className="flex flex-col items-start">
-                <span className="text-sm">{item.razao}</span>
-                <span className="text-xs text-zinc-400">
-                  {item.endereco.cidadeNome}, {item.endereco.bairro}
-                </span>
-              </div>
+                <div className="flex flex-col items-start">
+                  <span className="text-sm">{item.razao}</span>
+                  <span className="text-xs text-zinc-400 truncate max-w-[70%]">
+                    {item.endereco.cidadeNome}, {item.endereco.bairro},{' '}
+                    {item.endereco.logradouro}
+                  </span>
+                </div>
+              </button>
 
-              <CaretRight
-                weight="bold"
-                data-selected={branch?.id === item.id}
-                className="data-[selected=true]:opacity-100 data-[selected=true]:translate-x-0 ml-auto group-hover:opacity-100 group-hover:translate-x-0 -translate-x-2 opacity-0 transition-all duration-150"
-              />
+              {/** <button className="absolute right-0 top-2.5 hover:bg-zinc-200/50 h-7 w-7 rounded-full bg-zinc-100 flex items-center justify-center">
+                <CaretDown
+                  weight="bold"
+                  size={14}
+                  data-selected={branch?.id === item.id}
+                />
+              </button> */}
+
+              {branch && (
+                <div className="flex-col group-data-[selected='true']:flex bg-zinc-50 gap-2.5 rounded-xl mt-2 p-5 hidden h-auto w-full">
+                  {/** <pre className="text-xs">{JSON.stringify(branch, null, 2)}</pre> */}
+
+                  <p className="text-xs text-zinc-700 font-medium">
+                    {branch.cnpj.replace(
+                      /(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,
+                      '$1.$2.$3/$4-$5',
+                    )}
+                  </p>
+
+                  <h3 className="font-semibold uppercase -tracking-wide text-[13px] block">
+                    {branch.razao}
+                  </h3>
+
+                  <p className="text-xs text-zinc-700 font-medium">
+                    {branch.descricao}
+                  </p>
+
+                  <p className="text-xs text-zinc-700 font-medium">
+                    {branch.categoria}
+                  </p>
+
+                  <p className="text-xs text-zinc-700 font-medium">
+                    {branch.endereco.paisNome}, {branch.endereco.cidadeNome},{' '}
+                    {branch.endereco.uf}, {branch.endereco.bairro},{' '}
+                    {branch.endereco.bairro}, {branch.endereco.numero},{' '}
+                    {branch.endereco.logradouro}.
+                  </p>
+                </div>
+              )}
             </li>
           ))
         )}

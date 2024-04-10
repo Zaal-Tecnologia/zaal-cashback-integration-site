@@ -1,9 +1,13 @@
-import { motion } from 'framer-motion'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { ArrowUpRight, Camera, CircleNotch } from '@phosphor-icons/react'
-import clsx from 'clsx'
+import {
+  ArrowDown,
+  ArrowUpRight,
+  CircleNotch,
+  Image as IconImage,
+  Trash,
+} from '@phosphor-icons/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { api } from '@/data/api'
@@ -11,6 +15,7 @@ import { api } from '@/data/api'
 import { useMutation } from '@/hooks/use-mutation'
 
 import { Input } from './ui/input'
+import { useToast } from './ui/use-toast'
 
 const FormSchema = z.object({
   cnpj: z.string(),
@@ -71,7 +76,6 @@ export function CreateBranchForm(props: Props) {
     })
 
     const json = await response.json()
-    console.log('branch', json)
 
     return json.id
   }
@@ -131,76 +135,110 @@ export function CreateBranchForm(props: Props) {
     props.onEnd()
   }
 
-  function handleSelectImage(e: ChangeEvent<HTMLInputElement>) {
-    if (!e.target.files || e.target.files.length === 0) {
-      return
-    }
+  const { toast } = useToast()
 
-    const file = e.target.files[0]
+  const handleSelectPicture = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      if (event.target && event.target.files) {
+        const file = event.target.files[0]
 
-    const reader = new FileReader()
+        let hasError = false
 
-    reader.onload = () => {
-      setImage(String(reader.result))
-    }
+        const picture = new Image()
 
-    reader.readAsDataURL(file)
-  }
+        if (picture.width > 100 || picture.height > 100) {
+          toast({
+            title: 'Ocorreu um erro',
+            description: 'Imagem maior do que 100x100',
+            variant: 'error',
+          })
+
+          hasError = true
+        }
+
+        if (picture.width < 80 || picture.height < 80) {
+          toast({
+            title: 'Ocorreu um erro',
+            description: 'Imagem menor do que 80x80',
+            variant: 'error',
+          })
+
+          hasError = true
+        }
+
+        if (file.type !== 'image/png') {
+          toast({
+            title: 'Ocorreu um erro',
+            description: 'A imagem precisa ter o formato .png',
+            variant: 'error',
+          })
+
+          hasError = true
+        }
+
+        if (!hasError) {
+          const reader = new FileReader()
+
+          reader.onload = () => {
+            setImage(String(reader.result))
+          }
+
+          reader.readAsDataURL(file)
+        }
+      }
+    },
+    [toast],
+  )
 
   return (
-    <motion.div
-      initial={{ translateY: -50, opacity: 0 }}
-      animate={{ translateY: 0, opacity: 1 }}
-      transition={{ type: 'tween' }}
-      className="flex flex-col relative"
-    >
-      <form action="" onSubmit={handleSubmit(onSubmit)}>
-        <Input.Root>
-          <Input.Label>Logo</Input.Label>
-          <div
-            className={clsx(
-              'relative rounded-md p-2.5 mb-5 flex items-center gap-5 border border-dashed dark:bg-zinc-800/50',
-              {
-                'bg-zinc-50': !image,
-                'border-green-500 bg-green-200/50': image,
-              },
-            )}
-          >
+    <div className="w-full">
+      <form action="grid grid-cols-2" onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex items-start gap-5 border-b border-b-zinc-100 dark:border-b-zinc-700 mb-5">
+          <div className="relative rounded-2xl mb-5 hover:border-zinc-900 transition-all duration-500 flex items-center justify-center h-[110px] w-[110px] group border border-dashed dark:bg-zinc-800/50">
             <input
               type="file"
               className="opacity-0 absolute inset-0 cursor-pointer"
-              onChange={handleSelectImage}
+              onChange={handleSelectPicture}
             />
 
-            <div
-              className={clsx(
-                'rounded-md h-[50px] w-[50px] flex items-center justify-center',
-                {
-                  'bg-zinc-200 dark:bg-zinc-700 shadow-inner': !image,
-                },
-              )}
-            >
-              {image ? (
-                <img src={image} alt="" />
-              ) : (
-                <Camera size={20} weight="duotone" />
-              )}
-            </div>
+            {image ? (
+              <img src={image} alt="" className="rounded-xl" />
+            ) : (
+              <>
+                <ArrowDown
+                  size={20}
+                  weight="bold"
+                  className="group-hover:translate-y-0 translate-y-4 transition-all duration-500 opacity-0 group-hover:opacity-100"
+                  alt=""
+                />
 
-            <div className="flex flex-col">
-              <p
-                className={clsx('text-green-700 font-medium text-xs', {
-                  'text-green-500': image,
-                  'text-zinc-900 dark:text-white': !image,
-                })}
-              >
-                {image
-                  ? 'Foto adicionada com sucesso.'
-                  : 'Adicione uma foto a sua filial'}
-              </p>
-            </div>
+                <IconImage
+                  size={24}
+                  weight="duotone"
+                  className="absolute top-1/2 left-1/2 righ-auto bottom-auto -translate-y-1/2 -translate-x-1/2 -mr-1/2 group-hover:translate-y-4 transition-all duration-500 group-hover:opacity-0 opacity-100"
+                  alt=""
+                />
+              </>
+            )}
           </div>
-        </Input.Root>
+
+          <div className="flex flex-col gap-5">
+            <span className="text-xs block mt-4 text-zinc-700">
+              É importante que a imagem tenha entre 80x80 e 100x100 e esteja em
+              .png
+            </span>
+
+            {image ? (
+              <button
+                onClick={() => setImage(null)}
+                className="bg-red-500 h-8 w-24 flex items-center justify-center rounded-full transition-all duration-300 hover:bg-red-500/90"
+              >
+                <Trash weight="bold" className="text-white" />
+                <span className="text-xs text-white ml-1">Remover</span>
+              </button>
+            ) : null}
+          </div>
+        </div>
 
         <Input.Root>
           <Input.Label>CNPJ</Input.Label>
@@ -216,7 +254,7 @@ export function CreateBranchForm(props: Props) {
           className="mt-5 h-[50px] flex items-center justify-between px-5 bg-[#305a96] w-full rounded-md ring-2 ring-[#305a96]/50"
         >
           <p className="-tracking-wide text-[13px] font-medium text-white">
-            Criar
+            Verificar CNPJ
           </p>
 
           {isPending ? (
@@ -230,6 +268,6 @@ export function CreateBranchForm(props: Props) {
           )}
         </button>
       </form>
-    </motion.div>
+    </div>
   )
 }
