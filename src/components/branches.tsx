@@ -1,5 +1,6 @@
 import { Plus } from '@phosphor-icons/react'
 import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
 
 import { BranchImage } from './branch-image'
 
@@ -10,7 +11,6 @@ import { api } from '@/data/api'
 
 import type { API } from '@/@types/dto/api'
 import type { BranchDTO } from '@/@types/dto/branch-dto'
-import { useEffect } from 'react'
 
 export function Branches() {
   const { setBranch, branch } = useBranch()

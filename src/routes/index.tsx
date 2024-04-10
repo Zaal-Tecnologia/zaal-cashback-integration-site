@@ -7,8 +7,10 @@ import { History } from '@/screens/history'
 import { Layout } from '@/components/layout'
 import { NotFound } from '@/screens/not-found'
 import { Protected } from '@/components/protected'
-import { Profile } from '@/screens/profile'
 import { Branch } from '@/screens/branch'
+
+import { ChangeGroupName } from '@/screens/profile/change-group-name'
+import { Logout } from '@/screens/profile/logout'
 
 export function AppRouter() {
   return (
@@ -30,19 +32,28 @@ export function AppRouter() {
           />
 
           <Route
-            path="/profile"
+            path="/branch"
             element={
               <Protected to="/">
-                <Profile />
+                <Branch />
               </Protected>
             }
           />
 
           <Route
-            path="/branch"
+            path="/profile/change-group-name"
             element={
               <Protected to="/">
-                <Branch />
+                <ChangeGroupName />
+              </Protected>
+            }
+          />
+
+          <Route
+            path="/profile/logout"
+            element={
+              <Protected to="/">
+                <Logout />
               </Protected>
             }
           />

@@ -1,16 +1,18 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Link, Outlet } from 'react-router-dom'
-import { FlagBanner, ArrowUpRight } from '@phosphor-icons/react'
+import { Link, Outlet, useLocation } from 'react-router-dom'
+import { FlagBanner, ArrowUpRight, User } from '@phosphor-icons/react'
 
 import { Toaster } from '@/components/ui/toaster'
 
 import { Branches } from './branches'
 import { MenuItem } from './menu-item'
-import { Logout } from './logout'
 import { ScrollArea } from './ui/scroll-area'
 import { Theme } from './theme'
+import { ProfileActions } from './profile-actions'
 
 export function Layout() {
+  const { pathname } = useLocation()
+
   return (
     <div className="w-screen min-h-screen bg-[#fefefe] dark:bg-zinc-800">
       <Toaster />
@@ -27,7 +29,10 @@ export function Layout() {
 
             <Theme />
 
-            <Logout />
+            <MenuItem.Root to="/profile/change-group-name">
+              <User size={20} weight="bold" />
+              <MenuItem.Title>PERFIL</MenuItem.Title>
+            </MenuItem.Root>
 
             <Link
               to="ads"
@@ -42,7 +47,11 @@ export function Layout() {
           </nav>
         </aside>
 
-        <Branches />
+        {pathname.split('/')[1] !== 'profile' ? (
+          <Branches />
+        ) : (
+          <ProfileActions />
+        )}
 
         <ScrollArea className="col-span-5">
           <Outlet />

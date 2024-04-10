@@ -2,15 +2,13 @@ import { ComponentProps, ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
 interface RootProps {
-  to?: 'history' | 'ads'
+  to?: 'history' | 'ads' | '/profile/change-group-name'
   onAction?: () => void
   children: ReactNode
 }
 
 function Root({ to, onAction, ...props }: RootProps) {
   const { pathname } = useLocation()
-
-  console.log(pathname.replace('/', ''), to)
 
   return to ? (
     <Link
