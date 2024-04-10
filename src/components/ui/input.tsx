@@ -4,7 +4,7 @@ import { ComponentProps, ElementRef, forwardRef } from 'react'
 
 function Root(props: ComponentProps<'fieldset'>) {
   return (
-    <fieldset className="flex flex-col" {...props}>
+    <fieldset className="flex flex-col w-full" {...props}>
       {props.children}
     </fieldset>
   )

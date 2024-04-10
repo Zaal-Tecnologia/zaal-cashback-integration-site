@@ -7,7 +7,6 @@ import { Toaster } from '@/components/ui/toaster'
 import { Branches } from './branches'
 import { MenuItem } from './menu-item'
 import { ScrollArea } from './ui/scroll-area'
-import { Theme } from './theme'
 import { ProfileActions } from './profile-actions'
 
 export function Layout() {
@@ -26,8 +25,6 @@ export function Layout() {
               <FlagBanner size={20} weight="bold" />
               <MenuItem.Title>ANÚNCIOS</MenuItem.Title>
             </MenuItem.Root>
-
-            <Theme />
 
             <MenuItem.Root to="/profile/change-group-name">
               <User size={20} weight="bold" />

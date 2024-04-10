@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const ACTIONS = [
+  { name: 'ESCOLHER TEMA ', action: '/profile/theme' },
   { name: 'ALTERAR NOME DO GRUPO', action: '/profile/change-group-name' },
   { name: 'SAIR', action: '/profile/logout' },
 ]
@@ -14,10 +15,13 @@ export function ProfileActions() {
 
   return (
     <div className="overflow-hidden shadow-sm col-span-3 border-x border-zinc-200 dark:border-zinc-700 flex flex-col pt-10">
-      <header className="flex items-center justify-between mb-20 px-8 min-h-12">
-        <strong className="text-2xl text-zinc-700 group-hover:translate-x-2 font-extrabold font-urbanist transition-transform duration-300">
+      <header className="mb-20 flex flex-col items-start px-10">
+        <strong className="text-2xl group-hover:translate-x-2 font-extrabold font-urbanist transition-transform duration-300">
           Perfil
         </strong>
+        <span className="text-[13px] text-zinc-700 dark:text-zinc-200 mt-2.5">
+          Configurações de perfil e mais
+        </span>
       </header>
 
       <ul>
