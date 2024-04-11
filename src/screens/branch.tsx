@@ -32,7 +32,7 @@ export function Branch() {
         </button>
       </header>
 
-      <CreateBranchForm onEnd={() => console.log('branch')} />
+      <CreateBranchForm />
     </motion.div>
   )
 }

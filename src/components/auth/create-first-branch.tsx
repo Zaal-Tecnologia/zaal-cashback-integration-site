@@ -1,6 +1,5 @@
 import { ArrowLeft } from '@phosphor-icons/react'
 import { motion } from 'framer-motion'
-import { useNavigate } from 'react-router-dom'
 
 import { useStep } from '../../contexts/step'
 
@@ -8,7 +7,6 @@ import { CreateBranchForm } from '../create-branch-form'
 
 export function CreateFirstBranch() {
   const { setStep } = useStep()
-  const navigate = useNavigate()
 
   function handleGoBack() {
     localStorage.removeItem('@zaalcashback:token')
@@ -45,7 +43,7 @@ export function CreateFirstBranch() {
         </p>
       </div>
 
-      <CreateBranchForm onEnd={() => navigate('ads')} />
+      <CreateBranchForm />
     </motion.div>
   )
 }
