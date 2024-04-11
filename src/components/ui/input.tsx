@@ -38,6 +38,7 @@ const Write = forwardRef<ElementRef<'input'>, ComponentProps<'input'>>(
         ref={ref}
         type="text"
         className="text-[13px] focus:outline-none w-full flex bg-zinc-100/30 dark:bg-zinc-700/50 dark:border-zinc-600/50 h-12 border focus:border-[#305a96] focus:ring-2 focus:ring-blue-300/50 dark:focus:ring-blue-700/50 rounded-md px-2.5"
+        onChange={props.onChange}
         {...props}
       />
     )

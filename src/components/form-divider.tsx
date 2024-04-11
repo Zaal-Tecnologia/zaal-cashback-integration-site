@@ -1,7 +1,12 @@
+import clsx from 'clsx'
 import { ComponentProps } from 'react'
 
 function FormDivider(props: ComponentProps<'div'>) {
-  return <div className="flex items-center space-x-2">{props.children}</div>
+  return (
+    <div className={clsx('flex items-center space-x-2', props.className)}>
+      {props.children}
+    </div>
+  )
 }
 
 function FormDividerTitle(props: ComponentProps<'div'> & { position: string }) {

@@ -1,6 +1,6 @@
-import { Plus } from '@phosphor-icons/react'
+import { Info, Plus, X } from '@phosphor-icons/react'
 import { Link } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useState } from 'react'
 
 import { BranchImage } from './branch-image'
 
@@ -11,6 +11,21 @@ import { api } from '@/data/api'
 
 import type { API } from '@/@types/dto/api'
 import type { BranchDTO } from '@/@types/dto/branch-dto'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from './ui/tooltip'
+
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from './ui/dialog'
 
 export function Branches() {
   const { setBranch, branch } = useBranch()
@@ -29,27 +44,108 @@ export function Branches() {
     },
   )
 
-  useEffect(() => {
+  /** useEffect(() => {
     if (data) setBranch(data.content[0])
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data])
+  }, [data]) */
+
+  const [info, setInfo] = useState(false)
 
   return (
-    <div className="overflow-hidden shadow-sm col-span-3 border-x border-zinc-200 dark:border-zinc-700 flex flex-col px-8 pt-10">
-      <header className="flex items-center justify-between mb-20">
+    <div className="overflow-hidden shadow-sm col-span-3 border-x border-zinc-200 dark:border-zinc-700 flex flex-col pt-10">
+      <header className="flex items-center justify-between mb-20 px-8">
         <span className="text-sm group-hover:translate-x-2 font-medium transition-transform duration-300">
           SUAS FILIAIS
         </span>
 
-        <Link
-          to="branch"
-          className="h-12 w-12 rounded-full hover:bg-zinc-200/50 flex items-center justify-center translate-all duration-300"
-        >
-          <Plus weight="bold" size={18} />
-        </Link>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link
+                to="branch"
+                className="h-12 w-12 rounded-full hover:bg-zinc-200/50 flex items-center justify-center translate-all duration-300"
+              >
+                <Plus weight="bold" size={18} />
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent>Nova filial</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </header>
 
-      <ul className="space-y-5">
+      <Dialog
+        open={info}
+        // onOpenChange={(event) => event === false && handleCloseModal()}
+      >
+        {info && (
+          <DialogContent>
+            <DialogClose
+              onClick={() => setInfo(false)}
+              className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
+            >
+              <X className="h-4 w-4" weight="bold" />
+              <span className="sr-only">Close</span>
+            </DialogClose>
+
+            <div className="duration-300 flex-col flex gap-2.5 py-5 h-auto w-full">
+              {branch && (
+                <>
+                  <DialogHeader>
+                    <DialogTitle>{branch?.razao}</DialogTitle>
+                    <DialogDescription>
+                      Veja informações sobre o anúncio {branch?.razao}.
+                    </DialogDescription>
+                  </DialogHeader>
+
+                  <div className="w-full bg-zinc-200 h-[1px] my-5"></div>
+
+                  <p className="text-xs text-zinc-700 font-medium">
+                    {branch.cnpj.replace(
+                      /(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,
+                      '$1.$2.$3/$4-$5',
+                    )}
+                  </p>
+
+                  <div className="flex flex-col my-5">
+                    <p className="text-xs text-zinc-900 font-semibold block mb-2.5">
+                      Descrição
+                    </p>
+
+                    <p className="text-xs text-zinc-700 font-medium">
+                      {branch.descricao}.
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col mb-5">
+                    <p className="text-xs text-zinc-900 font-semibold block mb-2.5">
+                      Categoria
+                    </p>
+
+                    <p className="text-xs text-zinc-700 font-medium">
+                      {branch.categoria}.
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col">
+                    <p className="text-xs text-zinc-900 font-semibold block mb-2.5">
+                      Endereço
+                    </p>
+
+                    <p className="text-xs text-zinc-700 font-medium">
+                      {branch.endereco.paisNome}, {branch.endereco.cidadeNome},{' '}
+                      {branch.endereco.uf}, {branch.endereco.bairro},{' '}
+                      {branch.endereco.bairro}, {branch.endereco.numero},{' '}
+                      {branch.endereco.logradouro}.
+                    </p>
+                  </div>
+                </>
+              )}
+            </div>
+          </DialogContent>
+        )}
+      </Dialog>
+
+      <ul className="space-y-5 px-5">
         {isLoading ? (
           <li className="animate-pulse flex items-center gap-x-5 group cursor-pointer">
             <div className="relative group bg-zinc-200/50 rounded-full w-[45px] h-[45px] flex items-center justify-center" />
@@ -60,70 +156,38 @@ export function Branches() {
             </div>
           </li>
         ) : (
-          data?.content.map((item) => (
-            <li
-              data-selected={!branch ? true : item.id === branch?.id}
-              key={item.id}
-              className="relative flex flex-col items-center group"
-            >
-              <button
-                className="group-data-[selected='false']:opacity-70 transition-[opacity] duration-300 flex items-center gap-x-5 group cursor-pointer"
-                onClick={() =>
-                  item.id === branch?.id ? setBranch(null) : setBranch(item)
-                }
+          <>
+            {data?.content.map((item) => (
+              <li
+                key={item.cnpj}
+                data-selected={!branch ? true : item.id === branch?.id}
+                className="relative flex justify-between items-center group space-x-5"
               >
                 <BranchImage id={item.id} razao={item.razao} />
+                <button
+                  className="group-data-[selected='false']:opacity-70 transition-[opacity] duration-300 flex items-center gap-x-5 group cursor-pointer"
+                  onClick={() =>
+                    item.id === branch?.id ? setBranch(null) : setBranch(item)
+                  }
+                >
+                  <div className="flex flex-col items-start">
+                    <span className="text-sm">{item.razao}</span>
+                    <span className="text-xs text-zinc-500 truncate max-w-[70%]">
+                      {item.endereco.cidadeNome}, {item.endereco.bairro},{' '}
+                      {item.endereco.logradouro}
+                    </span>
+                  </div>
+                </button>
 
-                <div className="flex flex-col items-start">
-                  <span className="text-sm">{item.razao}</span>
-                  <span className="text-xs text-zinc-400 truncate max-w-[70%]">
-                    {item.endereco.cidadeNome}, {item.endereco.bairro},{' '}
-                    {item.endereco.logradouro}
-                  </span>
-                </div>
-              </button>
-
-              {/** <button className="absolute right-0 top-2.5 hover:bg-zinc-200/50 h-7 w-7 rounded-full bg-zinc-100 flex items-center justify-center">
-                <CaretDown
-                  weight="bold"
-                  size={14}
-                  data-selected={branch?.id === item.id}
-                />
-              </button> */}
-
-              {branch && (
-                <div className="flex-col group-data-[selected='true']:flex bg-zinc-50 gap-2.5 rounded-xl mt-2 p-5 hidden h-auto w-full">
-                  {/** <pre className="text-xs">{JSON.stringify(branch, null, 2)}</pre> */}
-
-                  <p className="text-xs text-zinc-700 font-medium">
-                    {branch.cnpj.replace(
-                      /(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,
-                      '$1.$2.$3/$4-$5',
-                    )}
-                  </p>
-
-                  <h3 className="font-semibold uppercase -tracking-wide text-[13px] block">
-                    {branch.razao}
-                  </h3>
-
-                  <p className="text-xs text-zinc-700 font-medium">
-                    {branch.descricao}
-                  </p>
-
-                  <p className="text-xs text-zinc-700 font-medium">
-                    {branch.categoria}
-                  </p>
-
-                  <p className="text-xs text-zinc-700 font-medium">
-                    {branch.endereco.paisNome}, {branch.endereco.cidadeNome},{' '}
-                    {branch.endereco.uf}, {branch.endereco.bairro},{' '}
-                    {branch.endereco.bairro}, {branch.endereco.numero},{' '}
-                    {branch.endereco.logradouro}.
-                  </p>
-                </div>
-              )}
-            </li>
-          ))
+                <button
+                  className="h-12 w-12 rounded-full hover:bg-zinc-200/50 items-center justify-center translate-all duration-300 group-data-[selected='true']:flex hidden absolute right-0 top-1"
+                  onClick={() => setInfo(true)}
+                >
+                  <Info size={18} weight="bold" />
+                </button>
+              </li>
+            ))}
+          </>
         )}
       </ul>
     </div>

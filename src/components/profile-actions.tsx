@@ -3,8 +3,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const ACTIONS = [
-  { name: 'ESCOLHER TEMA ', action: '/profile/theme' },
   { name: 'ALTERAR NOME DO GRUPO', action: '/profile/change-group-name' },
+  { name: 'ESCOLHER TEMA ', action: '/profile/theme' },
   { name: 'SAIR', action: '/profile/logout' },
 ]
 

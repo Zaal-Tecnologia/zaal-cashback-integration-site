@@ -11,11 +11,14 @@ export function Theme() {
   const [theme, setTheme] = useState(
     localStorage.getItem('@zaalcashback:theme'),
   )
+  console.log(theme)
 
   function toggleTheme(theme: string) {
     const doc = document.documentElement
 
     setTheme(theme)
+
+    localStorage.setItem('@zaalcashback:theme', theme)
 
     if (theme === 'light' && doc.classList.contains('dark')) {
       doc.classList.remove('dark')
