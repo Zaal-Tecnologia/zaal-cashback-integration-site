@@ -406,10 +406,10 @@ export function CreateBranchForm() {
 
         <button
           type="submit"
-          className="mt-5 h-[50px] flex items-center justify-between px-5 bg-[#305a96] w-full rounded-md ring-2 ring-[#305a96]/50"
+          className="mt-5 mb-10 h-[50px] flex items-center justify-between px-5 bg-[#305a96] w-full rounded-md ring-2 ring-[#305a96]/50"
         >
           <p className="-tracking-wide text-[13px] font-medium text-white">
-            Verificar CNPJ
+            Criar filial
           </p>
 
           {isPending ? (
