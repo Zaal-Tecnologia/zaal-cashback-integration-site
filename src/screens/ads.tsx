@@ -31,6 +31,7 @@ import {
   FormDividerLine,
   FormDividerTitle,
 } from '@/components/form-divider'
+import { useNavigate } from 'react-router-dom'
 
 const FormSchema = z.object({
   ativo: z.boolean().default(true),
@@ -77,7 +78,7 @@ const FormSchema = z.object({
 
     const date = `${year}-${month}-${day}`
 
-    if (dayjs().isBefore(dayjs(date))) {
+    if (dayjs(date).isBefore(dayjs())) {
       return ctx.addIssue({
         message: 'abaixo da data atual.',
         code: 'custom',
@@ -101,6 +102,7 @@ export function Ads() {
   const { branch } = useBranch()
   const { form, setForm } = useUpdateForm()
   const { toast } = useToast()
+  const navigate = useNavigate()
 
   const [image, setImage] = useState<Image | null>(null)
 
@@ -161,26 +163,28 @@ export function Ads() {
         body: JSON.stringify(input),
       })
 
-      if (response.ok) {
-        console.log('error')
+      if (!response.ok) {
+        toast({
+          variant: 'error',
+          title: 'Erro ao criar anúncio',
+          description:
+            'Ocorreu um erro ao criar o seu anúncio, verifique tudo e tente novamente.',
+        })
 
-        return
+        return null
       }
 
-      const json = await response.json()
+      if (response.ok) {
+        toast({
+          title: 'Criado',
+          description: 'Anúncio criado com sucesso.',
+          variant: 'success',
+        })
 
-      return json
-    },
-    async () => {
-      toast({
-        title: 'Criado',
-        description: 'Anúncio criado com sucesso.',
-        variant: 'success',
-      })
+        reset()
 
-      reset()
-
-      setImage(null)
+        setImage(null)
+      }
     },
   )
 
@@ -198,7 +202,7 @@ export function Ads() {
     reset()
   }, [reset, setForm])
 
-  console.log(form)
+  // console.log(form)
 
   useEffect(() => {
     setValue('inicio', dayjs().format('DD/MM/YYYY'))
@@ -460,18 +464,18 @@ export function Ads() {
           </>
         )}
 
-        <footer className="flex-row flex items-center space-x-2.5 mt-5 pb-10">
-          {isUpdate ? (
-            <button
-              type="button"
-              onClick={handleCancelUpdate}
-              className="h-[50px] min-h-[50px] w-full transition-all duration-300 hover:bg-opacity-90 flex items-center justify-between px-5 border border-[#305a96] rounded-md ring-4 ring-[#305a96]/50"
-            >
-              <p className="-tracking-wide text-[13px] font-medium text-[#305a96]">
-                Cancelar atualização
-              </p>
-            </button>
-          ) : null}
+        <footer className="flex-row flex items-center space-x-5 mt-5 pb-10">
+          <button
+            type="button"
+            onClick={() =>
+              isUpdate ? handleCancelUpdate() : navigate('/history')
+            }
+            className="h-[50px] min-h-[50px] w-full transition-all duration-300 hover:bg-opacity-90 flex items-center justify-between px-5 border border-[#305a96] rounded-md ring-4 ring-[#305a96]/50"
+          >
+            <p className="-tracking-wide text-[13px] font-medium text-[#305a96]">
+              {isUpdate ? 'Cancelar atualização' : 'Cancelar'}
+            </p>
+          </button>
 
           <button
             type="submit"

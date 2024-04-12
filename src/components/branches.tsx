@@ -161,30 +161,34 @@ export function Branches() {
               <li
                 key={item.cnpj}
                 data-selected={!branch ? true : item.id === branch?.id}
-                className="relative flex justify-between items-center group space-x-5"
+                className="relative flex items-center group space-x-5"
               >
                 <BranchImage id={item.id} razao={item.razao} />
                 <button
-                  className="group-data-[selected='false']:opacity-70 transition-[opacity] duration-300 flex items-center gap-x-5 group cursor-pointer"
+                  className="group-data-[selected='false']:opacity-70 w-full transition-[opacity] duration-300 flex items-center gap-x-5 group cursor-pointer"
                   onClick={() =>
                     item.id === branch?.id ? setBranch(null) : setBranch(item)
                   }
                 >
                   <div className="flex flex-col items-start">
-                    <span className="text-sm">{item.razao}</span>
-                    <span className="text-xs text-zinc-500 truncate max-w-[70%]">
-                      {item.endereco.cidadeNome}, {item.endereco.bairro},{' '}
-                      {item.endereco.logradouro}
+                    <span className="text-xs font-semibold uppercase">
+                      {item.razao}
+                    </span>
+
+                    <span className="text-xs text-zinc-500">
+                      {item.endereco.cidadeNome}
                     </span>
                   </div>
                 </button>
 
-                <button
-                  className="h-12 w-12 rounded-full hover:bg-zinc-200/50 items-center justify-center translate-all duration-300 group-data-[selected='true']:flex hidden absolute right-0 top-1"
-                  onClick={() => setInfo(true)}
-                >
-                  <Info size={18} weight="bold" />
-                </button>
+                {item.id === branch?.id && (
+                  <button
+                    className="group-data-[selected=true]:visible invisible h-12 w-12 rounded-full hover:bg-zinc-200/50 items-center justify-center translate-all duration-300 group-data-[selected='true']:flex hidden absolute right-0 top-0.5"
+                    onClick={() => setInfo(true)}
+                  >
+                    <Info size={18} weight="bold" />
+                  </button>
+                )}
               </li>
             ))}
           </>

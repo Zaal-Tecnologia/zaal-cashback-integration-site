@@ -9,9 +9,8 @@ const THEMES = [
 
 export function Theme() {
   const [theme, setTheme] = useState(
-    localStorage.getItem('@zaalcashback:theme'),
+    localStorage.getItem('@zaalcashback:theme') || 'light',
   )
-  console.log(theme)
 
   function toggleTheme(theme: string) {
     const doc = document.documentElement
