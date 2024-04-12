@@ -1,5 +1,6 @@
 import { Camera, X, XCircle } from '@phosphor-icons/react'
 import { ChangeEvent } from 'react'
+import { red } from 'tailwindcss/colors'
 
 export interface Image {
   base64: string
@@ -21,14 +22,15 @@ export function ImagePicker({ image, onSelect }: Props) {
         <div className="group relative hover:bg-zinc-200/50 transition-all duration-300 items-center justify-center flex min-w-full border-dashed h-[300px] sm:h-[500px] w-[300px] sm:w-[500px] bg-zinc-50 dark:bg-zinc-700/50 dark:border-zinc-600/50 rounded-md border border-zinc-200">
           {image ? (
             <>
-              <div className="flex flex-col items-center absolute top-0 -right-12 gap-y-1.5">
-                <button
-                  onClick={() => onSelect(null)}
-                  className="flex items-center justify-center h-10 w-10 bg-red-200/50 rounded-md hover:bg-red-300/50"
-                >
-                  <XCircle size={20} className="text-red-500" />
-                </button>
-              </div>
+              <button
+                onClick={() => onSelect(null)}
+                className="hover:bg-zinc-100 dark:hover:bg-zinc-800 bg-white dark:bg-zinc-900 h-10 pl-1 pr-7 flex items-center justify-center rounded-full absolute bottom-0 group-hover:visible group-hover:opacity-100 group-hover:-translate-y-10 duration-300 invisible text-xs"
+              >
+                <div className="h-8 w-8 flex items-center justify-center bg-red-200 dark:bg-red-800 rounded-full mr-2.5">
+                  <XCircle size={18} weight="bold" color={red[500]} />
+                </div>
+                <p>Remover imagem</p>
+              </button>
 
               {image.type !== 'image/jpeg' && image.type !== 'image/jpg' ? (
                 <div className="flex flex-col items-center">
@@ -51,7 +53,7 @@ export function ImagePicker({ image, onSelect }: Props) {
                 <img
                   src={image.base64}
                   alt=""
-                  className="w-[480px] h-[480px] rounded-md"
+                  className="min-w-[calc(100%_-_20px)] w-[480px] h-[480px]"
                 />
               )}
             </>
