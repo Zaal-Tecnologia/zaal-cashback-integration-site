@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Image } from '@phosphor-icons/react'
 
 import { api } from '@/data/api'
 
@@ -42,17 +43,17 @@ export function BranchImage(props: Props) {
   return (
     <div
       data-logo={!logo}
-      className="data-[logo=true]:rounded-full data-[logo=true]:border border-zinc-900 relative group w-[45px] h-[45px] min-w-[45px] min-h-[45px] flex items-center justify-center"
+      className="data-[logo=true]:bg-zinc-50 data-[logo=true]:rounded-md relative group w-[35px] h-[35px] min-w-[35px] min-h-[35px] flex items-center justify-center"
     >
       {logo ? (
         <img
           src={`data:image/png;base64, ${logo}`}
           alt=""
-          className="h-[45px] w-[45px] group-hover:scale-110 rounded-full min-w-[45px] min-h-[45px] transition-all duration-300 object-fill"
+          className="h-[35px] w-[35px] min-w-[35px] min-h-[35px] transition-all duration-300 object-fill"
         />
       ) : (
         <span className="text-[13px] font-medium uppercase text-zinc-700 dark:text-white">
-          {props.razao.slice(0, 2)}
+          <Image size={15} weight="bold" alt="" />
         </span>
       )}
     </div>

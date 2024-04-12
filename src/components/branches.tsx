@@ -145,7 +145,7 @@ export function Branches() {
         )}
       </Dialog>
 
-      <ul className="space-y-5 px-5">
+      <ul>
         {isLoading ? (
           <li className="animate-pulse flex items-center gap-x-5 group cursor-pointer">
             <div className="relative group bg-zinc-200/50 rounded-full w-[45px] h-[45px] flex items-center justify-center" />
@@ -161,11 +161,11 @@ export function Branches() {
               <li
                 key={item.cnpj}
                 data-selected={!branch ? true : item.id === branch?.id}
-                className="relative flex items-center group space-x-5"
+                className="relative flex items-center first:border-t group dark:border-zinc-700 space-x-5 px-5 border-b h-16 hover:data-[selected='false']:opacity-100 data-[selected='false']:opacity-70 transition-[opacity] duration-300"
               >
                 <BranchImage id={item.id} razao={item.razao} />
                 <button
-                  className="group-data-[selected='false']:opacity-70 w-full transition-[opacity] duration-300 flex items-center gap-x-5 group cursor-pointer"
+                  className="w-full flex items-center gap-x-5 group cursor-pointer"
                   onClick={() =>
                     item.id === branch?.id ? setBranch(null) : setBranch(item)
                   }
@@ -183,7 +183,7 @@ export function Branches() {
 
                 {item.id === branch?.id && (
                   <button
-                    className="group-data-[selected=true]:visible invisible h-12 w-12 rounded-full hover:bg-zinc-200/50 items-center justify-center translate-all duration-300 group-data-[selected='true']:flex hidden absolute right-0 top-0.5"
+                    className="group-data-[selected=true]:visible invisible h-12 w-12 rounded-full hover:bg-zinc-200/50 items-center justify-center translate-all duration-300 group-data-[selected='true']:flex hidden absolute right-2.5 top-2.5"
                     onClick={() => setInfo(true)}
                   >
                     <Info size={18} weight="bold" />
