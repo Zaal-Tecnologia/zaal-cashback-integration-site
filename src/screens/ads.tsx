@@ -99,7 +99,7 @@ export function Ads() {
     useForm<FormData>({
       resolver: zodResolver(FormSchema),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      defaultValues: form as any,
+      defaultValues: form ? (form as any) : null,
     })
 
   const isUpdate = !!form
@@ -182,6 +182,14 @@ export function Ads() {
       filialInscricaoEstadual: branch?.inscricaoEstadual,
     })
   }
+
+  const handleCancelUpdate = useCallback(() => {
+    setForm(null)
+
+    reset()
+  }, [reset, setForm])
+
+  console.log(form)
 
   useEffect(() => {
     setValue('inicio', dayjs().format('DD/MM/YYYY'))
@@ -392,7 +400,7 @@ export function Ads() {
             </FormDivider>
 
             <div className="grid grid-cols-2 gap-5 px-2.5">
-              <div className="col-span-2 flex items-center justify-between bg-zinc-100 p-5 rounded-md dark:bg-zinc-700/50">
+              {/** <div className="col-span-2 flex items-center justify-between bg-zinc-100 p-5 rounded-md dark:bg-zinc-700/50">
                 <div className="flex flex-col">
                   <span className="font-medium text-[13px]">Começar hoje</span>
                   <span className="text-[11px] text-zinc-500 font-medium dark:text-zinc-400">
@@ -408,7 +416,7 @@ export function Ads() {
                   }
                   checked={watch('inicio') !== ''}
                 />
-              </div>
+              </div> */}
 
               <Input.Root>
                 <Input.Label
@@ -447,11 +455,7 @@ export function Ads() {
           {isUpdate ? (
             <button
               type="button"
-              onClick={() => {
-                setForm(null)
-
-                reset()
-              }}
+              onClick={handleCancelUpdate}
               className="h-[50px] min-h-[50px] w-full transition-all duration-300 hover:bg-opacity-90 flex items-center justify-between px-5 border border-[#305a96] rounded-md ring-4 ring-[#305a96]/50"
             >
               <p className="-tracking-wide text-[13px] font-medium text-[#305a96]">
