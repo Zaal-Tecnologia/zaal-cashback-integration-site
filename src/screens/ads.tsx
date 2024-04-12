@@ -47,7 +47,7 @@ const FormSchema = z.object({
 
     const date = `${year}-${month}-${day}`
 
-    if (dayjs(date).isBefore(new Date())) {
+    if (dayjs().isBefore(dayjs(date))) {
       return ctx.addIssue({
         message: 'abaixo da data atual.',
         code: 'custom',
