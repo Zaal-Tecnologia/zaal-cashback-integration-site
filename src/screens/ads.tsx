@@ -39,9 +39,18 @@ const FormSchema = z.object({
   descricao: z.string().max(250, 'deve ter no máximo 250 caracteres.'),
   conteudo: z.string(),
   cupom: z.string(),
-  valorDesconto: z.number({ required_error: 'é obrigarório' }),
-  valorMinimo: z.number({ required_error: 'é obrigarório' }),
-  valorMaximo: z.number({ required_error: 'é obrigarório' }),
+  valorDesconto: z.number({
+    required_error: 'é obrigarório',
+    invalid_type_error: 'é obrigarório',
+  }),
+  valorMinimo: z.number({
+    required_error: 'é obrigarório',
+    invalid_type_error: 'é obrigarório',
+  }),
+  valorMaximo: z.number({
+    required_error: 'é obrigarório',
+    invalid_type_error: 'é obrigarório',
+  }),
   inicio: z.string().transform((value, ctx) => {
     const [day, month, year] = value.split('/')
 
@@ -68,7 +77,7 @@ const FormSchema = z.object({
 
     const date = `${year}-${month}-${day}`
 
-    if (dayjs(date).isBefore(new Date())) {
+    if (dayjs().isBefore(dayjs(date))) {
       return ctx.addIssue({
         message: 'abaixo da data atual.',
         code: 'custom',
