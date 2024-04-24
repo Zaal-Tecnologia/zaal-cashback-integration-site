@@ -16,7 +16,7 @@ export function Layout() {
     <div className="w-screen min-h-screen bg-[#fefefe] dark:bg-zinc-800">
       <Toaster />
 
-      <div className="sm:max-w-[1180px] h-screen sm:mx-auto sm:w-screen dark:bg-zinc-800 grid grid-cols-10">
+      <div className="sm:max-w-[1220px] h-screen sm:mx-auto sm:w-screen dark:bg-zinc-800 grid grid-cols-10">
         <aside className="overflow-hidden relative bg-white/25 pr-10 pl-4 dark:bg-zinc-800 backdrop-blur-md flex flex-col items-start col-span-2 py-10">
           <img src={'/logo-preto.png'} alt="" className="h-[45px] w-[45px]" />
 

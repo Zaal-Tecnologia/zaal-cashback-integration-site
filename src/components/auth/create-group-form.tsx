@@ -67,7 +67,7 @@ export function CreateGroupForm() {
 
       return json
     },
-    () => navigate('ads'),
+    () => navigate('history'),
   )
 
   async function onSubmit(input: FormInput) {
@@ -125,6 +125,10 @@ export function CreateGroupForm() {
             <ArrowUpRight weight="bold" className="text-white" />
           )}
         </button>
+
+        {/** <p className="text-zinc-900 dark:text-white text-sm leading-8 w-[90%]">
+          Ainda não tem um empresa registrada?
+        </p> */}
       </form>
     </div>
   )

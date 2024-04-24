@@ -29,7 +29,7 @@ export function ChangeGroupName() {
       animate={{ translateY: 0, opacity: 1 }}
       initial={{ translateY: 200, opacity: 0 }}
       transition={{ type: 'time' }}
-      className="flex items-start flex-col relative px-10"
+      className="flex items-start flex-col relative px-10 min-h-screen border-r border-zinc-200 dark:border-zinc-800"
     >
       <header className="mt-10 mb-12 flex flex-col items-start">
         <h1 className="font-bold text-2xl -tracking-wide font-urbanist">
@@ -56,7 +56,7 @@ export function ChangeGroupName() {
 
         <button
           type="submit"
-          className="flex items-center justify-center h-12 ring-4 ring-[#305a96]/50 rounded-md w-44 bg-[#305a96]"
+          className="flex items-center justify-center h-10 ring-2 ring-[#305a96]/50 rounded-md w-44 bg-[#305a96]"
         >
           <span className="text-xs font-medium text-white">Confirmar</span>
         </button>

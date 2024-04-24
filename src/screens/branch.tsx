@@ -11,7 +11,7 @@ export function Branch() {
       animate={{ translateY: 0, opacity: 1 }}
       initial={{ translateY: 200, opacity: 0 }}
       transition={{ type: 'time' }}
-      className="h-screen p-10 flex flex-col items-center"
+      className="h-screen p-10 flex flex-col items-center border-r border-t border-zinc-200 dark:border-zinc-800"
     >
       <header className="mb-20 flex items-center justify-between w-full">
         <div className="flex items-center">

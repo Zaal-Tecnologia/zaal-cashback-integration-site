@@ -2,11 +2,16 @@ import { ChangeEvent, useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import {
-  ArrowDown,
   ArrowUpRight,
+  Check,
+  CheckCircle,
   CircleNotch,
-  Image as IconImage,
+  Dot,
+  ImagesSquare as IconImage,
   Trash,
+  Warning,
+  X,
+  XCircle,
 } from '@phosphor-icons/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import cep from 'cep-promise'
@@ -17,7 +22,13 @@ import { useMutation } from '@/hooks/use-mutation'
 
 import { Input } from './ui/input'
 import { useToast } from './ui/use-toast'
-import { FormDivider, FormDividerLine, FormDividerTitle } from './form-divider'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from './ui/tooltip'
+import { client } from '@/App'
 
 const FormSchema = z.object({
   cnpj: z.string(),
@@ -37,67 +48,59 @@ const FormSchema = z.object({
 })
 
 type FormInput = z.input<typeof FormSchema>
+type CreateBranchResponse = { id: string }
 
-interface Branch {
-  cnpj: string
-  inscest: string
-  razao: string
-  fantasia: string
-  descricao: string
-  categoria: string
-  endereco: {
-    cep: string
-    bairro: string
-    numero: string
-    complemento: string
-    logradouro: string
-    pais: string
-  }
-}
+const ZIP_CODE_COMPONENTS = {
+  LOADING: <CircleNotch className="animate-spin" />,
+  SLEEP: null,
+  ERROR: (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Warning weight="bold" className="text-red-500" />
+        </TooltipTrigger>
+        <TooltipContent asChild>
+          <p className="text-xs">Ocorreu um erro ao buscar o CEP.</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  ),
+  SUCCESS: (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Check weight="bold" className="text-green-500" />
+        </TooltipTrigger>
+        <TooltipContent asChild>
+          <p className="text-xs">Seu CEP é válido.</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  ),
+} as const
 
 export function CreateBranchForm() {
   const { register, handleSubmit, setValue, formState } = useForm<FormInput>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      cnpj: '14.278.480/0001-61',
-      razao: 'SHOP 15 LTDA',
-      fantasia: 'Shop15',
-      categoria: 'COMÉRCIO VAREJISTA DE ARTIGOS DO VESTUÁRIO E ACESSÓRIOS',
-      inscest: '23.456.789-0',
-      descricao: 'Empresa focada em calçados e roupas',
-      endereco: {
-        cep: '25821550',
-        complemento: 'Centro da cidade',
-        numero: '90',
-      },
+      cnpj: '80853473000170',
+      inscest: '66562778',
     },
   })
 
+  const { toast } = useToast()
+
   const [image, setImage] = useState<string | null>(null)
+  const [errorsInTheImage, setErrorsInTheImage] = useState<string[]>([])
 
   async function getCity(name: string) {
-    const response = await api(`cidades?descricao=${name}`)
+    const response = await api(`cidades?descricao=${name.trim()}`)
 
     const json = await response.json()
 
     const city = json.content[0]
-    console.log('city', city)
 
     return city ? city.id : null
-  }
-
-  async function createBranch(branch: Branch) {
-    const response = await api('filiais', {
-      method: 'POST',
-      body: JSON.stringify(branch),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-
-    const json = await response.json()
-
-    return json.id
   }
 
   async function createBranchImage(branchId: string) {
@@ -112,316 +115,382 @@ export function CreateBranchForm() {
     return json.id
   }
 
-  const { isPending } = useMutation<unknown, FormInput>(
+  const { isPending, mutate } = useMutation<CreateBranchResponse, FormInput>(
     ['create-branch-mutation'],
     async (input) => {
-      const code = input.cnpj.replace(/[^\d]/g, '')
+      const response = await api('filiais', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify([input]),
+      })
 
-      await fetch(`https://api-publica.speedio.com.br/buscarcnpj?cnpj=${code}`)
-        .then((response) => response.json())
-        .then(async (data) => {
-          const cidadeId = await getCity(data.MUNICIPIO)
+      const json = await response.json()
 
-          const branch = {
-            cnpj: data.CNPJ,
-            fantasia: data['NOME FANTASIA'],
-            inscest: 'string',
-            razao: data['RAZAO SOCIAL'],
-            descricao: data['CNAE PRINCIPAL DESCRICAO'],
-            categoria: data.SETOR,
-            endereco: {
-              cep: data.CEP,
-              bairro: `${data.BAIRRO}, ${data.MUNICIPIO}, ${data.UF}`,
-              numero: data.NUMERO,
-              complemento: data.COMPLEMENTO,
-              logradouro: `${data['TIPO LOGRADOURO']} ${data.LOGRADOURO}`,
-              cidadeId,
-              pais: 'Brasil',
-            },
-          }
-
-          const branchId = await createBranch(branch)
-
-          await createBranchImage(branchId)
+      return json.id
+    },
+    async (data) => {
+      await client
+        .invalidateQueries({
+          queryKey: ['get-all-branches-query'],
+        })
+        .then(() => {
+          createBranchImage(data.id).then(() =>
+            toast({
+              title: 'Criado com sucesso',
+              description: 'Sua filial foi criada com sucesso.',
+            }),
+          )
         })
     },
-    // props.onEnd,
+    (error) => toast({ title: 'Ocorreu um erro', description: error.message }),
   )
 
   async function onSubmit(input: FormInput) {
-    const cidadeId = await getCity(input.endereco.logradouro.split(',')[1])
+    const city = input.endereco.logradouro.split(',')[1]
+
+    const cidadeId = await getCity(city)
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     input.endereco.cidadeId = cidadeId
 
-    const response = await api('filiais', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify([input]),
-    })
-
-    if (!response.ok) {
-      console.log(response.status, response.statusText)
-    }
-
-    if (response.ok) {
-      const json = await response.json()
-
-      console.log(json)
-    }
-
-    // props.onEnd()
+    mutate(input)
   }
 
-  const { toast } = useToast()
-
-  const handleSelectPicture = useCallback(
+  const handleSelectBranchImage = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
-      if (event.target && event.target.files) {
+      if (event && event.target.files) {
         const file = event.target.files[0]
 
-        let hasError = false
-
-        const picture = new Image()
-
-        if (picture.width > 100 || picture.height > 100) {
-          toast({
-            title: 'Ocorreu um erro',
-            description: 'Imagem maior do que 100x100',
-            variant: 'error',
-          })
-
-          hasError = true
-        }
-
-        if (picture.width < 80 || picture.height < 80) {
-          toast({
-            title: 'Ocorreu um erro',
-            description: 'Imagem menor do que 80x80',
-            variant: 'error',
-          })
-
-          hasError = true
-        }
-
-        if (file.type !== 'image/png') {
-          toast({
-            title: 'Ocorreu um erro',
-            description: 'A imagem precisa ter o formato .png',
-            variant: 'error',
-          })
-
-          hasError = true
-        }
-
-        if (!hasError) {
+        if (file) {
           const reader = new FileReader()
 
-          reader.onload = () => {
-            setImage(String(reader.result))
+          reader.onload = (event) => {
+            const image = new Image()
+
+            if (event.target && event.target.result) {
+              image.src = String(event.target.result)
+
+              image.onload = () => {
+                const width = image.width
+                const height = image.height
+
+                const isSmaller = width < 100 && height < 100
+                const isBigger = width > 400 && height > 400
+                const itHasADifferentHeightAndWidth = width !== height
+
+                if (file.type !== 'image/png') {
+                  setErrorsInTheImage((prev) => [...prev, 'Ter formato PNG'])
+                }
+
+                if (isSmaller || isBigger) {
+                  setErrorsInTheImage((prev) => [
+                    ...prev,
+                    'Estar entre 100x100 e 400x400',
+                  ])
+                }
+
+                if (itHasADifferentHeightAndWidth) {
+                  setErrorsInTheImage((prev) => [...prev, 'Ter lados iguais'])
+                }
+
+                setImage(String(event.target!.result))
+              }
+
+              setImage(String(event.target.result))
+            }
           }
 
           reader.readAsDataURL(file)
         }
       }
     },
-    [toast],
+    [],
   )
 
+  function onRemoveImage() {
+    setImage(null)
+
+    setErrorsInTheImage([])
+  }
+
+  const [zipCodeStatus, setZipCodeStatus] =
+    useState<keyof typeof ZIP_CODE_COMPONENTS>('SLEEP')
+
+  async function getZipCodeInfo(value: string) {
+    if (value.length === 8) {
+      setZipCodeStatus('LOADING')
+
+      cep(value)
+        .then((data) => {
+          setValue('endereco.cep', value)
+          setValue('endereco.bairro', data.neighborhood)
+          setValue(
+            'endereco.logradouro',
+            `${data.state}, ${data.city}, ${data.street}`,
+          )
+          setValue('endereco.pais', 'Brasil')
+
+          setZipCodeStatus('SUCCESS')
+        })
+        .catch(() => {
+          setZipCodeStatus('ERROR')
+
+          toast({
+            title: 'Erro no CEP',
+            description:
+              'Ocorreu um erro ao carregar seu CEP, preencha os campos manualmente.',
+            variant: 'error',
+            onEnded() {
+              setZipCodeStatus('SLEEP')
+            },
+          })
+        })
+    }
+  }
+
+  const showTheFormAfterValidatingTheImage =
+    image && errorsInTheImage.length === 0
+
   return (
-    <div className="w-full">
-      <form action="grid grid-cols-2" onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex items-start gap-5 mb-5">
-          <div className="relative rounded-2xl mb-5 hover:border-zinc-900 transition-all duration-500 flex items-center justify-center h-[110px] w-[110px] group border border-dashed dark:bg-zinc-800/50">
+    <div className="w-full pb-32">
+      <form
+        action="grid grid-cols-2 relative"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <div className="flex items-start gap-7">
+          <div className="relative cursor-pointer p-5 rounded-md mb-5 hover:border-zinc-900 transition-all duration-500 flex items-center justify-center h-[200px] w-[200px] group border border-dashed dark:bg-zinc-800/50">
             <input
               type="file"
               className="opacity-0 absolute inset-0 cursor-pointer"
-              onChange={handleSelectPicture}
+              onChange={handleSelectBranchImage}
             />
 
             {image ? (
-              <img src={image} alt="" className="rounded-xl" />
+              <img src={image} alt="" className="h-[100px] w-[100px]" />
             ) : (
-              <>
-                <ArrowDown
-                  size={20}
-                  weight="bold"
-                  className="group-hover:translate-y-0 translate-y-4 transition-all duration-500 opacity-0 group-hover:opacity-100"
-                  alt=""
-                />
-
-                <IconImage
-                  size={24}
-                  weight="duotone"
-                  className="absolute top-1/2 left-1/2 righ-auto bottom-auto -translate-y-1/2 -translate-x-1/2 -mr-1/2 group-hover:translate-y-4 transition-all duration-500 group-hover:opacity-0 opacity-100"
-                  alt=""
-                />
-              </>
+              <IconImage
+                size={24}
+                weight="duotone"
+                className="group-hover:scale-110 transition-all duration-500"
+                alt=""
+              />
             )}
           </div>
 
-          <div className="flex flex-col gap-5">
-            <span className="text-xs block mt-4 text-zinc-700">
-              É importante que a imagem tenha entre 80x80 e 100x100 e esteja em
-              .png
-            </span>
+          <div className="flex flex-col gap-x-5">
+            <ul className="mt-1.5 mb-2">
+              <span className="text-xs font-medium block mb-5 text-zinc-900">
+                Regras para a imagem da filial
+              </span>
+
+              {[
+                'Ter formato PNG',
+                'Estar entre 100x100 e 400x400',
+                'Ter lados iguais',
+              ].map((rule) => (
+                <li key={rule} className="flex items-center gap-x-2 mb-2.5">
+                  <div className="w-5 flex items-center justify-center">
+                    {errorsInTheImage.find((error) => error === rule) ? (
+                      <X className="text-red-500" />
+                    ) : (
+                      <Dot className="text-zinc-700" size={20} />
+                    )}
+                  </div>
+
+                  <span className="text-xs text-zinc-900">{rule}</span>
+                </li>
+              ))}
+            </ul>
 
             {image ? (
-              <button
-                onClick={() => setImage(null)}
-                className="bg-red-500 h-8 w-24 flex items-center justify-center rounded-full transition-all duration-300 hover:bg-red-500/90"
+              <footer
+                data-background={errorsInTheImage.length === 0}
+                className="flex data-[background=true]:bg-[#305a96]/10 data-[background=false]:bg-red-500/10 py-2.5 data-[background=false]:pl-2.5 data-[background=false]:pr-5 rounded-full items-center justify-center gap-x-5"
               >
-                <Trash weight="bold" className="text-white" />
-                <span className="text-xs text-white ml-1">Remover</span>
-              </button>
+                {errorsInTheImage.length === 0 ? (
+                  <div className="flex items-center justify-center gap-x-1">
+                    <CheckCircle weight="bold" className="text-[#305a96]" />
+                    <span className="text-xs font-medium text-[#305a96]">
+                      Requisitos atendidos
+                    </span>
+                  </div>
+                ) : (
+                  <>
+                    <button
+                      onClick={onRemoveImage}
+                      className="bg-red-500 h-8 w-24 flex items-center justify-center rounded-full transition-all duration-300 hover:bg-red-500/90"
+                    >
+                      <Trash weight="bold" className="text-white" />
+                      <span className="text-xs text-white ml-1">Remover</span>
+                    </button>
+
+                    <div className="flex items-center justify-center gap-x-1">
+                      <XCircle weight="bold" className="text-red-500" />
+                      <span className="text-xs font-medium text-red-500">
+                        Ocorreu um erro
+                      </span>
+                    </div>
+                  </>
+                )}
+              </footer>
             ) : null}
           </div>
         </div>
 
-        <FormDivider className="my-5">
-          <FormDividerTitle position="1">INFORMAÇÕES</FormDividerTitle>
-          <FormDividerLine />
-        </FormDivider>
+        {showTheFormAfterValidatingTheImage ? (
+          <>
+            <div className="grid grid-cols-2 gap-5">
+              <div className="col-span-2 border-b border-zinc-200 dark:border-zinc-800 pb-2.5 mt-2.5">
+                <span className="font-medium text-[13px] -tracking-wide text-zinc-800">
+                  Nome, categoria & descrição
+                </span>
+              </div>
 
-        <div className="grid grid-cols-2 gap-2.5">
-          <Input.Root>
-            <Input.Label errorMessage={formState.errors.cnpj?.message}>
-              CNPJ
-            </Input.Label>
-            <Input.Mask
-              mask="99.999.999/9999-99"
-              placeholder="CNPJ da filial"
-              {...register('cnpj')}
-            />
-          </Input.Root>
+              <Input.Root>
+                <Input.Label errorMessage={formState.errors.razao?.message}>
+                  Nome razão
+                </Input.Label>
+                <Input.Write
+                  placeholder="Digite o nome razão"
+                  {...register('razao')}
+                />
+              </Input.Root>
 
-          <Input.Root>
-            <Input.Label errorMessage={formState.errors.razao?.message}>
-              Nome razão
-            </Input.Label>
-            <Input.Write
-              placeholder="Digite o nome razão"
-              {...register('razao')}
-            />
-          </Input.Root>
+              <Input.Root>
+                <Input.Label errorMessage={formState.errors.fantasia?.message}>
+                  Nome fantasia
+                </Input.Label>
+                <Input.Write
+                  placeholder="Digite a categoria"
+                  {...register('fantasia')}
+                />
+              </Input.Root>
 
-          <Input.Root>
-            <Input.Label errorMessage={formState.errors.fantasia?.message}>
-              Nome fantasia
-            </Input.Label>
-            <Input.Write
-              placeholder="Digite a categoria"
-              {...register('fantasia')}
-            />
-          </Input.Root>
+              <Input.Root>
+                <Input.Label errorMessage={formState.errors.categoria?.message}>
+                  Categoria
+                </Input.Label>
+                <Input.Write
+                  placeholder="Digite a categoria"
+                  {...register('categoria')}
+                />
+              </Input.Root>
 
-          <Input.Root>
-            <Input.Label errorMessage={formState.errors.categoria?.message}>
-              Categoria
-            </Input.Label>
-            <Input.Write
-              placeholder="Digite a categoria"
-              {...register('categoria')}
-            />
-          </Input.Root>
+              <Input.Root>
+                <Input.Label errorMessage={formState.errors.descricao?.message}>
+                  Descrição
+                </Input.Label>
+                <Input.Write
+                  placeholder="Digite a descrição"
+                  {...register('descricao')}
+                />
+              </Input.Root>
 
-          <Input.Root>
-            <Input.Label errorMessage={formState.errors.inscest?.message}>
-              Inscrição estadual da filial
-            </Input.Label>
-            <Input.Mask
-              mask="99.999.999-9"
-              placeholder="Digite a inscrição estadual"
-              {...register('inscest')}
-            />
-          </Input.Root>
+              <div className="col-span-2 border-b border-zinc-200 dark:border-zinc-800 pb-2.5 mt-2.5">
+                <span className="font-medium text-[13px] -tracking-wide text-zinc-800">
+                  Documentos
+                </span>
+              </div>
 
-          <Input.Root className="col-span-2">
-            <Input.Label errorMessage={formState.errors.descricao?.message}>
-              Descrição
-            </Input.Label>
-            <Input.Area
-              placeholder="Digite a descrição"
-              {...register('descricao')}
-            />
-          </Input.Root>
-        </div>
+              <Input.Root>
+                <Input.Label errorMessage={formState.errors.cnpj?.message}>
+                  CNPJ
+                </Input.Label>
+                <Input.Write
+                  // mask="99.999.999/9999-99"
+                  placeholder="CNPJ da filial"
+                  {...register('cnpj')}
+                />
+              </Input.Root>
 
-        <FormDivider className="my-5">
-          <FormDividerTitle position="2">ENDEREÇO</FormDividerTitle>
-          <FormDividerLine />
-        </FormDivider>
+              <Input.Root>
+                <Input.Label errorMessage={formState.errors.inscest?.message}>
+                  Inscrição estadual
+                </Input.Label>
+                <Input.Write
+                  // mask="99.999.999-9"
+                  placeholder="Digite a inscrição estadual"
+                  {...register('inscest')}
+                />
+              </Input.Root>
 
-        <div className="grid grid-cols-2 gap-2.5">
-          <Input.Root>
-            <Input.Label>CEP</Input.Label>
-            <Input.Write
-              placeholder="CEP da filial"
-              maxLength={8}
-              onChange={(e) => {
-                if (e.target.value.length === 8) {
-                  cep(e.target.value.replace('-', '').replace('.', '')).then(
-                    (data) => {
-                      setValue('endereco.cep', e.target.value)
-                      setValue('endereco.bairro', data.neighborhood)
-                      setValue(
-                        'endereco.logradouro',
-                        `${data.state}, ${data.city}, ${data.street}`,
-                      )
-                      setValue('endereco.pais', 'Brasil')
-                    },
-                  )
-                }
-              }}
-            />
-          </Input.Root>
+              <div className="col-span-2 border-b border-zinc-200 dark:border-zinc-800 pb-2.5 mt-2.5">
+                <span className="font-medium text-[13px] -tracking-wide text-zinc-800">
+                  Endereço
+                </span>
+              </div>
 
-          <Input.Root>
-            <Input.Label
-              errorMessage={formState.errors.endereco?.complemento?.message}
-            >
-              Complemento
-            </Input.Label>
-            <Input.Write
-              placeholder="Digite o complemento"
-              {...register('endereco.complemento')}
-            />
-          </Input.Root>
+              <Input.Root>
+                <Input.Label>CEP</Input.Label>
+                <div className="relative">
+                  <Input.Write
+                    placeholder="CEP da filial"
+                    maxLength={8}
+                    onChange={(e) => getZipCodeInfo(e.target.value)}
+                  />
 
-          <Input.Root>
-            <Input.Label
-              errorMessage={formState.errors.endereco?.numero?.message}
-            >
-              Número
-            </Input.Label>
-            <Input.Write
-              placeholder="Digite o número"
-              {...register('endereco.numero')}
-            />
-          </Input.Root>
-        </div>
+                  <div className="absolute right-0 top-0 h-10 w-10 flex items-center justify-center">
+                    {ZIP_CODE_COMPONENTS[zipCodeStatus]}
+                  </div>
+                </div>
+              </Input.Root>
 
-        <button
-          type="submit"
-          className="mt-5 mb-10 h-[50px] flex items-center justify-between px-5 bg-[#305a96] w-full rounded-md ring-2 ring-[#305a96]/50"
-        >
-          <p className="-tracking-wide text-[13px] font-medium text-white">
-            Criar filial
-          </p>
+              <Input.Root>
+                <Input.Label
+                  errorMessage={formState.errors.endereco?.complemento?.message}
+                >
+                  Complemento
+                </Input.Label>
+                <Input.Write
+                  placeholder="Digite o complemento"
+                  {...register('endereco.complemento')}
+                />
+              </Input.Root>
 
-          {isPending ? (
-            <CircleNotch
-              weight="bold"
-              size={20}
-              className="text-white animate-spin"
-            />
-          ) : (
-            <ArrowUpRight weight="bold" className="text-white" />
-          )}
-        </button>
+              <Input.Root>
+                <Input.Label
+                  errorMessage={formState.errors.endereco?.numero?.message}
+                >
+                  Número
+                </Input.Label>
+                <Input.Write
+                  placeholder="Digite o número"
+                  {...register('endereco.numero')}
+                />
+              </Input.Root>
+            </div>
+
+            <footer className="absolute p-5 bottom-0 right-0 left-0 bg-white dark:bg-zinc-900 z-50 shadow-lg shadow-zinc-500 border-r border-t border-zinc-200 dark:border-zinc-800">
+              <button
+                type="submit"
+                className="group ml-auto w-[200px] h-[50px] flex items-center justify-between px-5 bg-[#305a96] rounded-full ring-2 ring-[#305a96]/50"
+              >
+                <p
+                  data-pending={isPending}
+                  className="transition-all duration-300 data-[pending=true]:translate-x-0 group-hover:translate-x-1/2 text-xs text-white"
+                >
+                  CRIAR FILIAL
+                </p>
+
+                {isPending ? (
+                  <CircleNotch
+                    weight="bold"
+                    size={20}
+                    className="text-white animate-spin"
+                  />
+                ) : (
+                  <ArrowUpRight
+                    weight="bold"
+                    className="text-white transition-all duration-300 group-hover:translate-x-8 group-hover:opacity-0"
+                  />
+                )}
+              </button>
+            </footer>
+          </>
+        ) : null}
       </form>
     </div>
   )
