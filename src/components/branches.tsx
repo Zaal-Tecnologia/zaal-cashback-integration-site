@@ -1,4 +1,4 @@
-import { Info, Plus, X } from '@phosphor-icons/react'
+import { CaretLeft, CaretRight, Plus, X } from '@phosphor-icons/react'
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 
@@ -26,14 +26,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from './ui/dialog'
+import { keepPreviousData } from '@tanstack/react-query'
 
 export function Branches() {
   const { setBranch, branch } = useBranch()
 
-  const { data, isLoading } = useQuery<API<BranchDTO>>(
-    ['get-all-branches-query'],
-    async (): Promise<API<BranchDTO>> => {
-      const response = await api('filiais')
+  const [page, setPage] = useState(0)
+
+  const { data, isLoading, isPlaceholderData } = useQuery<API<BranchDTO>>(
+    ['get-all-branches-query', String(page)],
+    async () => {
+      const response = await api(`filiais?size=6&page=${page}`)
 
       const json = await response.json()
 
@@ -41,8 +44,11 @@ export function Branches() {
     },
     {
       refetchOnMount: false,
+      placeholderData: keepPreviousData,
     },
   )
+
+  console.log(data)
 
   /** useEffect(() => {
     if (data) setBranch(data.content[0])
@@ -52,25 +58,70 @@ export function Branches() {
   const [info, setInfo] = useState(false)
 
   return (
-    <div className="overflow-hidden shadow-sm col-span-3 border-x border-zinc-200 dark:border-zinc-700 flex flex-col pt-10">
+    <div className="col-span-3 min-h-screen overflow-hidden pb-10 shadow-sm border-x border-zinc-200 dark:border-zinc-700 flex flex-col pt-10">
       <header className="flex items-center justify-between mb-20 px-8">
         <span className="text-sm group-hover:translate-x-2 font-medium transition-transform duration-300">
-          SUAS FILIAIS
+          FILIAIS
         </span>
 
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Link
-                to="branch"
-                className="h-12 w-12 rounded-full hover:bg-zinc-200/50 flex items-center justify-center translate-all duration-300"
-              >
-                <Plus weight="bold" size={18} />
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent>Nova filial</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center justify-start gap-1.5 mr-1.5">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    disabled={page < 1}
+                    onClick={() =>
+                      setPage((prev) => (prev >= 1 ? prev - 1 : prev))
+                    }
+                    className="disabled:opacity-60 hover:bg-zinc-100 dark:hover:bg-zinc-800 h-8 w-8 rounded-full flex items-center justify-center border border-zinc-200 dark:border-zinc-800"
+                  >
+                    <CaretLeft weight="bold" size={14} />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>Voltar</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    disabled={page === data?.totalPages}
+                    onClick={() => {
+                      if (!isPlaceholderData) {
+                        setPage((old) => old + 1)
+                      }
+                    }}
+                    /** onClick={() =>
+                  setPage((prev) =>
+                    prev === data?.totalPages ? prev : prev + 1,
+                  )
+                } */
+                    className="disabled:opacity-60 hover:bg-zinc-100 dark:hover:bg-zinc-800 h-8 w-8 rounded-full flex items-center justify-center border border-zinc-200 dark:border-zinc-800"
+                  >
+                    <CaretRight weight="bold" size={14} />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>Avançar</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  to="branch"
+                  className="hover:bg-zinc-100 dark:hover:bg-zinc-800 h-8 w-8 rounded-full flex items-center justify-center border border-zinc-200 dark:border-zinc-800"
+                >
+                  <Plus weight="bold" size={14} />
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent>Nova filial</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
       </header>
 
       <Dialog
@@ -145,7 +196,7 @@ export function Branches() {
         )}
       </Dialog>
 
-      <ul>
+      <ul className="px-2.5 mb-10">
         {isLoading ? (
           <li className="animate-pulse flex items-center gap-x-5 group cursor-pointer">
             <div className="relative group bg-zinc-200/50 rounded-full w-[45px] h-[45px] flex items-center justify-center" />
@@ -161,7 +212,7 @@ export function Branches() {
               <li
                 key={item.cnpj}
                 data-selected={!branch ? true : item.id === branch?.id}
-                className="relative flex items-center first:border-t group dark:border-zinc-700 space-x-5 px-5 border-b h-16 hover:data-[selected='false']:opacity-100 data-[selected='false']:opacity-70 transition-[opacity] duration-300"
+                className="relative flex items-center group space-x-5 px-5 h-16 hover:data-[selected='false']:opacity-100 data-[selected='false']:opacity-70 transition-[opacity] duration-300"
               >
                 <BranchImage id={item.id} razao={item.razao} />
                 <button
@@ -171,11 +222,11 @@ export function Branches() {
                   }
                 >
                   <div className="flex flex-col items-start">
-                    <span className="text-xs font-semibold uppercase">
-                      {item.razao}
+                    <span className="text-sm font-medium capitalize -tracking-wide">
+                      {item.razao.toLowerCase()}
                     </span>
 
-                    <span className="text-xs text-zinc-500">
+                    <span className="text-xs text-zinc-500 block mt-0.5">
                       {item.endereco.cidadeNome}
                     </span>
                   </div>
@@ -186,7 +237,7 @@ export function Branches() {
                     className="group-data-[selected=true]:visible invisible h-12 w-12 rounded-full hover:bg-zinc-200/50 items-center justify-center translate-all duration-300 group-data-[selected='true']:flex hidden absolute right-2.5 top-2.5"
                     onClick={() => setInfo(true)}
                   >
-                    <Info size={18} weight="bold" />
+                    <CaretRight size={16} weight="bold" />
                   </button>
                 )}
               </li>
@@ -197,118 +248,3 @@ export function Branches() {
     </div>
   )
 }
-
-/** <Sheet>
-      <SheetTrigger asChild>
-        <button
-          className={clsx(
-            'flex items-center h-8 px-2.5 mr-2.5 hover:bg-zinc-100 dark:bg-zinc-800 hover:dark:bg-zinc-700',
-            {
-              'rounded-full bg-zinc-100 dark:bg-zinc-800 px-0 pl-1 pr-5':
-                !!branch,
-              'rounded-md': !branch,
-            },
-          )}
-        >
-          {branch && (
-            <span className="sm:flex text-[10px] items-center justify-center flex tracking-wider uppercase h-6 w-6 bg-[#305a96] text-white rounded-full mr-2.5">
-              {branch.razao.slice(0, 2)}
-            </span>
-          )}
-          <span className="relative sm:flex hidden text-xs tracking-wider uppercase truncate">
-            {branch
-              ? ` ${branch.razao.length > 9 ? `${branch.razao.slice(0, 9)}...` : branch.razao}`
-              : 'FILIAIS'}
-          </span>
-        </button>
-      </SheetTrigger>
-
-      <SheetContent className="px-20">
-        <div className="flex items-center justify-between">
-          <SheetClose
-            data-create={create}
-            className="data-[create=true]:pointer-events-none rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 outline-none disabled:pointer-events-none data-[state=open]:bg-secondary"
-          >
-            <ArrowLeft weight="bold" size={18} />
-            <span className="sr-only">Close</span>
-          </SheetClose>
-
-          <button
-            onClick={() => setCreate(true)}
-            data-create={create}
-            className="data-[create=true]:hidden h-14 rounded-full gap-5 pl-2 pr-8 justify-center bg-[#305a96] flex items-center cursor-pointer"
-          >
-            <div className="bg-white flex items-center justify-center rounded-full h-10 w-10">
-              <Plus weight="bold" className="text-[#305a96]" size={18} />
-            </div>
-
-            <span className="text-xs text-white">Adicionar filial</span>
-          </button>
-
-          <button
-            onClick={() => setCreate(false)}
-            data-create={create}
-            className="data-[create=true]:flex hidden h-14 rounded-full w-14 justify-center border border-zinc-200 items-center cursor-pointer dark:border-zinc-700"
-          >
-            <X weight="bold" size={18} />
-          </button>
-        </div>
-
-        <SheetHeader>
-          <SheetTitle>
-            {create ? 'Crie uma nova filial' : 'Selecione uma filial'}
-          </SheetTitle>
-          <SheetDescription>
-            {create
-              ? 'Crie uma filial e comece a anunciar'
-              : 'Ao selecionar uma filial pode adicionar anúncios nela.'}
-          </SheetDescription>
-        </SheetHeader>
-
-        <div
-          className="mt-10 data-[create=true]:flex flex-col hidden"
-          data-create={create}
-        >
-          <CreateBranchForm onEnd={() => {}} />
-        </div>
-
-        <ul data-create={create} className="data-[create=true]:hidden mt-10">
-          {isLoading && (
-            <div className="animate-pulse">
-              <div className="group relative h-14 w-14 mb-5 bg-zinc-100 dark:bg-zinc-800/50 rounded-full flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
-              <div className="group relative h-14 w-14 mb-5 bg-zinc-100 dark:bg-zinc-800/50 rounded-full flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
-              <div className="group relative h-14 w-14 mb-5 bg-zinc-100 dark:bg-zinc-800/50 rounded-full flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
-              <div className="group relative h-14 w-14 mb-5 bg-zinc-100 dark:bg-zinc-800/50 rounded-full flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
-              <div className="group relative h-14 w-14 mb-5 bg-zinc-100 dark:bg-zinc-800/50 rounded-full flex items-center justify-center cursor-pointer hover:bg-zinc-200/50"></div>
-
-              <span className="sr-only">Loading...</span>
-            </div>
-          )}
-
-          {data ? (
-            data.content.map((item) => (
-              <li
-                key={item.id}
-                className="mb-5 flex items-center cursor-pointer group"
-                onClick={() => setBranch(item)}
-              >
-                <BranchImage id={item.id} razao={item.razao} />
-
-                <div className="flex flex-col ml-5">
-                  <span className="font-medium text-sm text-zinc-700 dark:text-white">
-                    {item.razao}
-                  </span>
-                  <span className="text-xs text-zinc-500 mt-1 dark:text-zinc-300">
-                    {item.endereco.cidadeNome}, {item.endereco.logradouro}
-                  </span>
-                </div>
-
-                <ArrowUpRight size={14} className="ml-auto" weight="bold" />
-              </li>
-            ))
-          ) : (
-            <p>lista vazia</p>
-          )}
-        </ul>
-      </SheetContent>
-    </Sheet> */

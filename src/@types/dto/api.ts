@@ -3,5 +3,6 @@ export interface API<D> {
   size: number
   totalNumbers: number
   totalElements: number
+  totalPages: number
   number: number
 }

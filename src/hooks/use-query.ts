@@ -10,11 +10,11 @@ export function useQuery<D>(
   fn: Options<D>['queryFn'],
   others?: Omit<Options<D>, 'queryKey' | 'queryFn'> | undefined,
 ) {
-  const { data, isLoading } = useRQ({
+  const { data, isLoading, ...more } = useRQ({
     queryKey: key,
     queryFn: fn,
     ...others,
   })
 
-  return { data, isLoading }
+  return { data, isLoading, ...more }
 }
