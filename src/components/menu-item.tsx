@@ -14,7 +14,7 @@ function Root({ to, onAction, ...props }: RootProps) {
     <Link
       to={to}
       data-path={pathname.replace('/', '') === to}
-      className="data-[path='true']:font-extrabold font-medium flex items-center h-8 hover:text-zinc-900 dark:hover:text-zinc-200 gap-x-5 group"
+      className="font-medium flex items-center h-8 hover:text-zinc-900 dark:hover:text-zinc-200 gap-x-5 group"
       {...props}
     >
       {props.children}
@@ -33,7 +33,7 @@ function Root({ to, onAction, ...props }: RootProps) {
 function Title({ children, ...props }: ComponentProps<'span'>) {
   return (
     <span
-      className="text-sm group-hover:translate-x-2 transition-transform duration-300"
+      className="text-sm group-hover:translate-x-1 transition-transform duration-300"
       {...props}
     >
       {children}

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Link, Outlet, useLocation } from 'react-router-dom'
-import { FlagBanner, ArrowUpRight, User } from '@phosphor-icons/react'
+import { Outlet, useLocation } from 'react-router-dom'
+import { User, Storefront } from '@phosphor-icons/react'
 
 import { Toaster } from '@/components/ui/toaster'
 
@@ -22,8 +22,8 @@ export function Layout() {
 
           <nav className="mt-20 flex flex-col items-start gap-y-7 w-full">
             <MenuItem.Root to="history">
-              <FlagBanner size={20} weight="bold" />
-              <MenuItem.Title>ANÚNCIOS</MenuItem.Title>
+              <Storefront size={20} weight="bold" />
+              <MenuItem.Title>FILIAIS</MenuItem.Title>
             </MenuItem.Root>
 
             <MenuItem.Root to="/profile/change-group-name">
@@ -31,7 +31,7 @@ export function Layout() {
               <MenuItem.Title>PERFIL</MenuItem.Title>
             </MenuItem.Root>
 
-            <Link
+            {/** <Link
               to="ads"
               className="h-14 px-7 mt-5 flex items-center justify-between bg-[#305a96] ring-4 ring-[#305a96]/40 hover:bg-[#305a96]/90 rounded-full w-full"
             >
@@ -40,7 +40,7 @@ export function Layout() {
               </span>
 
               <ArrowUpRight size={16} className="text-white" weight="bold" />
-            </Link>
+            </Link> */}
           </nav>
         </aside>
 

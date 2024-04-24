@@ -12,6 +12,7 @@ import { Branch } from '@/screens/branch'
 import { ChangeGroupName } from '@/screens/profile/change-group-name'
 import { Logout } from '@/screens/profile/logout'
 import { Theme } from '@/screens/profile/theme'
+import { Main } from '@/screens/main'
 
 export function AppRouter() {
   return (
@@ -46,6 +47,15 @@ export function AppRouter() {
             element={
               <Protected to="/">
                 <Theme />
+              </Protected>
+            }
+          />
+
+          <Route
+            path="/main"
+            element={
+              <Protected to="/">
+                <Main />
               </Protected>
             }
           />

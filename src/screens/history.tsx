@@ -17,14 +17,7 @@ import { AdsDTO } from '@/@types/dto/ads-dto'
 import dayjs from 'dayjs'
 import { useCallback, useState } from 'react'
 import { green, orange } from 'tailwindcss/colors'
-import {
-  CurrencyDollar,
-  Pencil,
-  Slideshow,
-  Ticket,
-  Timer,
-  X,
-} from '@phosphor-icons/react'
+import { CurrencyDollar, Pencil, Ticket, Timer, X } from '@phosphor-icons/react'
 import { DialogClose } from '@radix-ui/react-dialog'
 
 import { RemoveBranch } from '@/components/remove-branch'
@@ -93,9 +86,15 @@ export function History() {
       animate={{ translateY: 0, opacity: 1 }}
       initial={{ translateY: 200, opacity: 0 }}
       transition={{ type: 'time' }}
-      className="h-screen py-10 px-5 flex flex-col items-center"
+      className="h-screen p-10 flex flex-col items-center border-r border-t border-zinc-200 dark:border-zinc-800"
     >
-      <header className="mb-20 flex items-center justify-between w-full">
+      <header className="flex items-center w-full justify-start mb-20">
+        <span className="text-sm group-hover:translate-x-2 uppercase font-medium transition-transform duration-300">
+          ANÚNCIOS DE {branch?.razao}
+        </span>
+      </header>
+
+      {/** <header className="mb-20 flex items-center justify-between w-full">
         <div className="flex items-center">
           <span className="text-sm group-hover:translate-x-2 font-medium transition-transform duration-300">
             HISTÓRICO
@@ -122,7 +121,7 @@ export function History() {
             {ads?.length}
           </button>
         </div>
-      </header>
+      </header> */}
 
       {isLoading ? (
         <ul className="grid grid-cols-3 gap-2 animate-pulse">

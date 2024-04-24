@@ -58,7 +58,7 @@ export function Branches() {
   const [info, setInfo] = useState(false)
 
   return (
-    <div className="col-span-3 min-h-screen overflow-hidden pb-10 shadow-sm border-x border-zinc-200 dark:border-zinc-700 flex flex-col pt-10">
+    <div className="col-span-3 min-h-screen overflow-hidden pb-10 border-x border-zinc-200 dark:border-zinc-700 flex flex-col pt-10">
       <header className="flex items-center justify-between mb-20 px-8">
         <span className="text-sm group-hover:translate-x-2 font-medium transition-transform duration-300">
           FILIAIS
@@ -209,38 +209,39 @@ export function Branches() {
         ) : (
           <>
             {data?.content.map((item) => (
-              <li
-                key={item.cnpj}
-                data-selected={!branch ? true : item.id === branch?.id}
-                className="relative flex items-center group space-x-5 px-5 h-16 hover:data-[selected='false']:opacity-100 data-[selected='false']:opacity-70 transition-[opacity] duration-300"
-              >
-                <BranchImage id={item.id} razao={item.razao} />
-                <button
-                  className="w-full flex items-center gap-x-5 group cursor-pointer"
-                  onClick={() =>
-                    item.id === branch?.id ? setBranch(null) : setBranch(item)
-                  }
+              <Link key={item.cnpj} to="/main">
+                <li
+                  data-selected={!branch ? true : item.id === branch?.id}
+                  className="relative flex items-center group space-x-5 px-5 h-16 hover:data-[selected='false']:opacity-100 data-[selected='false']:opacity-70 transition-[opacity] duration-300"
                 >
-                  <div className="flex flex-col items-start">
-                    <span className="text-sm font-medium capitalize -tracking-wide">
-                      {item.razao.toLowerCase()}
-                    </span>
-
-                    <span className="text-xs text-zinc-500 block mt-0.5">
-                      {item.endereco.cidadeNome}
-                    </span>
-                  </div>
-                </button>
-
-                {item.id === branch?.id && (
+                  <BranchImage id={item.id} razao={item.razao} />
                   <button
-                    className="group-data-[selected=true]:visible invisible h-12 w-12 rounded-full hover:bg-zinc-200/50 items-center justify-center translate-all duration-300 group-data-[selected='true']:flex hidden absolute right-2.5 top-2.5"
-                    onClick={() => setInfo(true)}
+                    className="w-full flex items-center gap-x-5 group cursor-pointer"
+                    onClick={() =>
+                      item.id === branch?.id ? setBranch(null) : setBranch(item)
+                    }
                   >
-                    <CaretRight size={16} weight="bold" />
+                    <div className="flex flex-col items-start">
+                      <span className="text-sm font-medium capitalize -tracking-wide">
+                        {item.razao.toLowerCase()}
+                      </span>
+
+                      <span className="text-xs text-zinc-500 block mt-0.5">
+                        {item.endereco.cidadeNome}
+                      </span>
+                    </div>
                   </button>
-                )}
-              </li>
+
+                  {item.id === branch?.id && (
+                    <button
+                      className="group-data-[selected=true]:visible invisible h-12 w-12 rounded-full hover:bg-zinc-200/50 items-center justify-center translate-all duration-300 group-data-[selected='true']:flex hidden absolute right-2.5 top-2.5"
+                      onClick={() => setInfo(true)}
+                    >
+                      <CaretRight size={16} weight="bold" />
+                    </button>
+                  )}
+                </li>
+              </Link>
             ))}
           </>
         )}
