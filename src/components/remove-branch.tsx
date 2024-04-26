@@ -3,12 +3,7 @@ import { useMutation } from '@/hooks/use-mutation'
 import { CircleNotch, Trash } from '@phosphor-icons/react'
 import { useToast } from './ui/use-toast'
 import { client } from '@/App'
-
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
+import { white } from 'tailwindcss/colors'
 
 interface Props {
   id: number
@@ -42,26 +37,24 @@ export function RemoveBranch({ id }: Props) {
   )
 
   return (
-    <Tooltip>
-      <TooltipTrigger>
-        <button
-          onClick={() => mutate(id)}
-          className="h-12 w-12 rounded-full hover:bg-zinc-200/50 flex items-center justify-center translate-all duration-300 font-urbanist"
-        >
-          {isPending ? (
-            <CircleNotch
-              weight="bold"
-              size={20}
-              className="text-white animate-spin"
-            />
-          ) : (
-            <Trash className="w-4 h-4 text-red-500" weight="bold" size={18} />
-          )}
-        </button>
-      </TooltipTrigger>
-      <TooltipContent>
-        <p className="text-xs">Remover anúncio</p>
-      </TooltipContent>
-    </Tooltip>
+    <button
+      onClick={() => mutate(id)}
+      className="group row-span-2 rounded-lg bg-red-500 transition-all duration-300 flex gap-2.5 items-center justify-center px-5"
+    >
+      {isPending ? (
+        <CircleNotch size={20} weight="bold" color={white} />
+      ) : (
+        <Trash
+          size={20}
+          weight="bold"
+          color={white}
+          className="group-hover:translate-x-[32px] transition-all duration-300"
+        />
+      )}
+
+      <p className="text-[13px] font-medium text-white transition-all duration-300 group-hover:opacity-0 group-hover:translate-x-14">
+        Remover
+      </p>
+    </button>
   )
 }

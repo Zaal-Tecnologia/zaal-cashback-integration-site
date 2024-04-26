@@ -16,18 +16,19 @@ import {
 import { AdsDTO } from '@/@types/dto/ads-dto'
 import dayjs from 'dayjs'
 import { useCallback, useState } from 'react'
-import { green, orange } from 'tailwindcss/colors'
-import { CurrencyDollar, Pencil, Ticket, Timer, X } from '@phosphor-icons/react'
+import { green, orange, white } from 'tailwindcss/colors'
+import {
+  CurrencyDollar,
+  HighlighterCircle,
+  Ticket,
+  Timer,
+  X,
+} from '@phosphor-icons/react'
 import { DialogClose } from '@radix-ui/react-dialog'
 
 import { RemoveBranch } from '@/components/remove-branch'
 import { ImageProvider } from '@/contexts/image'
 import { Lightbox } from '@/components/lightbox'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
 import { useUpdateForm } from '@/hooks/use-update-form'
 
 import { useNavigate } from 'react-router-dom'
@@ -137,7 +138,7 @@ export function History() {
         <DialogContent className="max-w-[800px]">
           {selectedAds ? (
             <>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between mt-5">
                 <DialogClose
                   onClick={() => setSelectedAds(null)}
                   className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
@@ -145,28 +146,6 @@ export function History() {
                   <X className="h-4 w-4" weight="bold" />
                   <span className="sr-only">Close</span>
                 </DialogClose>
-
-                <div className="flex items-center">
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <button
-                        onClick={handleGetDefaultValuesToUpdateForm}
-                        className="h-12 w-12 rounded-full hover:bg-zinc-200/50 flex items-center justify-center translate-all duration-300 font-urbanist"
-                      >
-                        <Pencil
-                          className="w-4 h-4 text-blue-500"
-                          weight="bold"
-                          size={18}
-                        />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p className="text-xs">Editar anúncio</p>
-                    </TooltipContent>
-                  </Tooltip>
-
-                  <RemoveBranch id={selectedAds.id} />
-                </div>
               </div>
 
               <DialogHeader>
@@ -178,10 +157,10 @@ export function History() {
                 <img
                   src={selectedAds.src}
                   alt=""
-                  className="w-[300px] h-[300px] rounded-lg mr-5"
+                  className="w-[350px] h-[350px] rounded-lg mr-5"
                 />
 
-                <div className="grid grid-cols-2 gap-2.5 grid-rows-8 h-[300px]">
+                <div className="grid grid-cols-2 gap-2.5 grid-rows-10 h-[350px]">
                   <div className="row-span-2 rounded-lg bg-green-200/50 hover:bg-green-200 transition-all duration-300 cursor-not-allowed flex gap-2.5 items-center justify-center px-5">
                     <Ticket size={20} weight="bold" color={green[700]} />
 
@@ -230,6 +209,26 @@ export function History() {
                         ? `${selectedAds.valorDesconto}%`
                         : `R$ ${selectedAds.valorDesconto}`}
                     </p>
+                  </div>
+
+                  <div className="col-span-2 row-span-2 grid grid-cols-2 border-t dark:border-t-zinc-700 pt-2.5 gap-2.5">
+                    <button
+                      onClick={handleGetDefaultValuesToUpdateForm}
+                      className="group row-span-2 rounded-lg bg-[#305a96] transition-all duration-300 flex gap-2.5 items-center justify-center px-5"
+                    >
+                      <HighlighterCircle
+                        size={20}
+                        weight="bold"
+                        color={white}
+                        className="group-hover:translate-x-[20px] transition-all duration-300"
+                      />
+
+                      <p className="text-[13px] font-medium text-white transition-all duration-300 group-hover:opacity-0 group-hover:translate-x-14">
+                        Editar
+                      </p>
+                    </button>
+
+                    <RemoveBranch id={selectedAds.id} />
                   </div>
                 </div>
               </div>
