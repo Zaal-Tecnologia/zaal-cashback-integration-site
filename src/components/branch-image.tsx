@@ -84,7 +84,7 @@ export function BranchImage(props: Props) {
   return (
     <div
       data-logo={!data}
-      className="data-[logo=true]:bg-zinc-50 data-[logo=true]:rounded-md relative group w-[35px] h-[35px] min-w-[35px] min-h-[35px] flex items-center justify-center"
+      className="data-[logo=true]:bg-zinc-50 dark:data-[logo=true]:bg-zinc-700/50 data-[logo=true]:rounded-md relative group w-[35px] h-[35px] min-w-[35px] min-h-[35px] flex items-center justify-center"
     >
       {data ? (
         <img

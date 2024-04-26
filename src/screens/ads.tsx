@@ -1,5 +1,6 @@
 import {
   ArrowUpRight,
+  ArrowsClockwise,
   CheckCircle,
   CircleNotch,
   Dot,
@@ -55,7 +56,7 @@ const FormSchema = z.object({
 
     const date = `${year}-${month}-${day}`
 
-    if (dayjs().isBefore(dayjs(date))) {
+    if (!dayjs().isBefore(dayjs(date))) {
       return ctx.addIssue({
         message: 'abaixo da data atual.',
         code: 'custom',
@@ -161,7 +162,9 @@ export function Ads() {
     setForm(null)
 
     reset()
-  }, [reset, setForm])
+
+    navigate('/main')
+  }, [reset, setForm, navigate])
 
   useEffect(() => {
     setValue('inicio', dayjs().format('DD/MM/YYYY'))
@@ -239,12 +242,12 @@ export function Ads() {
       animate={{ translateY: 0, opacity: 1 }}
       initial={{ translateY: 200, opacity: 0 }}
       transition={{ type: 'time' }}
-      className="h-screen p-10 flex flex-col items-center border-r border-t border-zinc-200 dark:border-zinc-800"
+      className="h-screen p-10 flex flex-col items-center border-r border-t border-zinc-200 dark:border-zinc-700"
     >
       <header className="mb-10 flex items-center justify-between w-full">
         <div className="flex items-center">
           <span className="text-sm group-hover:translate-x-2 font-medium transition-transform duration-300">
-            CRIE UMA FILIAL
+            {isUpdate ? 'ATUALIZE O ANÚNCIO' : 'CRIE UM ANÚNCIO'}
           </span>
           <div className="h-5 mx-5 w-[1px] bg-zinc-200 dark:bg-zinc-700" />
           <span className="text-sm font-medium text-zinc-500 dark:text-zinc-300">
@@ -257,7 +260,7 @@ export function Ads() {
             <button
               type="button"
               onClick={() => (isUpdate ? handleCancelUpdate() : navigate(-1))}
-              className="disabled:opacity-60 hover:bg-zinc-100 dark:hover:bg-zinc-800 h-8 w-8 rounded-full flex items-center justify-center border border-zinc-200 dark:border-zinc-800"
+              className="disabled:opacity-60 hover:bg-zinc-100 dark:hover:bg-zinc-800 h-8 w-8 rounded-full flex items-center justify-center border border-zinc-200 dark:border-zinc-700"
             >
               <X weight="bold" size={14} />
             </button>
@@ -292,16 +295,14 @@ export function Ads() {
 
           {!isUpdate ? (
             <>
-              <div className="col-span-2 border-b border-zinc-200 dark:border-zinc-800 pb-2.5 mt-2.5 mb-5">
-                <span className="font-medium text-[13px] -tracking-wide text-zinc-800">
+              <div className="col-span-2 border-b border-zinc-200 dark:border-zinc-700 pb-2.5 mt-2.5 mb-5">
+                <span className="font-medium text-[13px] -tracking-wide">
                   Imagem
                 </span>
               </div>
 
-              {/* <ImagePicker image={image} onSelect={onSelect} /> */}
-
               <div className="flex items-start gap-7">
-                <div className="relative cursor-pointer p-5 rounded-md mb-5 hover:border-zinc-900 transition-all duration-500 flex items-center justify-center h-[200px] w-[200px] group border border-dashed dark:bg-zinc-800/50">
+                <div className="relative cursor-pointer p-5 rounded-md mb-5 hover:border-zinc-900 dark:hover:border-zinc-600 transition-all duration-500 flex items-center justify-center h-[200px] w-[200px] group border border-dashed dark:bg-zinc-800/50 dark:border-zinc-700">
                   <input
                     type="file"
                     className="opacity-0 absolute inset-0 cursor-pointer"
@@ -322,7 +323,7 @@ export function Ads() {
 
                 <div className="flex flex-col gap-x-5">
                   <ul className="mt-1.5 mb-2">
-                    <span className="text-xs font-medium block mb-5 text-zinc-900">
+                    <span className="text-xs font-medium block mb-5">
                       Regras para a imagem da filial
                     </span>
 
@@ -339,11 +340,11 @@ export function Ads() {
                           {errorsInTheImage.find((error) => error === rule) ? (
                             <X className="text-red-500" />
                           ) : (
-                            <Dot className="text-zinc-700" size={20} />
+                            <Dot size={20} />
                           )}
                         </div>
 
-                        <span className="text-xs text-zinc-900">{rule}</span>
+                        <span className="text-xs">{rule}</span>
                       </li>
                     ))}
                   </ul>
@@ -351,18 +352,34 @@ export function Ads() {
                   {image ? (
                     <footer
                       data-background={errorsInTheImage.length === 0}
-                      className="flex data-[background=true]:bg-[#305a96]/10 data-[background=false]:bg-red-500/10 py-2.5 data-[background=false]:pl-2.5 data-[background=false]:pr-5 rounded-full items-center justify-center gap-x-5"
+                      className="flex data-[background=true]:bg-[#305a96]/10 data-[background=false]:bg-red-500/10 py-2.5 pl-2.5 pr-5 rounded-full items-center justify-center gap-x-5"
                     >
                       {errorsInTheImage.length === 0 ? (
-                        <div className="flex items-center justify-center gap-x-1">
-                          <CheckCircle
-                            weight="bold"
-                            className="text-[#305a96]"
-                          />
-                          <span className="text-xs font-medium text-[#305a96]">
-                            Requisitos atendidos
-                          </span>
-                        </div>
+                        <>
+                          <button
+                            onClick={onRemoveImage}
+                            type="button"
+                            className="bg-[#305a96] h-8 w-24 flex items-center justify-center rounded-full transition-all duration-300 hover:bg-[#305a96]/90"
+                          >
+                            <ArrowsClockwise
+                              weight="bold"
+                              className="text-white"
+                            />
+                            <span className="text-xs font-medium text-white ml-1">
+                              Trocar
+                            </span>
+                          </button>
+
+                          <div className="flex items-center justify-center gap-x-1">
+                            <CheckCircle
+                              weight="bold"
+                              className="text-[#305a96]"
+                            />
+                            <span className="text-xs font-medium text-[#305a96]">
+                              Tudo certo!
+                            </span>
+                          </div>
+                        </>
                       ) : (
                         <>
                           <button
@@ -391,166 +408,148 @@ export function Ads() {
             </>
           ) : null}
 
-          <div className="col-span-2 border-b border-zinc-200 dark:border-zinc-800 pb-2.5 mt-2.5 mb-5">
-            <span className="font-medium text-[13px] -tracking-wide text-zinc-800">
-              Conteúdo
-            </span>
-          </div>
-
-          <div className="gap-3 grid">
-            <Input.Root>
-              <div className="flex items-center justify-between">
-                <Input.Label
-                  required
-                  errorMessage={formState.errors?.conteudo?.message}
-                >
-                  Conteúdo
-                </Input.Label>
-
-                <span className="text-xs font-medium -tracking-wider mr-2.5">
-                  {watch('conteudo')?.length} de 250
-                </span>
-              </div>
-
-              <Input.Area
-                {...register('conteudo')}
-                maxLength={250}
-                placeholder="Conteúdo do anúncio"
-              />
-            </Input.Root>
-
-            <div className="grid grid-cols-7 gap-x-3">
-              <Input.Root className="col-span-4">
-                <Input.Label
-                  required
-                  errorMessage={formState.errors?.descricao?.message}
-                >
-                  Descrição
-                </Input.Label>
-
-                <Input.Write
-                  {...register('descricao')}
-                  maxLength={60}
-                  placeholder="Qual a descrição do anúncio?"
-                />
-              </Input.Root>
-
-              <Input.Root className="col-span-3">
-                <Input.Label
-                  required
-                  errorMessage={formState.errors?.cupom?.message}
-                >
-                  Cupom
-                </Input.Label>
-
-                <Input.Write
-                  {...register('cupom')}
-                  placeholder="Cupom de desconto"
-                />
-              </Input.Root>
-            </div>
-          </div>
-
-          <div className="col-span-2 border-b border-zinc-200 dark:border-zinc-800 pb-2.5 mt-2.5 mb-5">
-            <span className="font-medium text-[13px] -tracking-wide text-zinc-800">
-              Valores
-            </span>
-          </div>
-
-          <div className="grid grid-cols-2 gap-5">
-            <div className="col-span-2 flex items-center justify-between bg-zinc-100 p-5 rounded-md dark:bg-zinc-700/50">
-              <div className="flex flex-col">
-                <span className="font-medium text-[13px]">
-                  Desconto em porcentagem
-                </span>
-                <span className="text-[11px] text-zinc-500 font-medium dark:text-zinc-400">
-                  Ao fazer isso o valor do desconto vai ser feito por
-                  porcentagem
-                </span>
-              </div>
-
-              <Switch
-                onChecked={(e) =>
-                  setValue('tipoDesconto', e ? 'PORCENTAGEM' : 'VALOR')
-                }
-                checked={watch('tipoDesconto') === 'PORCENTAGEM'}
-              />
-            </div>
-
-            <Input.Root>
-              <Input.Label
-                required
-                errorMessage={formState.errors?.valorMinimo?.message}
-              >
-                Valor mínimo • R$
-              </Input.Label>
-
-              <Input.Write
-                type="number"
-                placeholder="Valor mínimo"
-                {...register('valorMinimo', { valueAsNumber: true })}
-              />
-            </Input.Root>
-
-            <Input.Root>
-              <Input.Label
-                required
-                errorMessage={formState.errors?.valorMaximo?.message}
-              >
-                Valor máximo • R$
-              </Input.Label>
-
-              <Input.Write
-                type="number"
-                placeholder="Valor máximo"
-                {...register('valorMaximo', { valueAsNumber: true })}
-              />
-            </Input.Root>
-
-            <Input.Root>
-              <Input.Label
-                required
-                errorMessage={formState.errors?.valorDesconto?.message}
-              >
-                Valor do desconto •{' '}
-                {watch('tipoDesconto') === 'VALOR' ? 'R$' : '%'}
-              </Input.Label>
-
-              <Input.Write
-                type="number"
-                placeholder="Valor do desconto"
-                {...register('valorDesconto', { valueAsNumber: true })}
-              />
-            </Input.Root>
-          </div>
-
-          {!isUpdate && (
+          {watch('imagemBase64') || (!watch('imagemBase64') && isUpdate) ? (
             <>
-              <div className="col-span-2 border-b border-zinc-200 dark:border-zinc-800 pb-2.5 mt-2.5 mb-5">
-                <span className="font-medium text-[13px] -tracking-wide text-zinc-800">
+              <div className="col-span-2 border-b border-zinc-200 dark:border-zinc-700 pb-2.5 mt-2.5 mb-5">
+                <span className="font-medium text-[13px] -tracking-wide">
+                  Conteúdo
+                </span>
+              </div>
+
+              <div className="gap-3 grid">
+                <Input.Root>
+                  <div className="flex items-center justify-between">
+                    <Input.Label
+                      required
+                      errorMessage={formState.errors?.conteudo?.message}
+                    >
+                      Conteúdo
+                    </Input.Label>
+
+                    <span className="text-xs font-medium -tracking-wider mr-2.5">
+                      {watch('conteudo')?.length} de 250
+                    </span>
+                  </div>
+
+                  <Input.Area
+                    {...register('conteudo')}
+                    maxLength={250}
+                    placeholder="Conteúdo do anúncio"
+                  />
+                </Input.Root>
+
+                <div className="grid grid-cols-7 gap-x-3">
+                  <Input.Root className="col-span-4">
+                    <Input.Label
+                      required
+                      errorMessage={formState.errors?.descricao?.message}
+                    >
+                      Descrição
+                    </Input.Label>
+
+                    <Input.Write
+                      {...register('descricao')}
+                      maxLength={60}
+                      placeholder="Qual a descrição do anúncio?"
+                    />
+                  </Input.Root>
+
+                  <Input.Root className="col-span-3">
+                    <Input.Label
+                      required
+                      errorMessage={formState.errors?.cupom?.message}
+                    >
+                      Cupom
+                    </Input.Label>
+
+                    <Input.Write
+                      {...register('cupom')}
+                      placeholder="Cupom de desconto"
+                    />
+                  </Input.Root>
+                </div>
+              </div>
+
+              <div className="col-span-2 border-b border-zinc-200 dark:border-zinc-700 pb-2.5 mt-2.5 mb-5">
+                <span className="font-medium text-[13px] -tracking-wide">
+                  Valores
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-5">
+                <div className="col-span-2 flex items-center justify-between bg-zinc-100 p-5 rounded-md dark:bg-zinc-700/50">
+                  <div className="flex flex-col">
+                    <span className="font-medium text-[13px]">
+                      Desconto em porcentagem
+                    </span>
+                    <span className="text-[11px] text-zinc-500 font-medium dark:text-zinc-400">
+                      Ao fazer isso o valor do desconto vai ser feito por
+                      porcentagem
+                    </span>
+                  </div>
+
+                  <Switch
+                    onChecked={(e) =>
+                      setValue('tipoDesconto', e ? 'PORCENTAGEM' : 'VALOR')
+                    }
+                    checked={watch('tipoDesconto') === 'PORCENTAGEM'}
+                  />
+                </div>
+
+                <Input.Root>
+                  <Input.Label
+                    required
+                    errorMessage={formState.errors?.valorMinimo?.message}
+                  >
+                    Valor mínimo • R$
+                  </Input.Label>
+
+                  <Input.Write
+                    type="number"
+                    placeholder="Valor mínimo"
+                    {...register('valorMinimo', { valueAsNumber: true })}
+                  />
+                </Input.Root>
+
+                <Input.Root>
+                  <Input.Label
+                    required
+                    errorMessage={formState.errors?.valorMaximo?.message}
+                  >
+                    Valor máximo • R$
+                  </Input.Label>
+
+                  <Input.Write
+                    type="number"
+                    placeholder="Valor máximo"
+                    {...register('valorMaximo', { valueAsNumber: true })}
+                  />
+                </Input.Root>
+
+                <Input.Root>
+                  <Input.Label
+                    required
+                    errorMessage={formState.errors?.valorDesconto?.message}
+                  >
+                    Valor do desconto •{' '}
+                    {watch('tipoDesconto') === 'VALOR' ? 'R$' : '%'}
+                  </Input.Label>
+
+                  <Input.Write
+                    type="number"
+                    placeholder="Valor do desconto"
+                    {...register('valorDesconto', { valueAsNumber: true })}
+                  />
+                </Input.Root>
+              </div>
+
+              <div className="col-span-2 border-b border-zinc-200 dark:border-zinc-700 pb-2.5 mt-2.5 mb-5">
+                <span className="font-medium text-[13px] -tracking-wide">
                   Datas
                 </span>
               </div>
 
               <div className="grid grid-cols-2 gap-5">
-                {/** <div className="col-span-2 flex items-center justify-between bg-zinc-100 p-5 rounded-md dark:bg-zinc-700/50">
-                <div className="flex flex-col">
-                  <span className="font-medium text-[13px]">Começar hoje</span>
-                  <span className="text-[11px] text-zinc-500 font-medium dark:text-zinc-400">
-                    Começar a promoção a partir de hoje
-                  </span>
-                </div>
-
-                <Switch
-                  onChecked={(e) =>
-                    e
-                      ? setValue('inicio', dayjs().format('DD-MM-YYYY'))
-                      : setValue('inicio', '')
-                  }
-                  checked={watch('inicio') !== ''}
-                />
-              </div> */}
-
                 <Input.Root>
                   <Input.Label
                     required
@@ -581,35 +580,35 @@ export function Ads() {
                   />
                 </Input.Root>
               </div>
+
+              <footer className="absolute p-5 bottom-0 right-0 left-0 bg-white dark:bg-zinc-900 z-50 shadow-lg shadow-zinc-500 border-r border-t border-zinc-200 dark:border-zinc-700">
+                <button
+                  type="submit"
+                  className="group ml-auto w-[200px] h-[50px] flex items-center justify-between px-5 bg-[#305a96] rounded-full ring-2 ring-[#305a96]/50"
+                >
+                  <p
+                    data-pending={isPending}
+                    className="transition-all duration-300 uppercase data-[pending=true]:translate-x-0 group-hover:translate-x-1/2 text-xs font-medium text-white"
+                  >
+                    {isUpdate ? 'salvar aterações' : 'criar anúncio'}
+                  </p>
+
+                  {isPending ? (
+                    <CircleNotch
+                      weight="bold"
+                      size={20}
+                      className="text-white animate-spin"
+                    />
+                  ) : (
+                    <ArrowUpRight
+                      weight="bold"
+                      className="text-white transition-all duration-300 group-hover:translate-x-8 group-hover:opacity-0"
+                    />
+                  )}
+                </button>
+              </footer>
             </>
-          )}
-
-          <footer className="absolute p-5 bottom-0 right-0 left-0 bg-white dark:bg-zinc-900 z-50 shadow-lg shadow-zinc-500 border-r border-t border-zinc-200 dark:border-zinc-800">
-            <button
-              type="submit"
-              className="group ml-auto w-[200px] h-[50px] flex items-center justify-between px-5 bg-[#305a96] rounded-full ring-2 ring-[#305a96]/50"
-            >
-              <p
-                data-pending={isPending}
-                className="transition-all duration-300 data-[pending=true]:translate-x-0 group-hover:translate-x-1/2 text-xs font-medium text-white"
-              >
-                CRIAR ANÚNCIO
-              </p>
-
-              {isPending ? (
-                <CircleNotch
-                  weight="bold"
-                  size={20}
-                  className="text-white animate-spin"
-                />
-              ) : (
-                <ArrowUpRight
-                  weight="bold"
-                  className="text-white transition-all duration-300 group-hover:translate-x-8 group-hover:opacity-0"
-                />
-              )}
-            </button>
-          </footer>
+          ) : null}
         </form>
       </div>
     </motion.div>

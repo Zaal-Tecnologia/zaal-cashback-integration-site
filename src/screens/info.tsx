@@ -14,7 +14,7 @@ export function Info() {
       animate={{ translateY: 0, opacity: 1 }}
       initial={{ translateY: 200, opacity: 0 }}
       transition={{ type: 'time' }}
-      className="min-h-screen flex flex-col items-center border-r border-t border-zinc-200 dark:border-zinc-800 p-10"
+      className="min-h-screen flex flex-col items-center border-r border-t border-zinc-200 dark:border-zinc-700 p-10"
     >
       {branch && (
         <>
@@ -27,7 +27,7 @@ export function Info() {
           </header>
 
           <div className="grid grid-cols-2 grid-rows-8 gap-2.5 min-w-full min-h-[70%]">
-            <div className="col-span-2 rounded flex items-start justify-center flex-col border hover:shadow-lg dark:border-zinc-800 transition-all duration-300 row-span-4 p-10">
+            <div className="col-span-2 rounded flex items-start justify-center flex-col border hover:shadow-lg dark:border-zinc-700 transition-all duration-300 row-span-4 p-10">
               <div className="p-5 mb-5 rounded-full bg-yellow-500/20">
                 <InfoIcon weight="bold" size={20} color={yellow[500]} />
               </div>
@@ -43,7 +43,7 @@ export function Info() {
               </span>
             </div>
 
-            <div className="col-span-2 rounded flex items-start justify-center flex-col border hover:shadow-lg dark:border-zinc-800 transition-all duration-300 row-span-4 p-10">
+            <div className="col-span-2 rounded flex items-start justify-center flex-col border hover:shadow-lg dark:border-zinc-700 transition-all duration-300 row-span-4 p-10">
               <div className="p-5 mb-5 rounded-full bg-[#305a96]/20">
                 <NavigationArrow weight="bold" size={20} color="#305a96" />
               </div>

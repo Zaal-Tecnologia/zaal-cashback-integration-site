@@ -87,7 +87,7 @@ export function History() {
       animate={{ translateY: 0, opacity: 1 }}
       initial={{ translateY: 200, opacity: 0 }}
       transition={{ type: 'time' }}
-      className="min-h-screen flex flex-col items-center border-r border-t border-zinc-200 dark:border-zinc-800"
+      className="min-h-screen flex flex-col items-center border-r border-t border-zinc-200 dark:border-zinc-700"
     >
       <ScrollArea className="w-full p-10">
         <header className="flex items-center w-full justify-start mb-10">
@@ -123,7 +123,7 @@ export function History() {
           </ImageProvider>
         ) : (
           <div className="w-full h-[calc(100vh_-_120px)] flex items-center justify-center">
-            <span className="text-sm -tracking-wide text-zinc-700">
+            <span className="text-sm -tracking-wide">
               Ainda não existe anúncios para {branch?.razao}
             </span>
           </div>
@@ -233,21 +233,6 @@ export function History() {
                   </div>
                 </div>
               </div>
-
-              {/** <footer className="flex items-center gap-5">
-                <button
-                  type="submit"
-                  className="mt-5 h-[50px] flex items-center justify-between px-5 bg-[#305a96] w-full rounded-md ring-2 ring-[#305a96]/50"
-                >
-                  <p className="-tracking-wide text-[13px] font-medium text-white">
-                    Atualizar
-                  </p>
-
-                  <ArrowUpRight weight="bold" className="text-white" />
-                </button>
-
-                <RemoveBranch id={selectedAds?.id} />
-              </footer> */}
             </>
           ) : null}
         </DialogContent>

@@ -40,7 +40,7 @@ export function Branches() {
   }, [data, branch])
 
   return (
-    <div className="col-span-3 overflow-hidden min-h-screen h-auto p-10 border-x border-zinc-200 dark:border-zinc-800 flex flex-col">
+    <div className="col-span-3 overflow-hidden min-h-screen h-auto p-10 border-x border-zinc-200 dark:border-zinc-700 flex flex-col">
       <header className="flex items-center justify-between mb-10">
         <span className="text-sm group-hover:translate-x-2 font-medium transition-transform duration-300">
           FILIAIS
@@ -55,7 +55,7 @@ export function Branches() {
                   onClick={() =>
                     setPage((prev) => (prev >= 1 ? prev - 1 : prev))
                   }
-                  className="disabled:opacity-60 hover:bg-zinc-100 dark:hover:bg-zinc-800 h-8 w-8 rounded-full flex items-center justify-center border border-zinc-200 dark:border-zinc-800"
+                  className="disabled:opacity-60 hover:bg-zinc-100 dark:hover:bg-zinc-800 h-8 w-8 rounded-full flex items-center justify-center border border-zinc-200 dark:border-zinc-700"
                 >
                   <CaretLeft weight="bold" size={14} />
                 </button>
@@ -77,7 +77,7 @@ export function Branches() {
                     prev === data?.totalPages ? prev : prev + 1,
                   )
                 } */
-                  className="disabled:opacity-60 hover:bg-zinc-100 dark:hover:bg-zinc-800 h-8 w-8 rounded-full flex items-center justify-center border border-zinc-200 dark:border-zinc-800"
+                  className="disabled:opacity-60 hover:bg-zinc-100 dark:hover:bg-zinc-800 h-8 w-8 rounded-full flex items-center justify-center border border-zinc-200 dark:border-zinc-700"
                 >
                   <CaretRight weight="bold" size={14} />
                 </button>
@@ -90,7 +90,7 @@ export function Branches() {
             <TooltipTrigger asChild>
               <Link
                 to="branch"
-                className="hover:bg-zinc-100 dark:hover:bg-zinc-800 h-8 w-8 rounded-full flex items-center justify-center border border-zinc-200 dark:border-zinc-800"
+                className="hover:bg-zinc-100 dark:hover:bg-zinc-800 h-8 w-8 rounded-full flex items-center justify-center border border-zinc-200 dark:border-zinc-700"
               >
                 <Plus weight="bold" size={14} />
               </Link>
@@ -141,7 +141,7 @@ export function Branches() {
                         {item.razao.toLowerCase()}
                       </span>
 
-                      <span className="text-xs text-zinc-500 block mt-0.5 font-medium">
+                      <span className="text-xs text-zinc-500 dark:text-zinc-400 block mt-0.5 font-medium">
                         {item.endereco.cidadeNome}
                       </span>
                     </div>

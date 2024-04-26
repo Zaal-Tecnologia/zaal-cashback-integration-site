@@ -13,11 +13,11 @@ export function Layout() {
   const { pathname } = useLocation()
 
   return (
-    <div className="w-screen min-h-screen bg-[#fefefe] dark:bg-zinc-800">
+    <div className="w-screen min-h-screen bg-[#fefefe] dark:bg-zinc-900">
       <Toaster />
 
-      <div className="sm:max-w-[1220px] h-screen sm:mx-auto sm:w-screen dark:bg-zinc-800 grid grid-cols-10">
-        <aside className="overflow-hidden relative bg-white/25 pr-10 pl-4 dark:bg-zinc-800 backdrop-blur-md flex flex-col items-start col-span-2 py-10">
+      <div className="sm:max-w-[1220px] h-screen sm:mx-auto sm:w-screen bg-[#fefefe] dark:bg-zinc-900 grid grid-cols-10">
+        <aside className="overflow-hidden relative bg-white/25 pr-10 pl-4 dark:bg-zinc-900 backdrop-blur-md flex flex-col items-start col-span-2 py-10">
           <img src={'/logo-preto.png'} alt="" className="h-[45px] w-[45px]" />
 
           <nav className="mt-20 flex flex-col items-start gap-y-7 w-full">

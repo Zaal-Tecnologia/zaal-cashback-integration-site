@@ -16,7 +16,7 @@ export function Branch() {
       animate={{ translateY: 0, opacity: 1 }}
       initial={{ translateY: 200, opacity: 0 }}
       transition={{ type: 'time' }}
-      className="h-screen p-10 flex flex-col items-center border-r border-t border-zinc-200 dark:border-zinc-800"
+      className="h-screen p-10 flex flex-col items-center border-r border-t border-zinc-200 dark:border-zinc-700"
     >
       <header className="mb-20 flex items-center justify-between w-full">
         <div className="flex items-center">
@@ -33,7 +33,7 @@ export function Branch() {
           <TooltipTrigger asChild>
             <button
               onClick={() => navigate(-1)}
-              className="disabled:opacity-60 hover:bg-zinc-100 dark:hover:bg-zinc-800 h-8 w-8 rounded-full flex items-center justify-center border border-zinc-200 dark:border-zinc-800"
+              className="disabled:opacity-60 hover:bg-zinc-100 dark:hover:bg-zinc-800 h-8 w-8 rounded-full flex items-center justify-center border border-zinc-200 dark:border-zinc-700"
             >
               <X weight="bold" size={14} />
             </button>

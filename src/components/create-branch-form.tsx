@@ -252,7 +252,7 @@ export function CreateBranchForm() {
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="flex items-start gap-7">
-          <div className="relative cursor-pointer p-5 rounded-md mb-5 hover:border-zinc-900 transition-all duration-500 flex items-center justify-center h-[200px] w-[200px] group border border-dashed dark:bg-zinc-800/50">
+          <div className="relative cursor-pointer p-5 rounded-md mb-5 dark:border-zinc-700 dark:hover:border-zinc-600 hover:border-zinc-900 transition-all duration-500 flex items-center justify-center h-[200px] w-[200px] group border border-dashed dark:bg-zinc-800/50">
             <input
               type="file"
               className="opacity-0 absolute inset-0 cursor-pointer"
@@ -273,7 +273,7 @@ export function CreateBranchForm() {
 
           <div className="flex flex-col gap-x-5">
             <ul className="mt-1.5 mb-2">
-              <span className="text-xs font-medium block mb-5 text-zinc-900">
+              <span className="text-xs font-medium block mb-5">
                 Regras para a imagem da filial
               </span>
 
@@ -287,11 +287,11 @@ export function CreateBranchForm() {
                     {errorsInTheImage.find((error) => error === rule) ? (
                       <X className="text-red-500" />
                     ) : (
-                      <Dot className="text-zinc-700" size={20} />
+                      <Dot size={20} />
                     )}
                   </div>
 
-                  <span className="text-xs text-zinc-900">{rule}</span>
+                  <span className="text-xs">{rule}</span>
                 </li>
               ))}
             </ul>
@@ -334,8 +334,8 @@ export function CreateBranchForm() {
         {showTheFormAfterValidatingTheImage ? (
           <>
             <div className="grid grid-cols-2 gap-5">
-              <div className="col-span-2 border-b border-zinc-200 dark:border-zinc-800 pb-2.5 mt-2.5">
-                <span className="font-medium text-[13px] -tracking-wide text-zinc-800">
+              <div className="col-span-2 border-b border-zinc-200 dark:border-zinc-700 pb-2.5 mt-2.5">
+                <span className="font-medium text-[13px] -tracking-wide">
                   Nome, categoria & descrição
                 </span>
               </div>
@@ -380,8 +380,8 @@ export function CreateBranchForm() {
                 />
               </Input.Root>
 
-              <div className="col-span-2 border-b border-zinc-200 dark:border-zinc-800 pb-2.5 mt-2.5">
-                <span className="font-medium text-[13px] -tracking-wide text-zinc-800">
+              <div className="col-span-2 border-b border-zinc-200 dark:border-zinc-700 pb-2.5 mt-2.5">
+                <span className="font-medium text-[13px] -tracking-wide">
                   Documentos
                 </span>
               </div>
@@ -408,8 +408,8 @@ export function CreateBranchForm() {
                 />
               </Input.Root>
 
-              <div className="col-span-2 border-b border-zinc-200 dark:border-zinc-800 pb-2.5 mt-2.5">
-                <span className="font-medium text-[13px] -tracking-wide text-zinc-800">
+              <div className="col-span-2 border-b border-zinc-200 dark:border-zinc-700 pb-2.5 mt-2.5">
+                <span className="font-medium text-[13px] -tracking-wide">
                   Endereço
                 </span>
               </div>
@@ -454,7 +454,7 @@ export function CreateBranchForm() {
               </Input.Root>
             </div>
 
-            <footer className="absolute p-5 bottom-0 right-0 left-0 bg-white dark:bg-zinc-900 z-50 shadow-lg shadow-zinc-500 border-r border-t border-zinc-200 dark:border-zinc-800">
+            <footer className="absolute p-5 bottom-0 right-0 left-0 bg-white dark:bg-zinc-900 z-50 shadow-lg shadow-zinc-500 border-r border-t border-zinc-200 dark:border-zinc-700">
               <button
                 type="submit"
                 className="group ml-auto w-[200px] h-[50px] flex items-center justify-between px-5 bg-[#305a96] rounded-full ring-2 ring-[#305a96]/50"

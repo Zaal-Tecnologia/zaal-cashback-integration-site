@@ -11,7 +11,7 @@ export function GoBackButton() {
       <TooltipTrigger asChild>
         <button
           onClick={() => navigate(-1)}
-          className="disabled:opacity-60 hover:bg-zinc-100 dark:hover:bg-zinc-800 h-8 w-8 rounded-full flex items-center justify-center border border-zinc-200 dark:border-zinc-800"
+          className="disabled:opacity-60 hover:bg-zinc-100 dark:hover:bg-zinc-800 h-8 w-8 rounded-full flex items-center justify-center border border-zinc-200 dark:border-zinc-700"
         >
           <CaretLeft weight="bold" size={14} />
         </button>
