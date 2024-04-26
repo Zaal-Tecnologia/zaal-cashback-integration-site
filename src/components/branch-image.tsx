@@ -48,9 +48,9 @@ export function BranchImage(props: Props) {
     ['get-branch-image-query', String(props.id)],
     async () => {
       const response = await api(`filiais/${props.id}/logo`, {
-        headers: {
+        /** headers: {
           'Content-Type': 'image/png',
-        },
+        }, */
       })
 
       if (!response.ok) {

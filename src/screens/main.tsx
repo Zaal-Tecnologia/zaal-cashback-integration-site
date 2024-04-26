@@ -16,7 +16,7 @@ export function Main() {
       transition={{ type: 'time' }}
       className="h-screen p-10 flex flex-col items-center border-r border-t border-zinc-200 dark:border-zinc-700"
     >
-      <header className="flex items-center w-full justify-start mb-20">
+      <header className="flex items-center w-full justify-start mb-10">
         <span className="text-sm group-hover:translate-x-2 uppercase font-medium transition-transform duration-300">
           {branch?.razao}
         </span>
