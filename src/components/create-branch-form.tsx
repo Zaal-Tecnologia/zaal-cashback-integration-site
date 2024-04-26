@@ -22,12 +22,7 @@ import { useMutation } from '@/hooks/use-mutation'
 
 import { Input } from './ui/input'
 import { useToast } from './ui/use-toast'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from './ui/tooltip'
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
 import { client } from '@/App'
 
 const FormSchema = z.object({
@@ -54,28 +49,24 @@ const ZIP_CODE_COMPONENTS = {
   LOADING: <CircleNotch className="animate-spin" />,
   SLEEP: null,
   ERROR: (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Warning weight="bold" className="text-red-500" />
-        </TooltipTrigger>
-        <TooltipContent asChild>
-          <p className="text-xs">Ocorreu um erro ao buscar o CEP.</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Warning weight="bold" className="text-red-500" />
+      </TooltipTrigger>
+      <TooltipContent asChild>
+        <p className="text-xs">Ocorreu um erro ao buscar o CEP.</p>
+      </TooltipContent>
+    </Tooltip>
   ),
   SUCCESS: (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Check weight="bold" className="text-green-500" />
-        </TooltipTrigger>
-        <TooltipContent asChild>
-          <p className="text-xs">Seu CEP é válido.</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Check weight="bold" className="text-green-500" />
+      </TooltipTrigger>
+      <TooltipContent asChild>
+        <p className="text-xs">Seu CEP é válido.</p>
+      </TooltipContent>
+    </Tooltip>
   ),
 } as const
 
@@ -470,7 +461,7 @@ export function CreateBranchForm() {
               >
                 <p
                   data-pending={isPending}
-                  className="transition-all duration-300 data-[pending=true]:translate-x-0 group-hover:translate-x-1/2 text-xs text-white"
+                  className="transition-all duration-300 data-[pending=true]:translate-x-0 group-hover:translate-x-1/2 text-xs text-white font-medium"
                 >
                   CRIAR FILIAL
                 </p>

@@ -21,7 +21,7 @@ export function Logout() {
         <h1 className="font-bold text-2xl -tracking-wide font-urbanist">
           Deseja mesmo sair?
         </h1>
-        <span className="text-[13px] text-zinc-700 mt-2.5">
+        <span className="text-[13px] mt-2.5">
           Ao sair você vai perder todos os seus cookies, para recuperar é
           necessário fazer login novamente.
         </span>
@@ -29,7 +29,7 @@ export function Logout() {
 
       <button
         onClick={handleLogout}
-        className="h-10 px-8 bg-red-500 rounded-full hover:bg-red-600 transition-all duration-300 dark:bg-zinc-700/40 flex items-center space-x-2"
+        className="h-10 px-8 bg-red-500 rounded-full hover:bg-red-600 transition-all duration-300 dark:bg-red-700/40 flex items-center space-x-2"
       >
         <span className="text-[13px] text-white">SAIR</span>
       </button>

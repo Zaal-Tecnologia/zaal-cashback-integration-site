@@ -26,12 +26,13 @@ import { Lightbox } from '@/components/lightbox'
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { useUpdateForm } from '@/hooks/use-update-form'
 
 import { useNavigate } from 'react-router-dom'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { GoBackButton } from '@/components/go-back-button'
 
 export function History() {
   const { branch } = useBranch()
@@ -86,85 +87,54 @@ export function History() {
       animate={{ translateY: 0, opacity: 1 }}
       initial={{ translateY: 200, opacity: 0 }}
       transition={{ type: 'time' }}
-      className="h-screen p-10 flex flex-col items-center border-r border-t border-zinc-200 dark:border-zinc-800"
+      className="min-h-screen flex flex-col items-center border-r border-t border-zinc-200 dark:border-zinc-800"
     >
-      <header className="flex items-center w-full justify-start mb-20">
-        <span className="text-sm group-hover:translate-x-2 uppercase font-medium transition-transform duration-300">
-          ANÚNCIOS DE {branch?.razao}
-        </span>
-      </header>
-
-      {/** <header className="mb-20 flex items-center justify-between w-full">
-        <div className="flex items-center">
-          <span className="text-sm group-hover:translate-x-2 font-medium transition-transform duration-300">
-            HISTÓRICO
+      <ScrollArea className="w-full p-10">
+        <header className="flex items-center w-full justify-start mb-10">
+          <GoBackButton />
+          <span className="ml-2.5 text-sm group-hover:translate-x-2 uppercase font-medium transition-transform duration-300">
+            {branch ? `ANÚNCIOS DE ${branch?.razao}` : 'TODOS OS ANÚNCIOS'}
           </span>
-          <div className="h-5 mx-5 w-[1px] bg-zinc-200 dark:bg-zinc-700" />
-          <span className="text-sm text-zinc-500 dark:text-zinc-300 dark:font-light">
-            Veja seu histórico
-          </span>
-        </div>
+        </header>
 
-        <div className="flex items-center">
-          {ads && ads.length > 1 ? (
-            <button
-              onClick={() => setOpenLightbox(true)}
-              className="h-12 w-12 rounded-full hover:bg-zinc-200/50 flex items-center justify-center translate-all duration-300 font-urbanist"
-            >
-              <Slideshow size={18} />
-            </button>
-          ) : null}
-          <button
-            // onClick={() => setCreate((prev) => !prev)}
-            className="h-12 w-12 rounded-full hover:bg-zinc-200/50 flex items-center justify-center translate-all duration-300 font-urbanist"
-          >
-            {ads?.length}
-          </button>
-        </div>
-      </header> */}
+        {isLoading ? (
+          <ul className="grid grid-cols-3 gap-2 animate-pulse w-full h-screen">
+            <li className="flex flex-1 first:row-span-2 first:col-span-2 max-w-[350px] max-h-[350px] bg-zinc-100 dark:bg-zinc-700/50" />
 
-      {isLoading ? (
-        <ul className="grid grid-cols-3 gap-2 animate-pulse">
-          <li className="min-h-[320px] min-w-[320px] col-span-2 row-span-2 bg-zinc-100 dark:bg-zinc-700/50 rounded-md"></li>
-          <li className="min-h-[160px] min-w-[160px] bg-zinc-100 dark:bg-zinc-700/50 rounded-md"></li>
-          <li className="min-h-[160px] min-w-[160px] bg-zinc-100 dark:bg-zinc-700/50 rounded-md"></li>
-          <li className="min-h-[160px] min-w-[160px] bg-zinc-100 dark:bg-zinc-700/50 rounded-md"></li>
-          <li className="min-h-[160px] min-w-[160px] bg-zinc-100 dark:bg-zinc-700/50 rounded-md"></li>
-
-          <span className="sr-only">Loading...</span>
-        </ul>
-      ) : ads && ads.length > 0 ? (
-        <ImageProvider>
-          <Lightbox onClose={handleCloseLightbox} open={openLightbox} />
-
-          <ul className="grid grid-cols-3 gap-2">
-            {ads.map((item) => (
-              <li
-                key={item.id}
-                // onClick={() => setSelectedAds(item)}
-                className="cursor-pointer first:col-span-2 first:row-span-2 first:h-full first:w-full first:min-h-[330px] first:min-w-[320px]"
-              >
-                <AdsImage
-                  adsId={item.id}
-                  onSelectAds={(src) => setSelectedAds({ ...item, src })}
-                />
-              </li>
-            ))}
+            <span className="sr-only">Loading...</span>
           </ul>
-        </ImageProvider>
-      ) : (
-        <div className="w-full h-[calc(100vh_-_120px)] flex items-center justify-center">
-          <span className="text-sm -tracking-wide text-zinc-700">
-            Ainda não existe anúncios para {branch?.razao}
-          </span>
-        </div>
-      )}
+        ) : ads && ads.length > 0 ? (
+          <ImageProvider>
+            <Lightbox onClose={handleCloseLightbox} open={openLightbox} />
+
+            <ul className="grid grid-cols-3 gap-2">
+              {ads.map((item) => (
+                <li
+                  key={item.id}
+                  className="first:row-span-2 first:col-span-2 first:max-w-[400px] first:max-h-[400px]"
+                >
+                  <AdsImage
+                    adsId={item.id}
+                    onSelectAds={(src) => setSelectedAds({ ...item, src })}
+                  />
+                </li>
+              ))}
+            </ul>
+          </ImageProvider>
+        ) : (
+          <div className="w-full h-[calc(100vh_-_120px)] flex items-center justify-center">
+            <span className="text-sm -tracking-wide text-zinc-700">
+              Ainda não existe anúncios para {branch?.razao}
+            </span>
+          </div>
+        )}
+      </ScrollArea>
 
       <Dialog
         open={!!selectedAds}
         onOpenChange={(event) => event === false && handleCloseModal()}
       >
-        <DialogContent>
+        <DialogContent className="max-w-[800px]">
           {selectedAds ? (
             <>
               <div className="flex items-center justify-between">
@@ -177,84 +147,90 @@ export function History() {
                 </DialogClose>
 
                 <div className="flex items-center">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <button
-                          onClick={handleGetDefaultValuesToUpdateForm}
-                          className="h-12 w-12 rounded-full hover:bg-zinc-200/50 flex items-center justify-center translate-all duration-300 font-urbanist"
-                        >
-                          <Pencil
-                            className="w-4 h-4 text-blue-500"
-                            weight="bold"
-                            size={18}
-                          />
-                        </button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p className="text-xs">Editar anúncio</p>
-                      </TooltipContent>
-                    </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <button
+                        onClick={handleGetDefaultValuesToUpdateForm}
+                        className="h-12 w-12 rounded-full hover:bg-zinc-200/50 flex items-center justify-center translate-all duration-300 font-urbanist"
+                      >
+                        <Pencil
+                          className="w-4 h-4 text-blue-500"
+                          weight="bold"
+                          size={18}
+                        />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="text-xs">Editar anúncio</p>
+                    </TooltipContent>
+                  </Tooltip>
 
-                    <RemoveBranch id={selectedAds.id} />
-                  </TooltipProvider>
+                  <RemoveBranch id={selectedAds.id} />
                 </div>
               </div>
 
               <DialogHeader>
                 <DialogTitle>{selectedAds.conteudo}</DialogTitle>
-                <DialogDescription>
-                  Veja informações sobre o anúncio {selectedAds.conteudo}.
-                </DialogDescription>
+                <DialogDescription>{selectedAds.descricao}</DialogDescription>
               </DialogHeader>
 
-              <div className="grid grid-cols-2 gap-2.5 grid-rows-8 h-96 mt-5">
-                <div className="row-span-2 rounded-3xl bg-green-200/50 hover:bg-green-200 transition-all duration-300 cursor-not-allowed flex gap-2.5 items-center justify-center px-5">
-                  <Ticket size={20} weight="bold" color={green[700]} />
+              <div className="flex items-center mt-5">
+                <img
+                  src={selectedAds.src}
+                  alt=""
+                  className="w-[300px] h-[300px] rounded-lg mr-5"
+                />
 
-                  <p className="font-urbanist font-semibold text-sm text-green-700">
-                    {selectedAds.cupom}
-                  </p>
-                </div>
+                <div className="grid grid-cols-2 gap-2.5 grid-rows-8 h-[300px]">
+                  <div className="row-span-2 rounded-lg bg-green-200/50 hover:bg-green-200 transition-all duration-300 cursor-not-allowed flex gap-2.5 items-center justify-center px-5">
+                    <Ticket size={20} weight="bold" color={green[700]} />
 
-                <div className="row-span-2 rounded-3xl bg-orange-200/50 hover:bg-orange-200 transition-all duration-300 cursor-not-allowed flex gap-2.5 items-center justify-center px-5">
-                  <Timer size={20} weight="bold" color={orange[700]} />
+                    <p className="font-urbanist font-semibold text-sm text-green-700">
+                      {selectedAds.cupom}
+                    </p>
+                  </div>
 
-                  <p className="font-urbanist text-sm font-semibold text-orange-700">
-                    {dayjs(selectedAds.validade).format('DD/MM/YYYY')}
-                  </p>
-                </div>
+                  <div className="row-span-2 rounded-lg bg-orange-200/50 hover:bg-orange-200 transition-all duration-300 cursor-not-allowed flex gap-2.5 items-center justify-center px-5">
+                    <Timer size={20} weight="bold" color={orange[700]} />
 
-                <div className="row-span-6 rounded-3xl bg-cyan-200/50 hover:bg-cyan-200 transition-all duration-300 cursor-not-allowed flex flex-col justify-center px-10">
-                  <CurrencyDollar size={20} weight="bold" color="#305a96" />
+                    <p className="font-urbanist text-sm font-semibold text-orange-700">
+                      {dayjs(selectedAds.validade).format('DD/MM/YYYY')}
+                    </p>
+                  </div>
 
-                  <p className="text-[11px] font-medium tracking-wide text-cyan-700 my-5">
-                    VALOR MÁXIMO
-                  </p>
+                  <div className="row-span-6 rounded-lg bg-cyan-200/50 hover:bg-cyan-200 transition-all duration-300 cursor-not-allowed flex flex-col justify-center px-10">
+                    <CurrencyDollar size={20} weight="bold" color="#305a96" />
 
-                  <p className="font-urbanist font-semibold text-cyan-700">
-                    R$ {selectedAds.valorMaximo}
-                  </p>
-                </div>
+                    <p className="text-[11px] font-medium tracking-wide text-cyan-700 my-5">
+                      VALOR MÁXIMO
+                    </p>
 
-                <div className="rounded-3xl bg-yellow-200/50 hover:bg-yellow-200 transition-all duration-300 cursor-not-allowed flex flex-col justify-center row-span-3 px-10">
-                  <p className="text-[11px] font-medium tracking-wide text-yellow-700 mb-2.5">
-                    VALOR MÍNIMO
-                  </p>
+                    <p className="font-urbanist font-semibold text-cyan-700">
+                      R$ {selectedAds.valorMaximo}
+                    </p>
+                  </div>
 
-                  <p className="font-urbanist font-semibold text-yellow-700">
-                    R$ {selectedAds.valorMinimo}
-                  </p>
-                </div>
+                  <div className="rounded-lg bg-yellow-200/50 hover:bg-yellow-200 transition-all duration-300 cursor-not-allowed flex flex-col justify-center row-span-3 px-10">
+                    <p className="text-[11px] font-medium tracking-wide text-yellow-700 mb-2.5">
+                      VALOR MÍNIMO
+                    </p>
 
-                <div className="rounded-3xl bg-rose-200/50 hover:bg-rose-200 transition-all duration-300 cursor-not-allowed flex flex-col justify-center row-span-3 px-10">
-                  <p className="text-[11px] font-medium tracking-wide text-rose-700 mb-2.5">
-                    VALOR DE DESCONTO
-                  </p>
+                    <p className="font-urbanist font-semibold text-yellow-700">
+                      R$ {selectedAds.valorMinimo}
+                    </p>
+                  </div>
 
-                  <p className="font-urbanist font-semibold text-rose-700">
-                    R$ {selectedAds.valorDesconto}
-                  </p>
+                  <div className="rounded-lg bg-rose-200/50 hover:bg-rose-200 transition-all duration-300 cursor-not-allowed flex flex-col justify-center row-span-3 px-10">
+                    <p className="text-[11px] font-medium tracking-wide text-rose-700 mb-2.5">
+                      VALOR DE DESCONTO
+                    </p>
+
+                    <p className="font-urbanist font-semibold text-rose-700">
+                      {selectedAds.tipoDesconto === 'PORCENTAGEM'
+                        ? `${selectedAds.valorDesconto}%`
+                        : `R$ ${selectedAds.valorDesconto}`}
+                    </p>
+                  </div>
                 </div>
               </div>
 

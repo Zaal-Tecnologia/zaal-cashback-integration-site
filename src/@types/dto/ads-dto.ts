@@ -7,6 +7,7 @@ export interface AdsDTO {
   valorMinimo: number
   valorMaximo: number
   inicio: string
+  descricao: string
   validade: string
   filialId: number
 }

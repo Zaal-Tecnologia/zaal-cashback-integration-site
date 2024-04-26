@@ -44,17 +44,12 @@ export function AdsImage(props: Props) {
     },
   )
 
-  return data ? (
+  return (
     <button
       onClick={() => props.onSelectAds(URL.createObjectURL(data as Blob))}
+      className="flex flex-1 transition-all duration-300 hover:scale-105 hover:shadow-xl"
     >
-      <img
-        className="ring-2 ring-zinc-200 dark:ring-zinc-700 rounded-md"
-        src={URL.createObjectURL(data as Blob)}
-        alt=""
-      />
+      {data ? <img src={URL.createObjectURL(data as Blob)} alt="" /> : null}
     </button>
-  ) : (
-    <div className="min-h-[320px] min-w-[320px] bg-zinc-100 dark:bg-zinc-700/50 rounded-md"></div>
   )
 }

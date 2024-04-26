@@ -17,7 +17,7 @@ function Label(
   },
 ) {
   return (
-    <label htmlFor="" className="text-xs mb-1" {...props}>
+    <label htmlFor="" className="text-xs font-medium mb-1" {...props}>
       {props.children}{' '}
       {!props.errorMessage && props.required ? (
         <span className="text-red-500">*</span>

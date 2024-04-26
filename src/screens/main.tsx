@@ -62,7 +62,10 @@ export function Main() {
           </span>
         </Link>
 
-        <button className="rounded flex items-start justify-center flex-col border hover:shadow-lg dark:border-zinc-800 transition-all duration-300 row-span-4 p-10">
+        <Link
+          to="/info"
+          className="rounded flex items-start justify-center flex-col border hover:shadow-lg dark:border-zinc-800 transition-all duration-300 row-span-4 p-10"
+        >
           <div className="p-5 mb-5 rounded-full bg-green-500/20">
             <Storefront weight="bold" size={20} color={green[500]} />
           </div>
@@ -72,7 +75,7 @@ export function Main() {
           <span className="text-xs text-zinc-500 text-left block mt-5">
             Obtenha informações da sua filial, endereço, nome razão, CNPJ, etc.
           </span>
-        </button>
+        </Link>
       </div>
     </motion.div>
   )

@@ -1,43 +1,41 @@
-import { ArrowUpRight, CircleNotch, Info } from '@phosphor-icons/react'
+import {
+  ArrowUpRight,
+  CheckCircle,
+  CircleNotch,
+  Dot,
+  Image as IconImage,
+  Trash,
+  X,
+  XCircle,
+} from '@phosphor-icons/react'
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { z } from 'zod'
 import dayjs from 'dayjs'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { motion } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
 
 import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
+import { useToast } from '@/components/ui/use-toast'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 
 import { useBranch } from '@/hooks/use-branch'
 import { useMutation } from '@/hooks/use-mutation'
+import { useUpdateForm } from '@/hooks/use-update-form'
 
 import { api } from '@/data/api'
-import { useToast } from '@/components/ui/use-toast'
-import { Image, ImagePicker } from '@/components/image-picker'
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet'
-import { DeviceMockup } from '@/components/device-mockup'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { useUpdateForm } from '@/hooks/use-update-form'
-import {
-  FormDivider,
-  FormDividerLine,
-  FormDividerTitle,
-} from '@/components/form-divider'
-import { useNavigate } from 'react-router-dom'
 
 const FormSchema = z.object({
   ativo: z.boolean().default(true),
   tipoDesconto: z.enum(['PORCENTAGEM', 'VALOR']), // precisa confirmar com o maicon
   imagemBase64: z.string(),
-  descricao: z.string().max(250, 'deve ter no máximo 250 caracteres.'),
+  descricao: z.string().max(60, 'deve ter no máximo 60 caracteres.'),
   conteudo: z.string(),
   cupom: z.string(),
   valorDesconto: z.number({
@@ -104,9 +102,9 @@ export function Ads() {
   const { toast } = useToast()
   const navigate = useNavigate()
 
-  const [image, setImage] = useState<Image | null>(null)
+  const [image, setImage] = useState<string | null>(null)
 
-  const { register, handleSubmit, formState, reset, setValue, watch } =
+  const { register, handleSubmit, formState, watch, reset, setValue } =
     useForm<FormData>({
       resolver: zodResolver(FormSchema),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -114,43 +112,6 @@ export function Ads() {
     })
 
   const isUpdate = !!form
-
-  const onSelect = useCallback(
-    (e: ChangeEvent<HTMLInputElement> | null) => {
-      if (!e) {
-        setImage(null)
-
-        return
-      }
-
-      if (!e.target.files || e.target.files.length === 0) {
-        return
-      }
-
-      const file = e.target.files[0]
-
-      const name = file.name
-      const type = file.type
-      const size = file.size
-      const lastModified = file.lastModified
-
-      setImage({ name, type, size, lastModified, base64: '' })
-
-      const reader = new FileReader()
-
-      reader.onload = () => {
-        setImage((prev) => ({
-          ...prev!,
-          base64: String(reader.result),
-        }))
-
-        setValue('imagemBase64', String(reader.result))
-      }
-
-      reader.readAsDataURL(file)
-    },
-    [setValue],
-  )
 
   const { mutate, isPending } = useMutation(
     ['create-ads-mutation'],
@@ -202,63 +163,309 @@ export function Ads() {
     reset()
   }, [reset, setForm])
 
-  // console.log(form)
-
   useEffect(() => {
     setValue('inicio', dayjs().format('DD/MM/YYYY'))
     setValue('tipoDesconto', 'PORCENTAGEM')
   }, [setValue])
+
+  const [errorsInTheImage, setErrorsInTheImage] = useState<string[]>([])
+
+  const handleSelectAdsImage = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      if (event && event.target.files) {
+        const file = event.target.files[0]
+
+        if (file) {
+          const reader = new FileReader()
+
+          reader.onload = (event) => {
+            const image = new Image()
+
+            if (event.target && event.target.result) {
+              image.src = String(event.target.result)
+
+              image.onload = () => {
+                const width = image.width
+                const height = image.height
+
+                const isSmaller = width < 200 && height < 200
+                const isBigger = width > 2000 && height > 2000
+                const itHasADifferentHeightAndWidth = width !== height
+
+                if (
+                  !(file.type === 'image/jpg' || file.type === 'image/jpeg')
+                ) {
+                  setErrorsInTheImage((prev) => [
+                    ...prev,
+                    'Ter formato JPG ou JPEG',
+                  ])
+                }
+
+                if (isSmaller || isBigger) {
+                  setErrorsInTheImage((prev) => [
+                    ...prev,
+                    'Estar entre 200x200 e 400x400',
+                  ])
+                }
+
+                if (itHasADifferentHeightAndWidth) {
+                  setErrorsInTheImage((prev) => [...prev, 'Ter lados iguais'])
+                }
+
+                setImage(String(event.target!.result))
+
+                setValue('imagemBase64', String(event.target!.result))
+              }
+
+              setImage(String(event.target.result))
+            }
+          }
+
+          reader.readAsDataURL(file)
+        }
+      }
+    },
+    [setValue],
+  )
+
+  function onRemoveImage() {
+    setImage(null)
+
+    setErrorsInTheImage([])
+  }
 
   return (
     <motion.div
       animate={{ translateY: 0, opacity: 1 }}
       initial={{ translateY: 200, opacity: 0 }}
       transition={{ type: 'time' }}
-      className="h-screen py-10 px-5 flex flex-col items-center"
+      className="h-screen p-10 flex flex-col items-center border-r border-t border-zinc-200 dark:border-zinc-800"
     >
-      <header className="mb-20 flex items-center justify-between w-full">
+      <header className="mb-10 flex items-center justify-between w-full">
         <div className="flex items-center">
           <span className="text-sm group-hover:translate-x-2 font-medium transition-transform duration-300">
-            {isUpdate ? 'ATUALIZAR ANÚNCIO' : 'CRIAR ANÚNCIO'}
+            CRIE UMA FILIAL
           </span>
           <div className="h-5 mx-5 w-[1px] bg-zinc-200 dark:bg-zinc-700" />
-          <span className="text-sm text-zinc-500 dark:font-light dark:text-zinc-300">
-            Preencha o formulário abaixo
+          <span className="text-sm font-medium text-zinc-500 dark:text-zinc-300">
+            Responda o formulário abaixo
           </span>
         </div>
 
-        <Sheet>
-          <SheetTrigger className="h-12 w-12 rounded-full hover:bg-zinc-200/50 flex items-center justify-center translate-all duration-300">
-            <Info weight="bold" size={18} />
-          </SheetTrigger>
-
-          <SheetContent>
-            <ScrollArea>
-              <SheetHeader className="mb-10">
-                <SheetTitle>Preview</SheetTitle>
-                <SheetDescription>
-                  Aqui você pode ver um preview de como seus anúncios vão
-                  aparecer no aplicativo.
-                </SheetDescription>
-              </SheetHeader>
-
-              <DeviceMockup />
-            </ScrollArea>
-          </SheetContent>
-        </Sheet>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              type="button"
+              onClick={() => (isUpdate ? handleCancelUpdate() : navigate(-1))}
+              className="disabled:opacity-60 hover:bg-zinc-100 dark:hover:bg-zinc-800 h-8 w-8 rounded-full flex items-center justify-center border border-zinc-200 dark:border-zinc-800"
+            >
+              <X weight="bold" size={14} />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>Voltar</TooltipContent>
+        </Tooltip>
       </header>
 
-      <form
-        className="flex flex-col space-y-8 relative w-full"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        {isUpdate && (
-          <div className="grid grid-cols-2 gap-5 px-2.5">
+      <div className="w-full pb-32">
+        <form
+          action="grid grid-cols-2 relative"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          {isUpdate && (
+            <div className="grid grid-cols-2 gap-5">
+              <div className="col-span-2 flex items-center justify-between bg-zinc-100 p-5 rounded-md dark:bg-zinc-700/50">
+                <div className="flex flex-col">
+                  <span className="font-medium text-[13px]">Ativo</span>
+                  <span className="text-[11px] text-zinc-500 font-medium dark:text-zinc-400">
+                    Manter o anúncio ativo, ao desativar ele não vai mais
+                    aparecer.
+                  </span>
+                </div>
+
+                <Switch
+                  onChecked={(e) => setValue('ativo', e)}
+                  checked={!!watch('ativo')}
+                />
+              </div>
+            </div>
+          )}
+
+          {!isUpdate ? (
+            <>
+              <div className="col-span-2 border-b border-zinc-200 dark:border-zinc-800 pb-2.5 mt-2.5 mb-5">
+                <span className="font-medium text-[13px] -tracking-wide text-zinc-800">
+                  Imagem
+                </span>
+              </div>
+
+              {/* <ImagePicker image={image} onSelect={onSelect} /> */}
+
+              <div className="flex items-start gap-7">
+                <div className="relative cursor-pointer p-5 rounded-md mb-5 hover:border-zinc-900 transition-all duration-500 flex items-center justify-center h-[200px] w-[200px] group border border-dashed dark:bg-zinc-800/50">
+                  <input
+                    type="file"
+                    className="opacity-0 absolute inset-0 cursor-pointer"
+                    onChange={handleSelectAdsImage}
+                  />
+
+                  {image ? (
+                    <img src={image} alt="" className="h-[100px] w-[100px]" />
+                  ) : (
+                    <IconImage
+                      size={24}
+                      weight="duotone"
+                      className="group-hover:scale-110 transition-all duration-500"
+                      alt=""
+                    />
+                  )}
+                </div>
+
+                <div className="flex flex-col gap-x-5">
+                  <ul className="mt-1.5 mb-2">
+                    <span className="text-xs font-medium block mb-5 text-zinc-900">
+                      Regras para a imagem da filial
+                    </span>
+
+                    {[
+                      'Ter formato JPG ou JPEG',
+                      'Estar entre 200x200 e 2000x2000',
+                      'Ter lados iguais',
+                    ].map((rule) => (
+                      <li
+                        key={rule}
+                        className="flex items-center gap-x-2 mb-2.5"
+                      >
+                        <div className="w-5 flex items-center justify-center">
+                          {errorsInTheImage.find((error) => error === rule) ? (
+                            <X className="text-red-500" />
+                          ) : (
+                            <Dot className="text-zinc-700" size={20} />
+                          )}
+                        </div>
+
+                        <span className="text-xs text-zinc-900">{rule}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {image ? (
+                    <footer
+                      data-background={errorsInTheImage.length === 0}
+                      className="flex data-[background=true]:bg-[#305a96]/10 data-[background=false]:bg-red-500/10 py-2.5 data-[background=false]:pl-2.5 data-[background=false]:pr-5 rounded-full items-center justify-center gap-x-5"
+                    >
+                      {errorsInTheImage.length === 0 ? (
+                        <div className="flex items-center justify-center gap-x-1">
+                          <CheckCircle
+                            weight="bold"
+                            className="text-[#305a96]"
+                          />
+                          <span className="text-xs font-medium text-[#305a96]">
+                            Requisitos atendidos
+                          </span>
+                        </div>
+                      ) : (
+                        <>
+                          <button
+                            onClick={onRemoveImage}
+                            type="button"
+                            className="bg-red-500 h-8 w-24 flex items-center justify-center rounded-full transition-all duration-300 hover:bg-red-500/90"
+                          >
+                            <Trash weight="bold" className="text-white" />
+                            <span className="text-xs text-white ml-1">
+                              Remover
+                            </span>
+                          </button>
+
+                          <div className="flex items-center justify-center gap-x-1">
+                            <XCircle weight="bold" className="text-red-500" />
+                            <span className="text-xs font-medium text-red-500">
+                              Ocorreu um erro
+                            </span>
+                          </div>
+                        </>
+                      )}
+                    </footer>
+                  ) : null}
+                </div>
+              </div>
+            </>
+          ) : null}
+
+          <div className="col-span-2 border-b border-zinc-200 dark:border-zinc-800 pb-2.5 mt-2.5 mb-5">
+            <span className="font-medium text-[13px] -tracking-wide text-zinc-800">
+              Conteúdo
+            </span>
+          </div>
+
+          <div className="gap-3 grid">
+            <Input.Root>
+              <div className="flex items-center justify-between">
+                <Input.Label
+                  required
+                  errorMessage={formState.errors?.conteudo?.message}
+                >
+                  Conteúdo
+                </Input.Label>
+
+                <span className="text-xs font-medium -tracking-wider mr-2.5">
+                  {watch('conteudo')?.length} de 250
+                </span>
+              </div>
+
+              <Input.Area
+                {...register('conteudo')}
+                maxLength={250}
+                placeholder="Conteúdo do anúncio"
+              />
+            </Input.Root>
+
+            <div className="grid grid-cols-7 gap-x-3">
+              <Input.Root className="col-span-4">
+                <Input.Label
+                  required
+                  errorMessage={formState.errors?.descricao?.message}
+                >
+                  Descrição
+                </Input.Label>
+
+                <Input.Write
+                  {...register('descricao')}
+                  maxLength={60}
+                  placeholder="Qual a descrição do anúncio?"
+                />
+              </Input.Root>
+
+              <Input.Root className="col-span-3">
+                <Input.Label
+                  required
+                  errorMessage={formState.errors?.cupom?.message}
+                >
+                  Cupom
+                </Input.Label>
+
+                <Input.Write
+                  {...register('cupom')}
+                  placeholder="Cupom de desconto"
+                />
+              </Input.Root>
+            </div>
+          </div>
+
+          <div className="col-span-2 border-b border-zinc-200 dark:border-zinc-800 pb-2.5 mt-2.5 mb-5">
+            <span className="font-medium text-[13px] -tracking-wide text-zinc-800">
+              Valores
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-5">
             <div className="col-span-2 flex items-center justify-between bg-zinc-100 p-5 rounded-md dark:bg-zinc-700/50">
               <div className="flex flex-col">
-                <span className="font-medium text-[13px]">Ativo</span>
+                <span className="font-medium text-[13px]">
+                  Desconto em porcentagem
+                </span>
                 <span className="text-[11px] text-zinc-500 font-medium dark:text-zinc-400">
-                  Manter o anúncio ativo
+                  Ao fazer isso o valor do desconto vai ser feito por
+                  porcentagem
                 </span>
               </div>
 
@@ -269,151 +476,64 @@ export function Ads() {
                 checked={watch('tipoDesconto') === 'PORCENTAGEM'}
               />
             </div>
-          </div>
-        )}
 
-        {!isUpdate ? (
-          <>
-            <FormDivider>
-              <FormDividerTitle position="1">IMAGEM</FormDividerTitle>
-              <FormDividerLine />
-            </FormDivider>
-
-            <ImagePicker image={image} onSelect={onSelect} />
-          </>
-        ) : null}
-
-        <FormDivider>
-          <FormDividerTitle position="2">CONTEÚDO</FormDividerTitle>
-          <FormDividerLine />
-        </FormDivider>
-
-        <div className="gap-3 grid px-2.5">
-          <Input.Root>
-            <Input.Label
-              required
-              errorMessage={formState.errors?.descricao?.message}
-            >
-              Descrição
-            </Input.Label>
-
-            <Input.Area
-              {...register('descricao')}
-              placeholder="Faça uma breve descrição do anúncio"
-            />
-          </Input.Root>
-
-          <div className="grid grid-cols-2 gap-x-3">
             <Input.Root>
               <Input.Label
                 required
-                errorMessage={formState.errors?.conteudo?.message}
+                errorMessage={formState.errors?.valorMinimo?.message}
               >
-                Conteúdo
+                Valor mínimo • R$
               </Input.Label>
 
               <Input.Write
-                {...register('conteudo')}
-                placeholder="Qual o conteúdo do anúncio?"
+                type="number"
+                placeholder="Valor mínimo"
+                {...register('valorMinimo', { valueAsNumber: true })}
               />
             </Input.Root>
 
             <Input.Root>
               <Input.Label
                 required
-                errorMessage={formState.errors?.cupom?.message}
+                errorMessage={formState.errors?.valorMaximo?.message}
               >
-                Cupom
+                Valor máximo • R$
               </Input.Label>
 
               <Input.Write
-                {...register('cupom')}
-                placeholder="Cupom de desconto"
+                type="number"
+                placeholder="Valor máximo"
+                {...register('valorMaximo', { valueAsNumber: true })}
+              />
+            </Input.Root>
+
+            <Input.Root>
+              <Input.Label
+                required
+                errorMessage={formState.errors?.valorDesconto?.message}
+              >
+                Valor do desconto •{' '}
+                {watch('tipoDesconto') === 'VALOR' ? 'R$' : '%'}
+              </Input.Label>
+
+              <Input.Write
+                type="number"
+                placeholder="Valor do desconto"
+                {...register('valorDesconto', { valueAsNumber: true })}
               />
             </Input.Root>
           </div>
-        </div>
 
-        <FormDivider>
-          <FormDividerTitle position="3">VALORES</FormDividerTitle>
-          <FormDividerLine />
-        </FormDivider>
+          {!isUpdate && (
+            <>
+              <div className="col-span-2 border-b border-zinc-200 dark:border-zinc-800 pb-2.5 mt-2.5 mb-5">
+                <span className="font-medium text-[13px] -tracking-wide text-zinc-800">
+                  Datas
+                </span>
+              </div>
 
-        <div className="grid grid-cols-2 gap-5 px-2.5">
-          <div className="col-span-2 flex items-center justify-between bg-zinc-100 p-5 rounded-md dark:bg-zinc-700/50">
-            <div className="flex flex-col">
-              <span className="font-medium text-[13px]">
-                Desconto em porcentagem
-              </span>
-              <span className="text-[11px] text-zinc-500 font-medium dark:text-zinc-400">
-                Ao fazer isso o valor do desconto vai ser feito por porcentagem
-              </span>
-            </div>
-
-            <Switch
-              onChecked={(e) =>
-                setValue('tipoDesconto', e ? 'PORCENTAGEM' : 'VALOR')
-              }
-              checked={watch('tipoDesconto') === 'PORCENTAGEM'}
-            />
-          </div>
-
-          <Input.Root>
-            <Input.Label
-              required
-              errorMessage={formState.errors?.valorMinimo?.message}
-            >
-              Valor mínimo • R$
-            </Input.Label>
-
-            <Input.Write
-              type="number"
-              placeholder="Valor mínimo"
-              {...register('valorMinimo', { valueAsNumber: true })}
-            />
-          </Input.Root>
-
-          <Input.Root>
-            <Input.Label
-              required
-              errorMessage={formState.errors?.valorMaximo?.message}
-            >
-              Valor máximo • R$
-            </Input.Label>
-
-            <Input.Write
-              type="number"
-              placeholder="Valor máximo"
-              {...register('valorMaximo', { valueAsNumber: true })}
-            />
-          </Input.Root>
-
-          <Input.Root>
-            <Input.Label
-              required
-              errorMessage={formState.errors?.valorDesconto?.message}
-            >
-              Valor do desconto •{' '}
-              {watch('tipoDesconto') === 'VALOR' ? 'R$' : '%'}
-            </Input.Label>
-
-            <Input.Write
-              type="number"
-              placeholder="Valor do desconto"
-              {...register('valorDesconto', { valueAsNumber: true })}
-            />
-          </Input.Root>
-        </div>
-
-        {!isUpdate && (
-          <>
-            <FormDivider>
-              <FormDividerTitle position="4">DATAS</FormDividerTitle>
-              <FormDividerLine />
-            </FormDivider>
-
-            <div className="grid grid-cols-2 gap-5 px-2.5">
-              {/** <div className="col-span-2 flex items-center justify-between bg-zinc-100 p-5 rounded-md dark:bg-zinc-700/50">
+              <div className="grid grid-cols-2 gap-5">
+                {/** <div className="col-span-2 flex items-center justify-between bg-zinc-100 p-5 rounded-md dark:bg-zinc-700/50">
                 <div className="flex flex-col">
                   <span className="font-medium text-[13px]">Começar hoje</span>
                   <span className="text-[11px] text-zinc-500 font-medium dark:text-zinc-400">
@@ -431,72 +551,67 @@ export function Ads() {
                 />
               </div> */}
 
-              <Input.Root>
-                <Input.Label
-                  required
-                  errorMessage={formState.errors?.inicio?.message}
-                >
-                  Data de início
-                </Input.Label>
+                <Input.Root>
+                  <Input.Label
+                    required
+                    errorMessage={formState.errors?.inicio?.message}
+                  >
+                    Data de início
+                  </Input.Label>
 
-                <Input.Mask
-                  mask="99/99/9999"
-                  placeholder="Data de início"
-                  {...register('inicio')}
+                  <Input.Mask
+                    mask="99/99/9999"
+                    placeholder="Data de início"
+                    {...register('inicio')}
+                  />
+                </Input.Root>
+
+                <Input.Root>
+                  <Input.Label
+                    required
+                    errorMessage={formState.errors?.validade?.message}
+                  >
+                    Data de validade
+                  </Input.Label>
+
+                  <Input.Mask
+                    mask="99/99/9999"
+                    placeholder="Data de validade"
+                    {...register('validade')}
+                  />
+                </Input.Root>
+              </div>
+            </>
+          )}
+
+          <footer className="absolute p-5 bottom-0 right-0 left-0 bg-white dark:bg-zinc-900 z-50 shadow-lg shadow-zinc-500 border-r border-t border-zinc-200 dark:border-zinc-800">
+            <button
+              type="submit"
+              className="group ml-auto w-[200px] h-[50px] flex items-center justify-between px-5 bg-[#305a96] rounded-full ring-2 ring-[#305a96]/50"
+            >
+              <p
+                data-pending={isPending}
+                className="transition-all duration-300 data-[pending=true]:translate-x-0 group-hover:translate-x-1/2 text-xs font-medium text-white"
+              >
+                CRIAR ANÚNCIO
+              </p>
+
+              {isPending ? (
+                <CircleNotch
+                  weight="bold"
+                  size={20}
+                  className="text-white animate-spin"
                 />
-              </Input.Root>
-
-              <Input.Root>
-                <Input.Label
-                  required
-                  errorMessage={formState.errors?.validade?.message}
-                >
-                  Data de validade
-                </Input.Label>
-
-                <Input.Mask
-                  mask="99/99/9999"
-                  placeholder="Data de validade"
-                  {...register('validade')}
+              ) : (
+                <ArrowUpRight
+                  weight="bold"
+                  className="text-white transition-all duration-300 group-hover:translate-x-8 group-hover:opacity-0"
                 />
-              </Input.Root>
-            </div>
-          </>
-        )}
-
-        <footer className="flex-row flex items-center space-x-5 mt-5 pb-10">
-          <button
-            type="button"
-            onClick={() =>
-              isUpdate ? handleCancelUpdate() : navigate('/history')
-            }
-            className="h-[50px] min-h-[50px] w-full transition-all duration-300 hover:bg-opacity-90 flex items-center justify-between px-5 border border-[#305a96] rounded-md ring-4 ring-[#305a96]/50"
-          >
-            <p className="-tracking-wide text-[13px] font-medium text-[#305a96]">
-              {isUpdate ? 'Cancelar atualização' : 'Cancelar'}
-            </p>
-          </button>
-
-          <button
-            type="submit"
-            className="h-[50px] min-h-[50px] w-full transition-all duration-300 hover:bg-opacity-90 flex items-center justify-between px-5 bg-[#305a96] rounded-md ring-4 ring-[#305a96]/50"
-          >
-            <p className="-tracking-wide text-[13px] font-medium text-white">
-              Enviar anúncio
-            </p>
-
-            {isPending ? (
-              <CircleNotch
-                weight="bold"
-                size={20}
-                className="text-white animate-spin"
-              />
-            ) : (
-              <ArrowUpRight weight="bold" className="text-white" />
-            )}
-          </button>
-        </footer>
-      </form>
+              )}
+            </button>
+          </footer>
+        </form>
+      </div>
     </motion.div>
   )
 }

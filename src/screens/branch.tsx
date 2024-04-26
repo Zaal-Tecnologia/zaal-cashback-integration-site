@@ -1,4 +1,9 @@
 import { CreateBranchForm } from '@/components/create-branch-form'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { X } from '@phosphor-icons/react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
@@ -24,12 +29,17 @@ export function Branch() {
           </span>
         </div>
 
-        <button
-          onClick={() => navigate(-1)}
-          className="h-12 w-12 rounded-full hover:bg-zinc-200/50 flex items-center justify-center translate-all duration-300 font-urbanist"
-        >
-          <X />
-        </button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              onClick={() => navigate(-1)}
+              className="disabled:opacity-60 hover:bg-zinc-100 dark:hover:bg-zinc-800 h-8 w-8 rounded-full flex items-center justify-center border border-zinc-200 dark:border-zinc-800"
+            >
+              <X weight="bold" size={14} />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>Voltar</TooltipContent>
+        </Tooltip>
       </header>
 
       <CreateBranchForm />

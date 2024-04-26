@@ -67,7 +67,7 @@ export function CreateGroupForm() {
 
       return json
     },
-    () => navigate('history'),
+    () => navigate('main'),
   )
 
   async function onSubmit(input: FormInput) {
