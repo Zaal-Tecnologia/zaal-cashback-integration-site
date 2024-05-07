@@ -36,8 +36,6 @@ export function Branches() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, branch]) */
 
-  // return null
-
   return (
     <div className="col-span-3 overflow-hidden min-h-screen h-auto p-10 border-x border-zinc-200 dark:border-zinc-700 flex flex-col">
       <header className="flex items-center justify-between mb-10">
@@ -65,7 +63,10 @@ export function Branches() {
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
-                  // disabled={page === data?.totalPages}
+                  disabled={
+                    data?.pages[data?.pages.length - 1].totalPages - 1 ===
+                    data?.pageParams[data?.pageParams.length - 1]
+                  }
                   onClick={() => {
                     fetchNextPage()
 
