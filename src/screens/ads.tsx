@@ -274,7 +274,7 @@ export function Ads() {
           action="grid grid-cols-2 relative"
           onSubmit={handleSubmit(onSubmit)}
         >
-          {isUpdate && (
+          {/** {isUpdate && (
             <div className="grid grid-cols-2 gap-5">
               <div className="col-span-2 flex items-center justify-between bg-zinc-100 p-5 rounded-md dark:bg-zinc-700/50">
                 <div className="flex flex-col">
@@ -291,7 +291,7 @@ export function Ads() {
                 />
               </div>
             </div>
-          )}
+          )} */}
 
           {!isUpdate ? (
             <>
@@ -588,7 +588,7 @@ export function Ads() {
                 >
                   <p
                     data-pending={isPending}
-                    className="transition-all duration-300 uppercase data-[pending=true]:translate-x-0 group-hover:translate-x-1/2 text-xs font-medium text-white"
+                    className="transition-all duration-300 uppercase data-[pending=true]:translate-x-0 group-hover:translate-x-[18%] text-xs font-medium text-white"
                   >
                     {isUpdate ? 'salvar aterações' : 'criar anúncio'}
                   </p>

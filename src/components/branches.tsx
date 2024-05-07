@@ -1,43 +1,42 @@
 import { CaretLeft, CaretRight, Plus } from '@phosphor-icons/react'
 import { Link } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-
-import { BranchImage } from './branch-image'
+import { useState } from 'react'
 
 import { useBranch } from '@/hooks/use-branch'
-import { useQuery } from '@/hooks/use-query'
 
 import { api } from '@/data/api'
 
-import type { API } from '@/@types/dto/api'
-import type { BranchDTO } from '@/@types/dto/branch-dto'
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
-import { keepPreviousData } from '@tanstack/react-query'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { BranchImage } from './branch-image'
+import { BranchDTO } from '@/@types/dto/branch-dto'
+// import { keepPreviousData } from '@tanstack/react-query'
 
 export function Branches() {
   const { setBranch, branch } = useBranch()
 
   const [page, setPage] = useState(0)
 
-  const { data, isLoading, isPlaceholderData } = useQuery<API<BranchDTO>>(
-    ['get-all-branches-query', String(page)],
-    async () => {
-      const response = await api(`filiais?size=6&page=${page}`)
+  const { data, isLoading, fetchNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ['get-all-branches-query'],
+      initialPageParam: 0,
+      queryFn: async ({ pageParam = 0 }) => {
+        const response = await api(`filiais?size=6&page=${pageParam}`)
 
-      const json = await response.json()
+        const json = await response.json()
 
-      return json
-    },
-    {
-      refetchOnMount: false,
-      placeholderData: keepPreviousData,
-    },
-  )
+        return json
+      },
+      getNextPageParam: (lastPage) => lastPage.number + 1,
+    })
 
-  useEffect(() => {
+  /** useEffect(() => {
     if (data && branch === null) setBranch(data.content[0])
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, branch])
+  }, [data, branch]) */
+
+  // return null
 
   return (
     <div className="col-span-3 overflow-hidden min-h-screen h-auto p-10 border-x border-zinc-200 dark:border-zinc-700 flex flex-col">
@@ -66,17 +65,12 @@ export function Branches() {
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
-                  disabled={page === data?.totalPages}
+                  // disabled={page === data?.totalPages}
                   onClick={() => {
-                    if (!isPlaceholderData) {
-                      setPage((old) => old + 1)
-                    }
+                    fetchNextPage()
+
+                    setPage((prev) => prev + 1)
                   }}
-                  /** onClick={() =>
-                  setPage((prev) =>
-                    prev === data?.totalPages ? prev : prev + 1,
-                  )
-                } */
                   className="disabled:opacity-60 hover:bg-zinc-100 dark:hover:bg-zinc-800 h-8 w-8 rounded-full flex items-center justify-center border border-zinc-200 dark:border-zinc-700"
                 >
                   <CaretRight weight="bold" size={14} />
@@ -123,38 +117,42 @@ export function Branches() {
           </>
         ) : (
           <>
-            {data?.content.map((item) => (
-              <Link key={item.cnpj} to="/main">
-                <li
-                  data-selected={!branch ? true : item.id === branch?.id}
-                  className="relative flex items-center group space-x-5 h-16 hover:data-[selected='false']:opacity-100 transition-[opacity] duration-300"
-                >
-                  <BranchImage id={item.id} razao={item.razao} />
-                  <button
-                    className="flex-1 flex items-center gap-x-5 group cursor-pointer"
-                    onClick={() =>
-                      item.id === branch?.id ? setBranch(null) : setBranch(item)
-                    }
+            {data &&
+              !isFetchingNextPage &&
+              data.pages[page].content.map((item: BranchDTO) => (
+                <Link key={item.id} to="/main">
+                  <li
+                    data-selected={!branch ? true : item.id === branch?.id}
+                    className="relative flex items-center group space-x-5 h-16 hover:data-[selected='false']:opacity-100 transition-[opacity] duration-300"
                   >
-                    <div className="flex flex-col items-start">
-                      <span className="text-sm font-medium capitalize -tracking-wide">
-                        {item.razao.toLowerCase()}
-                      </span>
+                    <BranchImage id={item.id} razao={item.razao} />
+                    <button
+                      className="flex-1 flex items-center gap-x-5 group cursor-pointer"
+                      onClick={() =>
+                        item.id === branch?.id
+                          ? setBranch(null)
+                          : setBranch(item)
+                      }
+                    >
+                      <div className="flex flex-col items-start">
+                        <span className="text-sm font-medium capitalize -tracking-wide">
+                          {item.razao.toLowerCase()}
+                        </span>
 
-                      <span className="text-xs text-zinc-500 dark:text-zinc-400 block mt-0.5 font-medium">
-                        {item.endereco.cidadeNome}
-                      </span>
-                    </div>
-                  </button>
+                        <span className="text-xs text-zinc-500 dark:text-zinc-400 block mt-0.5 font-medium">
+                          {item.endereco.cidadeNome}
+                        </span>
+                      </div>
+                    </button>
 
-                  {item.id === branch?.id && (
-                    <div className="hover:bg-zinc-100 dark:hover:bg-zinc-800 h-8 w-8 rounded-full flex items-center justify-center">
-                      <CaretRight size={14} weight="bold" />
-                    </div>
-                  )}
-                </li>
-              </Link>
-            ))}
+                    {item.id === branch?.id && (
+                      <div className="hover:bg-zinc-100 dark:hover:bg-zinc-800 h-8 w-8 rounded-full flex items-center justify-center">
+                        <CaretRight size={14} weight="bold" />
+                      </div>
+                    )}
+                  </li>
+                </Link>
+              ))}
           </>
         )}
       </ul>
