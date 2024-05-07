@@ -64,8 +64,7 @@ export function Branches() {
               <TooltipTrigger asChild>
                 <button
                   disabled={
-                    data?.pages[data?.pages.length - 1].totalPages - 1 ===
-                    data?.pageParams[data?.pageParams.length - 1]
+                    data?.pages[data?.pages.length - 1].totalPages - 1 === page
                   }
                   onClick={() => {
                     fetchNextPage()
