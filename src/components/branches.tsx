@@ -1,6 +1,6 @@
 import { CaretLeft, CaretRight, Plus } from '@phosphor-icons/react'
 import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useBranch } from '@/hooks/use-branch'
 
@@ -31,10 +31,10 @@ export function Branches() {
       getNextPageParam: (lastPage) => lastPage.number + 1,
     })
 
-  /** useEffect(() => {
-    if (data && branch === null) setBranch(data.content[0])
+  useEffect(() => {
+    if (data && branch === null) setBranch(data.pages[0].content[0])
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, branch]) */
+  }, [data, branch])
 
   return (
     <div className="col-span-3 overflow-hidden min-h-screen h-auto p-10 border-x border-zinc-200 dark:border-zinc-700 flex flex-col">
