@@ -21,7 +21,7 @@ export function Branch() {
       <header className="mb-20 flex items-center justify-between w-full">
         <div className="flex items-center">
           <span className="text-sm group-hover:translate-x-2 font-medium transition-transform duration-300">
-            CRIE UMA FILIAL
+            NOVA FILIAL
           </span>
           <div className="h-5 mx-5 w-[1px] bg-zinc-200 dark:bg-zinc-700" />
           <span className="text-sm text-zinc-500 dark:text-zinc-300 dark:font-light">
