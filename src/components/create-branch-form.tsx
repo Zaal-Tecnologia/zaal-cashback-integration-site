@@ -100,7 +100,6 @@ export function CreateBranchForm() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Content-Encoding': 'identity',
       },
       body: JSON.stringify({ base64: image }),
     })
