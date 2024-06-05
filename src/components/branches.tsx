@@ -32,7 +32,8 @@ export function Branches() {
     })
 
   useEffect(() => {
-    if (data && branch === null) setBranch(data.pages[0].content[0])
+    if (data && branch === null)
+      setBranch(data ? data.pages[0].content[0] : null)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, branch])
 

@@ -24,6 +24,7 @@ import { Input } from './ui/input'
 import { useToast } from './ui/use-toast'
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
 import { client } from '@/App'
+import { ieLength } from '@/utils/ie'
 
 const FormSchema = z.object({
   cnpj: z.string(),
@@ -74,8 +75,8 @@ export function CreateBranchForm() {
   const { register, handleSubmit, setValue, formState } = useForm<FormInput>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      cnpj: '80853473000170',
-      inscest: '66562778',
+      // cnpj: '80853473000170',
+      // inscest: '66562778',
     },
   })
 
@@ -97,11 +98,14 @@ export function CreateBranchForm() {
   async function createBranchImage(branchId: string) {
     const response = await api(`filiais/${branchId}/logo`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Encoding': 'identity',
+      },
       body: JSON.stringify({ base64: image }),
     })
 
     const json = await response.json()
-    console.log('branch image', json)
 
     return json.id
   }
@@ -114,12 +118,12 @@ export function CreateBranchForm() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify([input]),
+        body: JSON.stringify(input),
       })
 
       const json = await response.json()
 
-      return json.id
+      return json
     },
     async (data) => {
       await client
@@ -146,6 +150,8 @@ export function CreateBranchForm() {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     input.endereco.cidadeId = cidadeId
+
+    console.log(input)
 
     mutate(input)
   }
@@ -210,12 +216,16 @@ export function CreateBranchForm() {
   const [zipCodeStatus, setZipCodeStatus] =
     useState<keyof typeof ZIP_CODE_COMPONENTS>('SLEEP')
 
+  const [state, setState] = useState('')
+
   async function getZipCodeInfo(value: string) {
     if (value.length === 8) {
       setZipCodeStatus('LOADING')
 
       cep(value)
         .then((data) => {
+          setState(data.state)
+
           setValue('endereco.cep', value)
           setValue('endereco.bairro', data.neighborhood)
           setValue(
@@ -382,34 +392,6 @@ export function CreateBranchForm() {
 
               <div className="col-span-2 border-b border-zinc-200 dark:border-zinc-700 pb-2.5 mt-2.5">
                 <span className="font-medium text-[13px] -tracking-wide">
-                  Documentos
-                </span>
-              </div>
-
-              <Input.Root>
-                <Input.Label errorMessage={formState.errors.cnpj?.message}>
-                  CNPJ
-                </Input.Label>
-                <Input.Write
-                  // mask="99.999.999/9999-99"
-                  placeholder="CNPJ da filial"
-                  {...register('cnpj')}
-                />
-              </Input.Root>
-
-              <Input.Root>
-                <Input.Label errorMessage={formState.errors.inscest?.message}>
-                  Inscrição estadual
-                </Input.Label>
-                <Input.Write
-                  // mask="99.999.999-9"
-                  placeholder="Digite a inscrição estadual"
-                  {...register('inscest')}
-                />
-              </Input.Root>
-
-              <div className="col-span-2 border-b border-zinc-200 dark:border-zinc-700 pb-2.5 mt-2.5">
-                <span className="font-medium text-[13px] -tracking-wide">
                   Endereço
                 </span>
               </div>
@@ -450,6 +432,37 @@ export function CreateBranchForm() {
                 <Input.Write
                   placeholder="Digite o número"
                   {...register('endereco.numero')}
+                />
+              </Input.Root>
+
+              <div className="col-span-2 border-b border-zinc-200 dark:border-zinc-700 pb-2.5 mt-2.5">
+                <span className="font-medium text-[13px] -tracking-wide">
+                  Documentos
+                </span>
+              </div>
+
+              <Input.Root>
+                <Input.Label errorMessage={formState.errors.cnpj?.message}>
+                  CNPJ
+                </Input.Label>
+                <Input.Write
+                  // mask="99.999.999/9999-99"
+                  placeholder="CNPJ da filial"
+                  {...register('cnpj')}
+                />
+              </Input.Root>
+
+              <Input.Root>
+                <Input.Label errorMessage={formState.errors.inscest?.message}>
+                  Inscrição estadual
+                </Input.Label>
+                <Input.Write
+                  // mask="99.999.999-9"
+                  placeholder="Digite a inscrição estadual"
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  maxLength={ieLength[state] || 0}
+                  {...register('inscest')}
                 />
               </Input.Root>
             </div>

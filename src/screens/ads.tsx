@@ -158,6 +158,8 @@ export function Ads() {
     })
   }
 
+  console.log(branch)
+
   const handleCancelUpdate = useCallback(() => {
     setForm(null)
 
@@ -193,7 +195,7 @@ export function Ads() {
 
                 const isSmaller = width < 200 && height < 200
                 const isBigger = width > 2000 && height > 2000
-                const itHasADifferentHeightAndWidth = width !== height
+                // const itHasADifferentHeightAndWidth = width !== height
 
                 if (
                   !(file.type === 'image/jpg' || file.type === 'image/jpeg')
@@ -211,9 +213,9 @@ export function Ads() {
                   ])
                 }
 
-                if (itHasADifferentHeightAndWidth) {
+                /** if (itHasADifferentHeightAndWidth) {
                   setErrorsInTheImage((prev) => [...prev, 'Ter lados iguais'])
-                }
+                } */
 
                 setImage(String(event.target!.result))
 
@@ -330,7 +332,7 @@ export function Ads() {
                     {[
                       'Ter formato JPG ou JPEG',
                       'Estar entre 200x200 e 2000x2000',
-                      'Ter lados iguais',
+                      // 'Ter lados iguais',
                     ].map((rule) => (
                       <li
                         key={rule}
