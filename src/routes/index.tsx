@@ -11,8 +11,6 @@ import { Branch } from '@/screens/branch'
 
 import { ChangeGroupName } from '@/screens/profile/change-group-name'
 import { Logout } from '@/screens/profile/logout'
-import { Theme } from '@/screens/profile/theme'
-import { Main } from '@/screens/main'
 import { Branches } from '@/screens/branches'
 
 export function AppRouter() {
@@ -22,7 +20,7 @@ export function AppRouter() {
   useEffect(() => {
     const isAuthenticated = localStorage.getItem('@zaalcashback:token')
 
-    if (isAuthenticated && pathname === '/') navigate('/main')
+    if (isAuthenticated && pathname === '/') navigate('/branches')
   }, [navigate, pathname])
 
   return (
@@ -40,24 +38,6 @@ export function AppRouter() {
           element={
             <Protected to="/">
               <Branch />
-            </Protected>
-          }
-        />
-
-        <Route
-          path="/profile/theme"
-          element={
-            <Protected to="/">
-              <Theme />
-            </Protected>
-          }
-        />
-
-        <Route
-          path="/main"
-          element={
-            <Protected to="/">
-              <Main />
             </Protected>
           }
         />

@@ -4,7 +4,7 @@ import { BranchImage } from '@/components/branch-image'
 import { CreateBranch } from '@/components/create-branch'
 import { api } from '@/data/api'
 import { useBranch } from '@/hooks/use-branch'
-import { CaretDown } from '@phosphor-icons/react'
+import { MagnifyingGlass } from '@phosphor-icons/react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -13,33 +13,46 @@ export function Branches() {
   const { setBranch } = useBranch()
   const navigate = useNavigate()
 
-  const [page, setPage] = useState(0)
+  const [page] = useState(0)
 
-  const { data, isLoading, fetchNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ['get-all-branches-query'],
-      initialPageParam: 0,
-      queryFn: async ({ pageParam = 0 }) => {
-        const response = await api(`filiais?size=30&page=${pageParam}`)
+  const { data, isLoading } = useInfiniteQuery({
+    queryKey: ['get-all-branches-query'],
+    initialPageParam: 0,
+    queryFn: async ({ pageParam = 0 }) => {
+      const response = await api(`filiais?size=30&page=${pageParam}`)
 
-        const json = await response.json()
+      const json = await response.json()
 
-        return json
-      },
-      getNextPageParam: (lastPage) => lastPage.number + 1,
-    })
+      return json
+    },
+    getNextPageParam: (lastPage) => lastPage.number + 1,
+  })
 
   return (
     <>
-      <header className="h-12 fixed top-0 left-[18%] right-0 border-b flex items-center px-10 z-50 bg-white/50 backdrop-blur-md">
-        <strong className="text-[13px] font-medium">Filiais</strong>
+      <header className="h-12 fixed top-0 left-[18%] right-0 border-b flex items-center justify-between px-5 z-50 bg-white dark:bg-zinc-900">
+        <div className="flex items-center">
+          <strong className="text-[13px] font-medium text-nowrap text-ellipsis">
+            Filiais
+          </strong>
 
-        <div className="h-6 w-[1px] bg-zinc-200 ml-8 mr-2.5"></div>
+          <form
+            action=""
+            className="flex ml-5 w-56 rounded-md items-center bg-zinc-50 dark:bg-zinc-700/50 focus-within:hover:bg-zinc-100 focus-within:bg-zinc-100 dark:focus-within:hover:bg-zinc-700/50 dark:focus-within:bg-zinc-700/50 h-8 outline-none text-xs font-medium px-2 placeholder:text-zinc-500 placeholder:text-[11px]"
+          >
+            <MagnifyingGlass size={14} weight="bold" />
+            <input
+              type="text"
+              className="h-[28px] w-full outline-none border-inherit pl-2 bg-zinc-50 dark:bg-zinc-700/10"
+              placeholder="Pesquise por filial"
+            />
+          </form>
+        </div>
 
         <CreateBranch />
       </header>
 
-      <div className="flex items-start p-10 h-auto mt-12">
+      <div className="flex flex-col items-start p-5 h-auto mt-12">
         <div className="pb-10 relative">
           <BranchDetails />
 
@@ -47,7 +60,7 @@ export function Branches() {
             <ul className="grid col-span-7 grid-cols-3 gap-x-3 gap-y-10 pb-10">
               {isLoading ? (
                 <li className="animate-pulse">
-                  <div className="bg-gradient-to-br border border-zinc-100/50 from-zinc-100 to-zinc-200/50 h-32 w-60 mb-2.5 rounded-lg"></div>
+                  <div className="bg-gradient-to-br border border-zinc-100/50 from-zinc-100 to-zinc-200/50 dark:from-zinc-700 dark:to-zinc-700/50 h-32 w-60 mb-2.5 rounded-lg"></div>
 
                   <div className="flex items-center gap-1.5">
                     <div className="h-[35px] w-[35px] min-w-[35px] rounded-lg min-h-[35px]  bg-zinc-200 dark:bg-zinc-700" />
@@ -70,7 +83,7 @@ export function Branches() {
                     }}
                     className="cursor-pointer"
                   >
-                    <div className="bg-gradient-to-br border border-zinc-100/50 from-zinc-100 to-zinc-200/50 h-32 w-60 mb-2.5 rounded-lg"></div>
+                    <div className="bg-gradient-to-br border border-zinc-100/50 dark:from-zinc-800 dark:to-zinc-800/50 dark:border-zinc-800 from-zinc-100 to-zinc-200/50 h-32 w-60 mb-2.5 rounded-lg"></div>
 
                     <div className="flex items-center gap-1.5">
                       <BranchImage id={item.id} razao={item.razao} />
@@ -79,7 +92,7 @@ export function Branches() {
                         <strong className="text-[13px] font-semibold truncate">
                           {item.razao}
                         </strong>
-                        <p className="text-[11px] font-medium text-zinc-600 truncate">
+                        <p className="text-[11px] font-medium text-zinc-600 dark:text-zinc-400 truncate">
                           {item.descricao}
                         </p>
                       </div>
@@ -88,22 +101,6 @@ export function Branches() {
                 ))
               )}
             </ul>
-          </div>
-
-          <div className="flex items-center">
-            <button
-              className="gap-1.5 h-8 px-2.5 rounded-full w-44 flex items-center justify-center bg-zinc-100 mr-2.5 hover:bg-zinc-200/50"
-              onClick={() => setPage((prev) => prev + 1)}
-            >
-              <span className="text-xs font-medium">
-                Carregar mais{' '}
-                {data ? data.pages[0].totalElements - (page + 1) * 10 : 0}
-              </span>
-
-              <CaretDown weight="bold" size={14} />
-            </button>
-
-            <div className="h-[1px] w-full bg-zinc-200"></div>
           </div>
         </div>
       </div>

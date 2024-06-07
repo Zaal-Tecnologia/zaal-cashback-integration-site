@@ -1,7 +1,5 @@
 import { useQuery } from '@/hooks/use-query'
 
-import { getRandomColor } from '@/utils/get-random-color'
-
 import { api } from '@/data/api'
 
 import type { BranchDTO } from '@/@types/dto/branch-dto'
@@ -48,10 +46,10 @@ export function BranchImage(props: Props) {
         />
       ) : !isLoading ? (
         <div
-          className="h-[35px] w-[35px] min-w-[35px] min-h-[35px] rounded-full flex items-center justify-center"
-          style={{ backgroundColor: getRandomColor() }}
+          className="bg-[#305a96] h-[35px] w-[35px] min-w-[35px] min-h-[35px] rounded-full flex items-center justify-center"
+          // style={{ backgroundColor: getRandomColor() }}
         >
-          <span className="font-semibold text-white text-xs">
+          <span className="font-semibold text-white text-xs uppercase">
             {props.razao.split('')[0]}
           </span>
         </div>

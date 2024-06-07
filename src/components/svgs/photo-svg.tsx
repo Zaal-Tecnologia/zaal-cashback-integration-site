@@ -5,7 +5,6 @@ export function PhotoSVG() {
       viewBox="0 0 24 24"
       width="18"
       height="18"
-      color="#000000"
       fill="none"
     >
       <path

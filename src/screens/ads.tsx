@@ -17,6 +17,8 @@ import { useState } from 'react'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { RemoveAd } from '@/components/remove-ad'
 import dayjs from 'dayjs'
+import { CreateAnnouncement } from '@/components/create-announcement'
+import { DialogTrigger } from '@/components/ui/dialog'
 
 type Ad = {
   id: number
@@ -61,11 +63,11 @@ export function Ads() {
 
   return (
     <>
-      <header className="h-12 fixed top-0 left-[18%] right-0 border-b flex items-center px-5 z-50 bg-white/50 backdrop-blur-md">
+      <header className="h-12 fixed top-0 left-[18%] right-0 border-b flex items-center px-5 z-50 bg-white dark:bg-zinc-900 backdrop-blur-md">
         <strong className="text-[13px] font-medium">Anúncios</strong>
       </header>
 
-      <div className="flex items-start p-10 h-auto mt-12">
+      <div className="flex items-start p-5 h-auto mt-12">
         <BranchDetails className="top-20" />
         <div className="pb-10 relative">
           <h1 className="font-urbanist text-3xl font-bold">{branch?.razao}</h1>
@@ -100,7 +102,7 @@ export function Ads() {
                         Ver informações
                       </p>
 
-                      <ArrowRight weight="bold" />
+                      <ArrowRight className="text-zinc-900" weight="bold" />
                     </div>
                   </li>
                 ))
@@ -120,14 +122,18 @@ export function Ads() {
                 <SheetTitle>{ad.descricao}</SheetTitle>
               </SheetHeader>
 
-              <p className="text-[13px] text-zinc-500 font-medium block my-5">
+              <p className="text-[13px] text-zinc-500 dark:text-zinc-400 font-medium block my-5">
                 {ad.conteudo}
               </p>
 
               <div className="flex items-center gap-2.5 w-full my-5">
-                <button className="h-8 px-5 bg-[#305a96] rounded-full hover:ring-4 hover:ring-[#305a96]/20">
-                  <p className="font-medium text-white text-xs">Editar</p>
-                </button>
+                <CreateAnnouncement>
+                  <DialogTrigger asChild>
+                    <button className="h-8 px-5 bg-[#305a96] rounded-full hover:ring-4 hover:ring-[#305a96]/20">
+                      <p className="font-medium text-white text-xs">Editar</p>
+                    </button>
+                  </DialogTrigger>
+                </CreateAnnouncement>
 
                 <RemoveAd id={ad.id} />
               </div>
@@ -136,7 +142,7 @@ export function Ads() {
                 <div className="flex flex-col">
                   <p className="text-2xl font-bold font-urbanist">{ad.cupom}</p>
 
-                  <p className="text-xs font-medium text-zinc-600 mt-2.5">
+                  <p className="text-xs font-medium text-zinc-600 dark:text-zinc-400 mt-2.5">
                     cupom
                   </p>
                 </div>
@@ -150,7 +156,7 @@ export function Ads() {
                     {daysDifference} dias
                   </p>
 
-                  <p className="text-xs font-medium text-zinc-600 mt-2.5">
+                  <p className="text-xs font-medium text-zinc-600 dark:text-zinc-400 mt-2.5">
                     para acabar
                   </p>
                 </div>
@@ -160,7 +166,7 @@ export function Ads() {
                     R$ {ad.valorMaximo}
                   </p>
 
-                  <p className="text-xs font-medium text-zinc-600 mt-2.5">
+                  <p className="text-xs font-medium text-zinc-600 dark:text-zinc-400 mt-2.5">
                     no máximo
                   </p>
                 </div>
@@ -170,7 +176,7 @@ export function Ads() {
                     R$ {ad.valorMinimo}
                   </p>
 
-                  <p className="text-xs font-medium text-zinc-600 mt-2.5">
+                  <p className="text-xs font-medium text-zinc-600 dark:text-zinc-400 mt-2.5">
                     no mínimo
                   </p>
                 </div>
@@ -182,7 +188,7 @@ export function Ads() {
                       : `R$ ${ad.valorDesconto}`}
                   </p>
 
-                  <p className="text-xs font-medium text-zinc-600 mt-2.5">
+                  <p className="text-xs font-medium text-zinc-600 dark:text-zinc-400 mt-2.5">
                     de desconto
                   </p>
                 </div>

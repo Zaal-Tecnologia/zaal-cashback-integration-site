@@ -55,8 +55,8 @@ export function CreateBranch() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <button className="h-8 px-5 hover:bg-[#305a96]/10 rounded-md">
-          <p className="font-medium text-zinc-900 text-xs">Criar</p>
+        <button className="h-8 px-5 bg-[#305a96] rounded-md hover:ring-4 hover:ring-[#305a96]/20">
+          <p className="font-medium text-white text-xs">Criar</p>
         </button>
       </DialogTrigger>
 
@@ -77,7 +77,7 @@ export function CreateBranch() {
             >
               <div
                 data-fill={step >= item}
-                className="data-[fill=true]:bg-[#305a96] h-[2px] rounded-full bg-zinc-200"
+                className="data-[fill=true]:bg-[#305a96] h-[2px] rounded-full bg-zinc-200 dark:data-[fill=true]:bg-[#305a96] dark:bg-zinc-700"
               />
             </button>
           ))}
@@ -85,7 +85,7 @@ export function CreateBranch() {
 
         <p className="text-xs font-medium text-zinc-500">{step} de 4</p>
 
-        <strong className="text-[13px] font-semibold -tracking-normal text-zinc-800">
+        <strong className="text-[13px] font-semibold -tracking-normal">
           {TITLE[step]}
         </strong>
 

@@ -96,18 +96,21 @@ export function CreateGroupForm() {
 
       <form action="" className="gap-5 flex flex-col">
         <Input.Root>
-          <Input.Label>Nome do grupo</Input.Label>
-          <Input.Write placeholder="Nome do grupo" {...register('name')} />
-        </Input.Root>
-
-        <Input.Root>
           <Input.Label>Código</Input.Label>
-          <Input.Write placeholder="Seu código" {...register('usuario')} />
+          <Input.Write
+            placeholder="Seu código"
+            className="placeholder:text-zinc-400 font-medium text-[13px] focus:outline-none w-full flex dark:border-zinc-600/50 h-12 border focus:border-[#305a96] focus:ring-2 focus:ring-blue-300/50 dark:focus:ring-blue-700/50 rounded-md px-2.5 dark:bg-zinc-700/50"
+            {...register('usuario')}
+          />
         </Input.Root>
 
         <Input.Root>
           <Input.Label>Senha</Input.Label>
-          <Input.Write placeholder="Sua senha" {...register('senha')} />
+          <Input.Write
+            placeholder="Sua senha"
+            className="placeholder:text-zinc-400 font-medium text-[13px] focus:outline-none w-full flex dark:border-zinc-600/50 h-12 border focus:border-[#305a96] focus:ring-2 focus:ring-blue-300/50 dark:focus:ring-blue-700/50 rounded-md px-2.5 dark:bg-zinc-700/50"
+            {...register('senha')}
+          />
         </Input.Root>
 
         <button

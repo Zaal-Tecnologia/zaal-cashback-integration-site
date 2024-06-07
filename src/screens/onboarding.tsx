@@ -4,7 +4,7 @@ import { Auth } from '../components/auth'
 
 export function Onboarding() {
   return (
-    <div className="h-screen relative bg-dotted-spacing-2 bg-dotted-zinc-100 bg-[#fefefe] dark:bg-[#1c1c1c]">
+    <div className="h-screen relative bg-[#fefefe] dark:bg-[#1c1c1c] mx-auto max-w-[1120px]">
       <header className="h-28 flex items-center fixed top-0 space-x-10">
         <img src="/logo-preto.png" alt="" className="w-[50px] h-[50px] mr-10" />
 

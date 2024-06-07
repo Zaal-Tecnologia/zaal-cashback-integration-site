@@ -88,7 +88,7 @@ export function Photo() {
 
         <div className="flex flex-col ml-5">
           <div className="flex items-center gap-x-5">
-            <div className="relative cursor-pointer rounded-lg h-8 bg-zinc-100 hover:bg-zinc-100/50 shadow hover:shadow-none w-[150px] border border-zinc-200 transition-all duration-300 flex items-center gap-2 justify-center">
+            <div className="relative cursor-pointer rounded-lg h-8 bg-zinc-100 hover:bg-zinc-100/50 dark:bg-zinc-800 dark:hover:bg-zinc-800/50 shadow hover:shadow-none w-[150px] border border-zinc-200 dark:border-zinc-700 transition-all duration-300 flex items-center gap-2 justify-center">
               <input
                 type="file"
                 className="opacity-0 absolute inset-0 cursor-pointer"

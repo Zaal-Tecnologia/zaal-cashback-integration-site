@@ -69,7 +69,9 @@ export function RemoveAd({ id }: Props) {
         <AlertDialogFooter className="mt-5">
           <AlertDialogCancel asChild>
             <button className="h-8 px-5 rounded-full border">
-              <p className="font-medium text-zinc-900 text-xs">Cancelar</p>
+              <p className="font-medium text-zinc-900 dark:text-white text-xs">
+                Cancelar
+              </p>
             </button>
           </AlertDialogCancel>
           <AlertDialogAction asChild>
