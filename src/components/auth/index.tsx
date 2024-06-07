@@ -1,9 +1,9 @@
 import { useStep } from '../../contexts/step'
 
-import { CreateFirstBranch } from './create-first-branch'
+// import { CreateFirstBranch } from './create-first-branch'
 import { CreateGroupForm } from './create-group-form'
 
-const COMPONENTS = [<CreateGroupForm key={0} />, <CreateFirstBranch key={1} />]
+const COMPONENTS = [<CreateGroupForm key={0} />]
 
 export function Auth() {
   const { step } = useStep()

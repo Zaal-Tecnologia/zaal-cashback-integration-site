@@ -62,12 +62,16 @@ export function CreateGroupForm() {
       const json = await response.json()
 
       localStorage.setItem('@zaalcashback:token', json.token)
+      localStorage.setItem(
+        '@zaalcashback:group-name',
+        input.usuario || input.usuario,
+      )
 
       setStep(1)
 
       return json
     },
-    () => navigate('main'),
+    () => navigate('branches'),
   )
 
   async function onSubmit(input: FormInput) {

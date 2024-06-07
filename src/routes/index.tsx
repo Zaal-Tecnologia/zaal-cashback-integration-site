@@ -3,7 +3,6 @@ import { useEffect } from 'react'
 
 import { Onboarding } from '@/screens/onboarding'
 import { Ads } from '@/screens/ads'
-import { History } from '@/screens/history'
 
 import { Layout } from '@/components/layout'
 import { NotFound } from '@/screens/not-found'
@@ -14,7 +13,7 @@ import { ChangeGroupName } from '@/screens/profile/change-group-name'
 import { Logout } from '@/screens/profile/logout'
 import { Theme } from '@/screens/profile/theme'
 import { Main } from '@/screens/main'
-import { Info } from '@/screens/info'
+import { Branches } from '@/screens/branches'
 
 export function AppRouter() {
   const navigate = useNavigate()
@@ -34,14 +33,7 @@ export function AppRouter() {
 
       <Route path="/" element={<Layout />}>
         <Route path="/ads" element={<Ads />} />
-        <Route
-          path="/history"
-          element={
-            <Protected to="/">
-              <History />
-            </Protected>
-          }
-        />
+        <Route path="/branches" element={<Branches />} />
 
         <Route
           path="/branch"
@@ -66,15 +58,6 @@ export function AppRouter() {
           element={
             <Protected to="/">
               <Main />
-            </Protected>
-          }
-        />
-
-        <Route
-          path="/info"
-          element={
-            <Protected to="/">
-              <Info />
             </Protected>
           }
         />

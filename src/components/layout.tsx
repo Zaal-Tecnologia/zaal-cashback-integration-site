@@ -1,58 +1,67 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Outlet, useLocation } from 'react-router-dom'
-import { User, Storefront } from '@phosphor-icons/react'
+import { Outlet } from 'react-router-dom'
+import { Storefront, CaretDown, MagnifyingGlass } from '@phosphor-icons/react'
 
 import { Toaster } from '@/components/ui/toaster'
 
-import { Branches } from './branches'
 import { MenuItem } from './menu-item'
-import { ScrollArea } from './ui/scroll-area'
-import { ProfileActions } from './profile-actions'
 
 export function Layout() {
-  const { pathname } = useLocation()
-
   return (
     <div className="w-screen min-h-screen bg-[#fefefe] dark:bg-zinc-900">
       <Toaster />
 
-      <div className="sm:max-w-[1220px] h-screen sm:mx-auto sm:w-screen bg-[#fefefe] dark:bg-zinc-900 sm:grid sm:grid-cols-10">
-        <aside className="overflow-hidden relative bg-white/25 pr-10 pl-4 dark:bg-zinc-900 backdrop-blur-md flex flex-col items-start col-span-2 py-10">
-          <img src="/logo-preto.png" alt="" className="h-[45px] w-[45px]" />
+      <aside className="fixed left-0 top-0 bottom-0 w-[18%] overflow-hidden px-2.5 bg-white/25 dark:bg-zinc-900 flex flex-col items-start border-r border-zinc-200 dark:border-zinc-700">
+        <header className="h-12 flex items-center w-full">
+          <img src="/logo-preto.png" alt="" className="h-[25px] w-[25px]" />
 
-          <nav className="mt-20 flex flex-col items-start gap-y-7 w-full">
-            <MenuItem.Root to="history">
-              <Storefront size={20} weight="bold" />
-              <MenuItem.Title>FILIAIS</MenuItem.Title>
-            </MenuItem.Root>
+          <button className="flex items-center justify-center ml-2 gap-1.5">
+            <span className="text-xs font-semibold -tracking-[0.01]">
+              Grupo 101
+            </span>
 
-            <MenuItem.Root to="/profile/change-group-name">
+            <CaretDown className="text-xs" weight="bold" />
+          </button>
+        </header>
+
+        <form
+          action=""
+          className="flex items-center border border-zinc-100 hover:border-[#305a96]/20 hover:focus-within:border-[#305a96] focus-within:border-[#305a96] h-8 w-full bg-zinc-100 rounded-md outline-none text-xs font-medium px-1.5 placeholder:text-zinc-500 placeholder:text-[11px]"
+        >
+          <MagnifyingGlass size={13} weight="bold" />
+          <input
+            type="text"
+            className="h-[28px] w-full bg-inherit outline-none border-inherit pl-1.5"
+            placeholder="Pesquise por filial"
+          />
+        </form>
+
+        <nav className="flex flex-col items-start w-full mt-2.5">
+          <MenuItem.Root to={['branches', 'ads']}>
+            <Storefront size={16} weight="bold" className="mb-[1.5px]" />
+            <MenuItem.Title>Filiais</MenuItem.Title>
+          </MenuItem.Root>
+
+          {/** <MenuItem.Root to="/profile/change-group-name">
               <User size={20} weight="bold" />
               <MenuItem.Title>PERFIL</MenuItem.Title>
-            </MenuItem.Root>
+        
+            </MenuItem.Root> */}
+        </nav>
+      </aside>
 
-            {/** <Link
-              to="ads"
-              className="h-14 px-7 mt-5 flex items-center justify-between bg-[#305a96] ring-4 ring-[#305a96]/40 hover:bg-[#305a96]/90 rounded-full w-full"
-            >
-              <span className="text-sm text-white group-hover:translate-x-2 transition-transform duration-300">
-                CRIAR
-              </span>
+      <div className="ml-[18%] relative flex z-50 h-screen bg-[#fefefe] dark:bg-zinc-900">
+        <Outlet />
 
-              <ArrowUpRight size={16} className="text-white" weight="bold" />
-            </Link> */}
-          </nav>
-        </aside>
-
-        {pathname.split('/')[1] !== 'profile' ? (
+        {/** {pathname.split('/')[1] !== 'profile' ? (
           <Branches />
         ) : (
           <ProfileActions />
         )}
 
-        <ScrollArea className="col-span-5">
+        <ScrollArea className="mt-14">
           <Outlet />
-        </ScrollArea>
+        </ScrollArea> */}
       </div>
     </div>
   )

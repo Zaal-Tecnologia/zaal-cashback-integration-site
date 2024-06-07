@@ -72,13 +72,14 @@ const ZIP_CODE_COMPONENTS = {
 } as const
 
 export function CreateBranchForm() {
-  const { register, handleSubmit, setValue, formState } = useForm<FormInput>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      // cnpj: '80853473000170',
-      // inscest: '66562778',
-    },
-  })
+  const { register, handleSubmit, setValue, formState, reset } =
+    useForm<FormInput>({
+      resolver: zodResolver(FormSchema),
+      defaultValues: {
+        // cnpj: '80853473000170',
+        // inscest: '66562778',
+      },
+    })
 
   const { toast } = useToast()
 
@@ -130,12 +131,14 @@ export function CreateBranchForm() {
           queryKey: ['get-all-branches-query'],
         })
         .then(() => {
-          createBranchImage(data.id).then(() =>
+          createBranchImage(data.id).then(() => {
             toast({
               title: 'Criado com sucesso',
               description: 'Sua filial foi criada com sucesso.',
-            }),
-          )
+            })
+
+            reset()
+          })
         })
     },
     (error) => toast({ title: 'Ocorreu um erro', description: error.message }),

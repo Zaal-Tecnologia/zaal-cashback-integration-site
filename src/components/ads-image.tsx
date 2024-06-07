@@ -3,9 +3,7 @@ import { api } from '@/data/api'
 import { useToast } from './ui/use-toast'
 
 import { useQuery } from '@/hooks/use-query'
-
-import { useImage } from '@/contexts/image'
-// import { AdsDTO } from '@/@types/dto/ads-dto'
+import { useMemo } from 'react'
 
 interface Props {
   adsId: number
@@ -14,10 +12,9 @@ interface Props {
 
 export function AdsImage(props: Props) {
   const { toast } = useToast()
-  const { setImages } = useImage()
 
   const { data } = useQuery(
-    ['get-image-query', String(props.adsId)],
+    ['GET-IMAGE-QUERY', String(props.adsId)],
     async () => {
       const response = await api(`anuncios/${props.adsId}/imagem`, {
         headers: {
@@ -38,18 +35,24 @@ export function AdsImage(props: Props) {
 
       const data = await response.blob()
 
-      setImages(data as Blob)
+      // setImages(data as Blob)
 
       return data
     },
   )
 
-  return (
-    <button
-      onClick={() => props.onSelectAds(URL.createObjectURL(data as Blob))}
-      className="flex flex-1 transition-all duration-300 hover:scale-105 hover:shadow-xl"
-    >
-      {data ? <img src={URL.createObjectURL(data as Blob)} alt="" /> : null}
-    </button>
+  const src = useMemo(
+    () => (data ? URL.createObjectURL(data as Blob) : ''),
+    [data],
   )
+
+  return data ? (
+    <button onClick={() => props.onSelectAds(src)}>
+      <img
+        src={URL.createObjectURL(data as Blob)}
+        alt=""
+        className="object-cover transition-all duration-300 group-hover:blur-[2px]"
+      />
+    </button>
+  ) : null
 }

@@ -35,7 +35,7 @@ const DialogContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        'fixed left-[50%] top-[50%] bg-white dark:bg-zinc-800 z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 border px-10 pb-10 pt-5 duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg shadow-2xl',
+        'fixed left-[50%] top-[50%] bg-white dark:bg-zinc-800 z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 border p-10 duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg shadow-2xl',
         className,
       )}
       {...props}
@@ -80,7 +80,7 @@ const DialogTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn('text-lg font-medium leading-8 tracking-tight', className)}
+    className={cn('text-[16px] font-semibold leading-6', className)}
     {...props}
   />
 ))
@@ -92,7 +92,7 @@ const DialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn('text-[13px] text-zinc-500', className)}
+    className={cn('text-xs text-zinc-600 font-medium leading-4', className)}
     {...props}
   />
 ))
