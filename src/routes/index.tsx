@@ -10,7 +10,6 @@ import { Protected } from '@/components/protected'
 import { Branch } from '@/screens/branch'
 
 import { ChangeGroupName } from '@/screens/profile/change-group-name'
-import { Logout } from '@/screens/profile/logout'
 import { Branches } from '@/screens/branches'
 
 export function AppRouter() {
@@ -47,15 +46,6 @@ export function AppRouter() {
           element={
             <Protected to="/">
               <ChangeGroupName />
-            </Protected>
-          }
-        />
-
-        <Route
-          path="/profile/logout"
-          element={
-            <Protected to="/">
-              <Logout />
             </Protected>
           }
         />

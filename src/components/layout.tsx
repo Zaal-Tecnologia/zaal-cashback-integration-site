@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/toaster'
 import { Theme } from '@/components/theme'
 
 import { MenuItem } from './menu-item'
+import { Logout } from './logout'
 
 export function Layout() {
   const groupName = window.localStorage.getItem('@zaalcashback:group-name')
@@ -25,17 +26,27 @@ export function Layout() {
           </button>
         </header>
 
-        <nav className="flex flex-col items-start w-full mt-2.5">
+        <nav className="flex flex-col items-start w-full">
+          <span className="text-[11px] text-zinc-600 dark:text-zinc-400 font-semibold my-5">
+            Ações
+          </span>
+
           <MenuItem.Root to={['branches', 'ads']}>
             <Storefront size={16} weight="bold" className="mb-[1.5px]" />
             <MenuItem.Title>Filiais</MenuItem.Title>
           </MenuItem.Root>
 
-          <span className="text-[11px] text-zinc-600 dark:text-zinc-400 font-semibold mt-5 mb-2.5">
+          <span className="text-[11px] text-zinc-600 dark:text-zinc-400 font-semibold mt-10 mb-5">
             Configurações
           </span>
 
           <Theme />
+
+          <span className="text-[11px] text-zinc-600 dark:text-zinc-400 font-semibold mt-10 mb-5">
+            Conta
+          </span>
+
+          <Logout />
         </nav>
       </aside>
 

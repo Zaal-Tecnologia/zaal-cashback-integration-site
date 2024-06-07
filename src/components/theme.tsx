@@ -2,8 +2,8 @@ import { Moon, Sun } from '@phosphor-icons/react'
 import { useState } from 'react'
 
 const ICON = {
-  light: <Sun size={16} weight="bold" className="mb-[1.5px]" />,
-  dark: <Moon size={16} weight="bold" className="mb-[1.5px]" />,
+  dark: <Sun size={16} weight="bold" className="mb-[1.5px]" />,
+  light: <Moon size={16} weight="bold" className="mb-[1.5px]" />,
 }
 
 export function Theme() {
@@ -14,22 +14,16 @@ export function Theme() {
   )
 
   function toggleTheme() {
-    const doc = document.documentElement
-
-    if (!theme || theme === 'light') {
-      localStorage.setItem('@zaalcashback:theme', 'dark')
-
+    if (theme === 'light') {
+      document.body.classList.remove('light')
+      document.body.classList.add('dark')
+      window.localStorage.setItem('@zaalcashback:theme', 'dark')
       setColor('dark')
-
-      doc.classList.add('dark')
-    }
-
-    if (theme === 'dark') {
-      localStorage.setItem('@zaalcashback:theme', 'light')
-
+    } else {
+      document.body.classList.remove('dark')
+      document.body.classList.add('light')
+      window.localStorage.setItem('@zaalcashback:theme', 'light')
       setColor('light')
-
-      doc.classList.add('light')
     }
   }
 
