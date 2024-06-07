@@ -1,4 +1,5 @@
-import { ReactNode, useCallback, useState } from 'react'
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import { ReactNode, useCallback, useEffect, useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -15,6 +16,7 @@ import { Values } from './components/values'
 import { Photo } from './components/photo'
 
 import { Form, FormContext } from './contexts/form'
+import { api } from '@/data/api'
 
 const TITLE = {
   1: 'Imagem',
@@ -32,12 +34,32 @@ const COMPONENT = {
 
 type Step = 1 | 2 | 3 | 4
 
-export function CreateAnnouncement({ children }: { children: ReactNode }) {
+export function CreateAnnouncement({
+  children,
+  data,
+}: {
+  children: ReactNode
+  data?: {
+    conteudo: string
+    cupom: string
+    descricao: string
+    filialId: number
+    id: number
+    imagemBase64: string
+    inicio: Date
+    tipoDesconto: string
+    validade: Date
+    valorDesconto: number
+    valorMaximo: number
+    valorMinimo: number
+  }
+}) {
   const { branch } = useBranch()
 
   const [open, _setOpen] = useState(false)
   const [step, _setStep] = useState<Step>(1)
   const [form, _setForm] = useState<Form>(null)
+  const [updateId, setUpdateId] = useState<number | null>(null)
 
   const setStep = useCallback((step: Step) => {
     _setStep(step)
@@ -64,6 +86,33 @@ export function CreateAnnouncement({ children }: { children: ReactNode }) {
     },
     [branch, form],
   )
+
+  useEffect(() => {
+    if (data) {
+      // _setForm(data)
+
+      api(`filiais/${data.filialId}`, {
+        headers: { 'Content-Type': 'application/json' },
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          // @ts-ignore
+          delete data.id
+          // @ts-ignore
+          delete data.filialId
+
+          _setForm({
+            ...data,
+            filialCnpj: json.cnpj as string,
+            filialInscricaoEstadual: json.inscricaoEstadual as string,
+          })
+        })
+
+      setUpdateId(data.id)
+    }
+  }, [data])
+
+  console.log(form)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -99,7 +148,15 @@ export function CreateAnnouncement({ children }: { children: ReactNode }) {
         </strong>
 
         <FormContext.Provider
-          value={{ setStep, step, form, setForm: onSubmit, setOpen }}
+          value={{
+            setStep,
+            step,
+            form,
+            setForm: onSubmit,
+            setOpen,
+            updateId,
+            setUpdateId,
+          }}
         >
           {COMPONENT[step]}
         </FormContext.Provider>

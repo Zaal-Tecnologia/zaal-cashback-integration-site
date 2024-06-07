@@ -29,7 +29,7 @@ type SelectedDate = {
 }
 
 export function Dates() {
-  const { setStep, form, setForm, setOpen } = useContext(FormContext)
+  const { setStep, form, setForm, setOpen, updateId } = useContext(FormContext)
 
   const { toast } = useToast()
 
@@ -39,13 +39,16 @@ export function Dates() {
   })
 
   const { mutate, isPending } = useMutation(
-    ['CREATE-ADS-MUTATION'],
+    ['CREATE-ADS-MUTATION', String(updateId)],
     async (input) => {
-      const response = await api('anuncios', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(input),
-      })
+      const response = await api(
+        updateId ? `anuncios/${updateId}` : 'anuncios',
+        {
+          method: updateId ? 'PUT' : 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(input),
+        },
+      )
 
       if (!response.ok) {
         toast({

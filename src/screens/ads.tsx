@@ -127,7 +127,22 @@ export function Ads() {
               </p>
 
               <div className="flex items-center gap-2.5 w-full my-5">
-                <CreateAnnouncement>
+                <CreateAnnouncement
+                  data={{
+                    conteudo: ad.conteudo,
+                    cupom: ad.cupom,
+                    descricao: ad.descricao,
+                    filialId: ad.filialId,
+                    id: ad.id,
+                    imagemBase64: ad.src,
+                    inicio: dayjs(ad.inicio).toDate(),
+                    tipoDesconto: ad.tipoDesconto,
+                    validade: dayjs(ad.validade).toDate(),
+                    valorDesconto: ad.valorDesconto,
+                    valorMaximo: ad.valorMaximo,
+                    valorMinimo: ad.valorMinimo,
+                  }}
+                >
                   <DialogTrigger asChild>
                     <button className="h-8 px-5 bg-[#305a96] rounded-full hover:ring-4 hover:ring-[#305a96]/20">
                       <p className="font-medium text-white text-xs">Editar</p>

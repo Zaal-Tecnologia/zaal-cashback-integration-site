@@ -2,10 +2,12 @@ import { PhotoSVG } from '@/components/svgs/photo-svg'
 import { ChangeEvent, useCallback, useContext, useState } from 'react'
 import { Base64Form, FormContext } from '../contexts/form'
 
+type Content = Base64Form
+
 export function Photo() {
   const { setStep, setForm, form } = useContext(FormContext)
 
-  const content = form as Base64Form | undefined
+  const content = form as Content | undefined
 
   const [errors, setErrors] = useState<string[]>([])
 
@@ -152,7 +154,7 @@ export function Photo() {
 
         <button
           onClick={() => setStep(2)}
-          disabled={!content?.imagemBase64 || errors.length > 0}
+          disabled={!content || errors.length > 0}
           className="disabled:opacity-70 disabled:cursor-not-allowed ml-auto rounded-md h-9 bg-[#305a96] w-40 flex items-center gap-2 justify-center hover:ring-4 hover:ring-[#305a96]/20"
         >
           <p className="text-xs font-semibold text-white">Próximo</p>

@@ -31,6 +31,9 @@ type FormContextData = {
   form: Form
   setForm(form: Form): void
 
+  updateId: number | null
+  setUpdateId(updateId: number | null): void
+
   setOpen(open: boolean): void
 }
 

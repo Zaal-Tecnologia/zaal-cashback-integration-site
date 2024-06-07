@@ -1,9 +1,9 @@
+import { useMemo } from 'react'
+
 import { api } from '@/data/api'
+import { useQuery } from '@/hooks/use-query'
 
 import { useToast } from './ui/use-toast'
-
-import { useQuery } from '@/hooks/use-query'
-import { useMemo } from 'react'
 
 interface Props {
   adsId: number
@@ -35,21 +35,29 @@ export function AdsImage(props: Props) {
 
       const data = await response.blob()
 
-      // setImages(data as Blob)
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader()
 
-      return data
+        reader.onloadend = function () {
+          const res = reader.result as string
+
+          resolve(res?.split(',')[1])
+        }
+        reader.onerror = function (error) {
+          reject(error)
+        }
+
+        reader.readAsDataURL(data)
+      })
     },
   )
 
-  const src = useMemo(
-    () => (data ? URL.createObjectURL(data as Blob) : ''),
-    [data],
-  )
+  const src = useMemo(() => (data ? `data:;base64,${data}` : ''), [data])
 
   return data ? (
     <button onClick={() => props.onSelectAds(src)}>
       <img
-        src={URL.createObjectURL(data as Blob)}
+        src={src}
         alt=""
         className="object-cover transition-all duration-300 group-hover:blur-[2px]"
       />
