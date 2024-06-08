@@ -16,8 +16,15 @@ import { formatDoc } from '@/utils/format-doc'
 import { CreateAnnouncement } from './create-announcement'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { cn } from '@/lib/utils'
+import { ReactNode } from 'react'
 
-export function BranchDetails({ className }: { className?: string }) {
+export function BranchDetails({
+  className,
+  children,
+}: {
+  className?: string
+  children?: ReactNode
+}) {
   /** const { data: ads, isLoading } = useQuery<AdsDTO[]>(
     ['get-ads-by-branch-id-query', String(branch.id)],
     async () => {
@@ -112,39 +119,6 @@ export function BranchDetails({ className }: { className?: string }) {
                   </button>
                 </DialogTrigger>
               </CreateAnnouncement>
-
-              {/** <Link to="/ads">
-                <button className="flex items-center gap-2.5 group">
-                  <div className="h-6 w-6 flex items-center justify-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      width="18"
-                      height="18"
-                      color="#000000"
-                      fill="none"
-                    >
-                      <path
-                        d="M17.5 17.5L22 22"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M20 11C20 6.02944 15.9706 2 11 2C6.02944 2 2 6.02944 2 11C2 15.9706 6.02944 20 11 20C15.9706 20 20 15.9706 20 11Z"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </div>
-
-                  <p className="text-[13px] font-medium text-zinc-900 hover:underline">
-                    Ver anúncios [3 ativos]
-                  </p>
-                </button>
-              </Link> */}
 
               <Dialog>
                 <DialogTrigger>
@@ -296,6 +270,8 @@ export function BranchDetails({ className }: { className?: string }) {
                   </div>
                 </DialogContent>
               </Dialog>
+
+              {children}
             </div>
 
             {/** <ul className="grid grid-cols-2 gap-2 mt-5">

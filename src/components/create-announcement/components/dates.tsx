@@ -22,6 +22,7 @@ import { useToast } from '@/components/ui/use-toast'
 import { useMutation } from '@/hooks/use-mutation'
 
 import { api } from '@/data/api'
+import { useQueryClient } from '@tanstack/react-query'
 
 type SelectedDate = {
   dueDate: Date | undefined
@@ -37,6 +38,8 @@ export function Dates() {
     dueDate: undefined,
     startDate: undefined,
   })
+
+  const { setQueryData } = useQueryClient()
 
   const { mutate, isPending } = useMutation(
     ['CREATE-ADS-MUTATION', String(updateId)],
@@ -60,20 +63,29 @@ export function Dates() {
 
         return null
       }
+    },
+    (_, variables) => {
+      setQueryData(['GET-ADDS-QUERY'], (cached: []) => {
+        return [
+          ...cached,
+          {
+            ...(variables as object),
+            id: crypto.randomUUID(),
+          },
+        ]
+      })
 
-      if (response.ok) {
-        toast({
-          title: 'Criado',
-          description: 'Anúncio criado com sucesso.',
-          variant: 'success',
-        })
+      toast({
+        title: 'Criado',
+        description: 'Anúncio criado com sucesso.',
+        variant: 'success',
+      })
 
-        setForm(null)
+      setForm(null)
 
-        setStep(1)
+      setStep(1)
 
-        setOpen(false)
-      }
+      setOpen(false)
     },
   )
 

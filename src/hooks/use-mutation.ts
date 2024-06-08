@@ -7,7 +7,7 @@ import {
 export function useMutation<D, V>(
   mutationKey: string[],
   mutationFn: MutationFunction<D, V>,
-  onSuccess?: (data: D) => void,
+  onSuccess?: (data: D, variables: V) => void,
   onError?: (error: Error, variables: V) => void,
 ) {
   const { mutate, data, error, isPending } = useRQMutation<D, DefaultError, V>({

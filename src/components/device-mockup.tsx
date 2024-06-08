@@ -1,11 +1,22 @@
-export function DeviceMockup() {
+import { ReactNode } from 'react'
+
+interface Props {
+  children: ReactNode
+}
+
+export function DeviceMockup(props: Props) {
   return (
-    <div className="relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px]">
-      <div className="h-[32px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -start-[17px] top-[72px] rounded-s-lg"></div>
-      <div className="h-[46px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -start-[17px] top-[124px] rounded-s-lg"></div>
-      <div className="h-[46px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -start-[17px] top-[178px] rounded-s-lg"></div>
-      <div className="h-[64px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -end-[17px] top-[142px] rounded-e-lg"></div>
-      <div className="rounded-[2rem] overflow-hidden w-[272px] h-[572px] bg-white dark:bg-gray-800"></div>
+    <div className="mb-20 pt-5 border-t border-zinc-200 dark:border-t-zinc-800">
+      <div className="relative border-gray-800 dark:border-gray-800 bg-gray-800 border-[12px] rounded-[2rem] flex items-center justify-center h-[498px] w-[250px] shadow-lg">
+        <div className="w-[148px] h-[18px] bg-gray-800 top-0 rounded-b-[1rem] left-1/2 -translate-x-1/2 absolute" />
+        <div className="h-[46px] w-[3px] bg-gray-800 absolute -start-[15px] top-[50px] rounded-s-lg" />
+        <div className="h-[46px] w-[3px] bg-gray-800 absolute -start-[15px] top-[100px] rounded-s-lg" />
+        <div className="h-[64px] w-[3px] bg-gray-800 absolute -end-[15px] top-[50px] rounded-e-lg" />
+
+        <div className="rounded-[1.5rem] overflow-hidden w-[228px] h-[475px] bg-white dark:bg-gray-800 relative">
+          {props.children}
+        </div>
+      </div>
     </div>
   )
 }

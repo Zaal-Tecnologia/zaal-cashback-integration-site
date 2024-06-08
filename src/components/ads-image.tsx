@@ -1,16 +1,17 @@
-import { useMemo } from 'react'
+import { ComponentProps, useMemo } from 'react'
 
 import { api } from '@/data/api'
 import { useQuery } from '@/hooks/use-query'
 
 import { useToast } from './ui/use-toast'
+import clsx from 'clsx'
 
-interface Props {
+interface Props extends ComponentProps<'img'> {
   adsId: number
   onSelectAds(src: string): void
 }
 
-export function AdsImage(props: Props) {
+export default function AdsImage(props: Props) {
   const { toast } = useToast()
 
   const { data } = useQuery(
@@ -59,7 +60,10 @@ export function AdsImage(props: Props) {
       <img
         src={src}
         alt=""
-        className="object-cover transition-all duration-300 group-hover:blur-[2px]"
+        className={clsx(
+          'object-cover transition-all duration-300 group-hover:blur-[2px]',
+          props.className,
+        )}
       />
     </button>
   ) : null
