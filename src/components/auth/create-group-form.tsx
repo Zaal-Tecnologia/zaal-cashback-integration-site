@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { ArrowUpRight, CircleNotch } from '@phosphor-icons/react'
+import { ArrowUpRight, LoaderCircle } from 'lucide-react'
 
 import { useMutation } from '../../hooks/use-mutation'
 
@@ -123,13 +123,9 @@ export function CreateGroupForm() {
           </p>
 
           {isPending ? (
-            <CircleNotch
-              weight="bold"
-              size={20}
-              className="text-white animate-spin"
-            />
+            <LoaderCircle size={20} className="text-white animate-spin" />
           ) : (
-            <ArrowUpRight weight="bold" className="text-white" />
+            <ArrowUpRight className="text-white" />
           )}
         </button>
 

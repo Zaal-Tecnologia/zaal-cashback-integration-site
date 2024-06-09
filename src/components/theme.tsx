@@ -1,9 +1,9 @@
-import { Moon, Sun } from '@phosphor-icons/react'
+import { Moon, Sun } from 'lucide-react'
 import { useState } from 'react'
 
 const ICON = {
-  dark: <Sun size={16} weight="bold" className="mb-[1.5px]" />,
-  light: <Moon size={16} weight="bold" className="mb-[1.5px]" />,
+  dark: <Sun size={16} className="mb-[1.5px]" />,
+  light: <Moon size={16} className="mb-[1.5px]" />,
 }
 
 export function Theme() {

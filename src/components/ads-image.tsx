@@ -1,10 +1,10 @@
 import { ComponentProps, useMemo } from 'react'
+import clsx from 'clsx'
 
 import { api } from '@/data/api'
 import { useQuery } from '@/hooks/use-query'
 
 import { useToast } from './ui/use-toast'
-import clsx from 'clsx'
 
 interface Props extends ComponentProps<'img'> {
   adsId: number
@@ -57,14 +57,19 @@ export default function AdsImage(props: Props) {
 
   return data ? (
     <button onClick={() => props.onSelectAds(src)}>
-      <img
-        src={src}
-        alt=""
-        className={clsx(
-          'object-cover transition-all duration-300 group-hover:blur-[2px]',
-          props.className,
-        )}
-      />
+      <picture>
+        <source srcSet={src} type="image/webp" />
+        <source srcSet={src} type="image/jpeg" />
+        <img
+          src={src}
+          alt=""
+          loading="lazy"
+          className={clsx(
+            'object-cover transition-all duration-300 group-hover:blur-[2px]',
+            props.className,
+          )}
+        />
+      </picture>
     </button>
   ) : null
 }

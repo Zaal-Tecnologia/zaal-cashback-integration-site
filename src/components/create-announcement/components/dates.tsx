@@ -1,9 +1,4 @@
-import {
-  ArrowLeft,
-  ArrowRight,
-  Check,
-  CircleNotch,
-} from '@phosphor-icons/react'
+import { ArrowLeft, ArrowRight, Check, LoaderCircle } from 'lucide-react'
 import dayjs from 'dayjs'
 import { useContext, useState } from 'react'
 
@@ -123,7 +118,7 @@ export function Dates() {
           </PopoverContent>
         </Popover>
 
-        <ArrowRight size={14} weight="bold" className="mx-2.5" />
+        <ArrowRight size={14} className="mx-2.5" />
 
         <Popover>
           <PopoverTrigger asChild>
@@ -155,7 +150,7 @@ export function Dates() {
 
       <footer className="flex items-center justify-between mt-5">
         <button type="button" onClick={() => setStep(3)}>
-          <ArrowLeft weight="bold" />
+          <ArrowLeft />
         </button>
 
         <button
@@ -165,11 +160,10 @@ export function Dates() {
         >
           {isPending ? (
             <div className="absolute top-1/2 translate-x-4 left-0 -translate-y-1/2">
-              <CircleNotch className="text-white animate-spin" weight="bold" />
+              <LoaderCircle className="text-white animate-spin" />
             </div>
           ) : (
             <Check
-              weight="bold"
               size={14}
               className="transition-all duration-300 text-xs font-semibold absolute top-1/2 opacity-0 group-hover:opacity-100 -translate-y-1/2 group-hover:translate-x-4 text-white left-0"
             />

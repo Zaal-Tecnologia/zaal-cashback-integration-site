@@ -1,4 +1,4 @@
-import { SignOut } from '@phosphor-icons/react'
+import { LogOut } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 import {
@@ -26,7 +26,7 @@ export function Logout() {
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <button className="font-medium flex items-center w-full h-8 rounded hover:text-red-900 dark:hover:text-red-200 gap-x-2.5 group hover:bg-red-200/20 dark:hover:bg-red-800/20 px-2.5">
-          <SignOut size={16} weight="bold" className="mb-[1.5px]" />
+          <LogOut size={16} className="mb-[1.5px]" />
           <span className="text-[13px]">Sair</span>
         </button>
       </AlertDialogTrigger>

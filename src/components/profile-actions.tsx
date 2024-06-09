@@ -1,4 +1,4 @@
-import { CaretRight } from '@phosphor-icons/react'
+import { ChevronRight } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -38,7 +38,7 @@ export function ProfileActions() {
             >
               <span className="text-xs font-medium">{item.name}</span>
 
-              <CaretRight size={16} weight="bold" />
+              <ChevronRight size={16} />
 
               <div className="h-14 w-[2px] group-data-[selected='true']:visible invisible bg-[#305a96] absolute right-0"></div>
             </button>

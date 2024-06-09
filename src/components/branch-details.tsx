@@ -1,4 +1,4 @@
-import { X } from '@phosphor-icons/react'
+import { ArrowRight, X } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
@@ -16,15 +16,8 @@ import { formatDoc } from '@/utils/format-doc'
 import { CreateAnnouncement } from './create-announcement'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { cn } from '@/lib/utils'
-import { ReactNode } from 'react'
 
-export function BranchDetails({
-  className,
-  children,
-}: {
-  className?: string
-  children?: ReactNode
-}) {
+export function BranchDetails({ className }: { className?: string }) {
   /** const { data: ads, isLoading } = useQuery<AdsDTO[]>(
     ['get-ads-by-branch-id-query', String(branch.id)],
     async () => {
@@ -60,7 +53,7 @@ export function BranchDetails({
                     }
                     className="h-6 w-6 flex items-center justify-center hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded"
                   >
-                    <X weight="bold" />
+                    <X size={16} />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent>Fechar</TooltipContent>
@@ -76,50 +69,7 @@ export function BranchDetails({
               </p>
             </div>
 
-            <div className="my-8 flex flex-col gap-4">
-              <CreateAnnouncement>
-                <DialogTrigger asChild>
-                  <button className="flex items-center gap-2.5 group">
-                    <div className="h-6 w-6 flex items-center justify-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        width="20"
-                        height="20"
-                        // color="#000000"
-                        fill="none"
-                      >
-                        <path
-                          d="M14.9263 4.41103L8.27352 7.60452C7.76151 7.85029 7.21443 7.91187 6.65675 7.78693C6.29177 7.70517 6.10926 7.66429 5.9623 7.64751C4.13743 7.43912 3 8.88342 3 10.5443V11.4557C3 13.1166 4.13743 14.5609 5.9623 14.3525C6.10926 14.3357 6.29178 14.2948 6.65675 14.2131C7.21443 14.0881 7.76151 14.1497 8.27352 14.3955L14.9263 17.589C16.4534 18.3221 17.217 18.6886 18.0684 18.4029C18.9197 18.1172 19.2119 17.5041 19.7964 16.278C21.4012 12.9112 21.4012 9.08885 19.7964 5.72196C19.2119 4.49586 18.9197 3.88281 18.0684 3.5971C17.217 3.3114 16.4534 3.67794 14.9263 4.41103Z"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M13 17V17.5C13 18.7841 13 19.4261 12.776 19.7886C12.4773 20.2719 11.9312 20.545 11.3653 20.4939C10.9409 20.4557 10.4273 20.0704 9.4 19.3L8.2 18.4C7.22253 17.6669 7 17.2218 7 16V14.5"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M7.5 14V8"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </div>
-
-                    <p className="text-[13px] font-medium text-zinc-900 dark:text-white hover:underline">
-                      Anunciar [+2 restantes]
-                    </p>
-                  </button>
-                </DialogTrigger>
-              </CreateAnnouncement>
-
+            <div className="mt-5 flex flex-col gap-5">
               <Dialog>
                 <DialogTrigger>
                   <button className="flex items-center gap-2.5 group">
@@ -271,7 +221,50 @@ export function BranchDetails({
                 </DialogContent>
               </Dialog>
 
-              {children}
+              <CreateAnnouncement>
+                <DialogTrigger asChild>
+                  <button className="h-12 group flex items-center justify-start px-5 gap-2.5 w-52 bg-gradient-to-r from-[#305a96] to-sky-800 rounded-full hover:ring-4 hover:ring-[#305a96]/20">
+                    <div className="h-12 w-6 flex items-center justify-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        width="20"
+                        height="20"
+                        color="#FFFFFF"
+                        fill="none"
+                      >
+                        <path
+                          d="M14.9263 4.41103L8.27352 7.60452C7.76151 7.85029 7.21443 7.91187 6.65675 7.78693C6.29177 7.70517 6.10926 7.66429 5.9623 7.64751C4.13743 7.43912 3 8.88342 3 10.5443V11.4557C3 13.1166 4.13743 14.5609 5.9623 14.3525C6.10926 14.3357 6.29178 14.2948 6.65675 14.2131C7.21443 14.0881 7.76151 14.1497 8.27352 14.3955L14.9263 17.589C16.4534 18.3221 17.217 18.6886 18.0684 18.4029C18.9197 18.1172 19.2119 17.5041 19.7964 16.278C21.4012 12.9112 21.4012 9.08885 19.7964 5.72196C19.2119 4.49586 18.9197 3.88281 18.0684 3.5971C17.217 3.3114 16.4534 3.67794 14.9263 4.41103Z"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M13 17V17.5C13 18.7841 13 19.4261 12.776 19.7886C12.4773 20.2719 11.9312 20.545 11.3653 20.4939C10.9409 20.4557 10.4273 20.0704 9.4 19.3L8.2 18.4C7.22253 17.6669 7 17.2218 7 16V14.5"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M7.5 14V8"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+
+                    <p className="font-medium text-white text-xs">Anunciar</p>
+
+                    <div className="ml-auto h-12 w-6 flex items-center justify-center transition-all duration-300 opacity-0 -translate-x-10 group-hover:translate-x-0 group-hover:opacity-100">
+                      <ArrowRight className="text-white font-bold" size={14} />
+                    </div>
+                  </button>
+                </DialogTrigger>
+              </CreateAnnouncement>
             </div>
 
             {/** <ul className="grid grid-cols-2 gap-2 mt-5">

@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { Input } from '@/components/ui/input'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ArrowLeft } from '@phosphor-icons/react'
+import { ArrowLeft } from 'lucide-react'
 import { useContext } from 'react'
 
 import { FormContext } from '../contexts/form'
@@ -105,7 +105,7 @@ export function Content() {
 
       <footer className="flex items-center justify-between mt-5">
         <button type="button" onClick={() => setStep(1)}>
-          <ArrowLeft weight="bold" />
+          <ArrowLeft />
         </button>
 
         <button

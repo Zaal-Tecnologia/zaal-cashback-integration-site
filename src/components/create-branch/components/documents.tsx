@@ -1,5 +1,5 @@
 import { Input } from '@/components/ui/input'
-import { ArrowLeft, Check, CircleNotch } from '@phosphor-icons/react'
+import { ArrowLeft, Check, LoaderCircle } from 'lucide-react'
 import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -161,7 +161,7 @@ export function Documents() {
 
       <footer className="flex items-center justify-between mt-5 col-span-2">
         <button type="button" onClick={() => setStep(3)}>
-          <ArrowLeft weight="bold" />
+          <ArrowLeft />
         </button>
 
         <button
@@ -170,11 +170,10 @@ export function Documents() {
         >
           {isPending ? (
             <div className="absolute top-1/2 translate-x-4 left-0 -translate-y-1/2">
-              <CircleNotch className="text-white animate-spin" weight="bold" />
+              <LoaderCircle className="text-white animate-spin" />
             </div>
           ) : (
             <Check
-              weight="bold"
               size={14}
               className="transition-all duration-300 text-xs font-semibold absolute top-1/2 opacity-0 group-hover:opacity-100 -translate-y-1/2 group-hover:translate-x-4 text-white left-0"
             />

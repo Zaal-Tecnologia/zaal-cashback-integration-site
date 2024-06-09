@@ -1,4 +1,4 @@
-import { Camera, X, XCircle } from '@phosphor-icons/react'
+import { Camera, X, XCircle } from 'lucide-react'
 import { ChangeEvent } from 'react'
 import { red } from 'tailwindcss/colors'
 
@@ -27,7 +27,7 @@ export function ImagePicker({ image, onSelect }: Props) {
                 className="hover:bg-zinc-100 dark:hover:bg-zinc-800 bg-white dark:bg-zinc-900 h-10 pl-1 pr-7 flex items-center justify-center rounded-full absolute bottom-0 group-hover:visible group-hover:opacity-100 group-hover:-translate-y-10 duration-300 invisible text-xs"
               >
                 <div className="h-8 w-8 flex items-center justify-center bg-red-200 dark:bg-red-800 rounded-full mr-2.5">
-                  <XCircle size={18} weight="bold" color={red[500]} />
+                  <XCircle size={18} color={red[500]} />
                 </div>
                 <p>Remover imagem</p>
               </button>
@@ -44,7 +44,7 @@ export function ImagePicker({ image, onSelect }: Props) {
                     className="bg-white h-10 pl-1 pr-10 flex items-center justify-center rounded-full absolute bottom-0 group-hover:visible group-hover:opacity-1 group-hover:-translate-y-10 duration-300 invisible text-xs"
                   >
                     <div className="h-8 w-8 flex items-center justify-center bg-zinc-200 rounded-full mr-2.5">
-                      <Camera size={14} weight="bold" />
+                      <Camera size={14} />
                     </div>
                     <p>Trocar imagem.</p>
                   </button>
@@ -63,7 +63,7 @@ export function ImagePicker({ image, onSelect }: Props) {
 
               <div className="bg-white dark:bg-zinc-900 h-10 pl-1 pr-10 flex items-center justify-center rounded-full absolute bottom-0 group-hover:visible group-hover:opacity-1 group-hover:-translate-y-10 duration-300 invisible text-xs">
                 <div className="h-8 w-8 flex items-center justify-center bg-zinc-200 dark:bg-zinc-800 rounded-full mr-2.5">
-                  <Camera size={14} weight="bold" />
+                  <Camera size={14} />
                 </div>
                 <p>Escolha uma imagem da sua galeria.</p>
               </div>

@@ -1,5 +1,5 @@
 import { Input } from '@/components/ui/input'
-import { ArrowLeft, Check, CircleNotch, Warning } from '@phosphor-icons/react'
+import { ArrowLeft, Check, LoaderCircle, CircleAlert } from 'lucide-react'
 import { useContext, useState } from 'react'
 import { FormContext } from '../contexts/form'
 import { useForm } from 'react-hook-form'
@@ -27,12 +27,12 @@ const FormSchema = z.object({
 export type FormInput = z.input<typeof FormSchema>
 
 const ZIP_CODE_COMPONENTS = {
-  LOADING: <CircleNotch className="animate-spin" />,
+  LOADING: <LoaderCircle className="animate-spin" />,
   SLEEP: null,
   ERROR: (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Warning weight="bold" className="text-red-500" />
+        <CircleAlert className="text-red-500" />
       </TooltipTrigger>
       <TooltipContent asChild>
         <p className="text-xs">Ocorreu um erro ao buscar o CEP.</p>
@@ -42,7 +42,7 @@ const ZIP_CODE_COMPONENTS = {
   SUCCESS: (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Check weight="bold" className="text-green-500" />
+        <Check className="text-green-500" />
       </TooltipTrigger>
       <TooltipContent asChild>
         <p className="text-xs">Seu CEP é válido.</p>
@@ -156,7 +156,7 @@ export function Address() {
 
       <footer className="flex items-center justify-between mt-5 col-span-2">
         <button type="button" onClick={() => setStep(2)}>
-          <ArrowLeft weight="bold" />
+          <ArrowLeft />
         </button>
 
         <button

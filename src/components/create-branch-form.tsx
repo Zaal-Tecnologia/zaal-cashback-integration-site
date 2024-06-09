@@ -5,14 +5,14 @@ import {
   ArrowUpRight,
   Check,
   CheckCircle,
-  CircleNotch,
+  LoaderCircle,
   Dot,
-  ImagesSquare as IconImage,
+  Image as IconImage,
   Trash,
-  Warning,
+  CircleAlert,
   X,
   XCircle,
-} from '@phosphor-icons/react'
+} from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import cep from 'cep-promise'
 
@@ -47,12 +47,12 @@ type FormInput = z.input<typeof FormSchema>
 type CreateBranchResponse = { id: string }
 
 const ZIP_CODE_COMPONENTS = {
-  LOADING: <CircleNotch className="animate-spin" />,
+  LOADING: <LoaderCircle className="animate-spin" />,
   SLEEP: null,
   ERROR: (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Warning weight="bold" className="text-red-500" />
+        <CircleAlert className="text-red-500" />
       </TooltipTrigger>
       <TooltipContent asChild>
         <p className="text-xs">Ocorreu um erro ao buscar o CEP.</p>
@@ -62,7 +62,7 @@ const ZIP_CODE_COMPONENTS = {
   SUCCESS: (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Check weight="bold" className="text-green-500" />
+        <Check className="text-green-500" />
       </TooltipTrigger>
       <TooltipContent asChild>
         <p className="text-xs">Seu CEP é válido.</p>
@@ -272,13 +272,16 @@ export function CreateBranchForm() {
             />
 
             {image ? (
-              <img src={image} alt="" className="h-[100px] w-[100px]" />
+              <img
+                loading="lazy"
+                src={image}
+                alt=""
+                className="h-[100px] w-[100px]"
+              />
             ) : (
               <IconImage
                 size={24}
-                weight="duotone"
                 className="group-hover:scale-110 transition-all duration-500"
-                alt=""
               />
             )}
           </div>
@@ -315,7 +318,7 @@ export function CreateBranchForm() {
               >
                 {errorsInTheImage.length === 0 ? (
                   <div className="flex items-center justify-center gap-x-1">
-                    <CheckCircle weight="bold" className="text-[#305a96]" />
+                    <CheckCircle className="text-[#305a96]" />
                     <span className="text-xs font-medium text-[#305a96]">
                       Requisitos atendidos
                     </span>
@@ -326,12 +329,12 @@ export function CreateBranchForm() {
                       onClick={onRemoveImage}
                       className="bg-red-500 h-8 w-24 flex items-center justify-center rounded-full transition-all duration-300 hover:bg-red-500/90"
                     >
-                      <Trash weight="bold" className="text-white" />
+                      <Trash className="text-white" />
                       <span className="text-xs text-white ml-1">Remover</span>
                     </button>
 
                     <div className="flex items-center justify-center gap-x-1">
-                      <XCircle weight="bold" className="text-red-500" />
+                      <XCircle className="text-red-500" />
                       <span className="text-xs font-medium text-red-500">
                         Ocorreu um erro
                       </span>
@@ -482,16 +485,9 @@ export function CreateBranchForm() {
                 </p>
 
                 {isPending ? (
-                  <CircleNotch
-                    weight="bold"
-                    size={20}
-                    className="text-white animate-spin"
-                  />
+                  <LoaderCircle size={20} className="text-white animate-spin" />
                 ) : (
-                  <ArrowUpRight
-                    weight="bold"
-                    className="text-white transition-all duration-300 group-hover:translate-x-8 group-hover:opacity-0"
-                  />
+                  <ArrowUpRight className="text-white transition-all duration-300 group-hover:translate-x-8 group-hover:opacity-0" />
                 )}
               </button>
             </footer>

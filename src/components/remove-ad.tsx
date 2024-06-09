@@ -1,6 +1,6 @@
 import { api } from '@/data/api'
 import { useMutation } from '@/hooks/use-mutation'
-import { CircleNotch } from '@phosphor-icons/react'
+import { LoaderCircle } from 'lucide-react'
 import { useToast } from './ui/use-toast'
 import { client } from '@/App'
 import { white } from 'tailwindcss/colors'
@@ -53,7 +53,7 @@ export function RemoveAd({ id }: Props) {
       <AlertDialogTrigger asChild>
         <button className="h-8 px-5 bg-red-500 rounded-full hover:ring-4 hover:ring-red-500/20">
           {isPending ? (
-            <CircleNotch size={20} weight="bold" color={white} />
+            <LoaderCircle size={20} color={white} />
           ) : (
             <p className="font-medium text-white text-xs">Remover</p>
           )}

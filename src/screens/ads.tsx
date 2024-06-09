@@ -1,4 +1,4 @@
-import { ArrowRight } from '@phosphor-icons/react'
+import { ArrowRight } from 'lucide-react'
 
 import { useBranch } from '@/hooks/use-branch'
 import {
@@ -72,8 +72,8 @@ export function Ads() {
       </header>
 
       <div className="flex items-start p-5 h-auto mt-12">
-        <BranchDetails className="top-20">
-          <button
+        <BranchDetails className="top-20" />
+        {/** <button
             className="flex items-center gap-2.5 group"
             // onClick={() => setMockup((prev) => !prev)}
           >
@@ -110,8 +110,7 @@ export function Ads() {
             <p className="text-[13px] font-medium text-zinc-900 hover:underline">
               Ver disposição no app
             </p>
-          </button>
-        </BranchDetails>
+          </button> */}
 
         <div className="pb-10 relative">
           <h1 className="font-urbanist text-3xl font-bold">{branch?.razao}</h1>
@@ -148,7 +147,7 @@ export function Ads() {
                         Ver informações
                       </p>
 
-                      <ArrowRight className="text-zinc-900" weight="bold" />
+                      <ArrowRight className="text-zinc-900" />
                     </div>
                   </li>
                 ))
@@ -340,7 +339,7 @@ export function Ads() {
                 </div>
               </div>
 
-              <img src={ad.src} alt="" className="mb-20" />
+              <img src={ad.src} loading="lazy" alt="" className="mb-20" />
             </ScrollArea>
           </SheetContent>
         ) : null}

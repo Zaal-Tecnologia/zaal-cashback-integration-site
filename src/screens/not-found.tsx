@@ -1,10 +1,15 @@
-import { Headphones } from '@phosphor-icons/react'
+import { Headset } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 export function NotFound() {
   return (
     <div className="w-screen h-screen max-w-[1120px] mx-auto flex items-center justify-center flex-col">
-      <img alt="" src="/logo-preto.png" className="w-[100px] h-[100px] mb-10" />
+      <img
+        alt=""
+        loading="lazy"
+        src="/logo-preto.png"
+        className="w-[100px] h-[100px] mb-10"
+      />
 
       <h1 className="font-urbanist text-[44px] font-semibold text-[#305a96]">
         Ops! 404.
@@ -25,7 +30,7 @@ export function NotFound() {
         </Link>
 
         <button className="flex items-center gap-x-2">
-          <Headphones weight="bold" />
+          <Headset />
           <span className="text-[13px] -tracking-wide text-zinc-700 font-medium">
             Entrar em contato com suporte
           </span>

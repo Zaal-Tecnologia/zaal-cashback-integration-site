@@ -6,7 +6,12 @@ export function Onboarding() {
   return (
     <div className="h-screen relative bg-[#fefefe] dark:bg-[#1c1c1c] mx-auto max-w-[1120px]">
       <header className="h-28 flex items-center fixed top-0 space-x-10">
-        <img src="/logo-preto.png" alt="" className="w-[50px] h-[50px] mr-10" />
+        <img
+          loading="lazy"
+          src="/logo-preto.png"
+          alt=""
+          className="w-[50px] h-[50px] mr-10"
+        />
 
         <span className="text-sm hover:text-zinc-900 dark:hover:text-zinc-50">
           <a target="_blank" href="https://zaal.com.br/" rel="noreferrer">

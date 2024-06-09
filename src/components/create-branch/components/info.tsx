@@ -1,4 +1,4 @@
-import { ArrowLeft } from '@phosphor-icons/react'
+import { ArrowLeft } from 'lucide-react'
 
 import { Input } from '@/components/ui/input'
 import { z } from 'zod'
@@ -80,7 +80,7 @@ export function Info() {
 
       <footer className="flex items-center col-span-2 justify-between mt-5">
         <button type="button" onClick={() => setStep(1)}>
-          <ArrowLeft weight="bold" />
+          <ArrowLeft />
         </button>
 
         <button
