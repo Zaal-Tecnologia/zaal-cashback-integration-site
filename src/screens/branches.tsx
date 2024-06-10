@@ -1,6 +1,7 @@
 import { BranchDTO } from '@/@types/dto/branch-dto'
 import { BranchDetails } from '@/components/branch-details'
 import { BranchImage } from '@/components/branch-image'
+import { BranchStatus } from '@/components/branch-status'
 import { CreateBranch } from '@/components/create-branch'
 import { SearchBranch } from '@/components/search-branch'
 import { api } from '@/data/api'
@@ -27,8 +28,6 @@ export function Branches() {
     },
     getNextPageParam: (lastPage) => lastPage.number + 1,
   })
-
-  console.log(data)
 
   return (
     <>
@@ -75,7 +74,7 @@ export function Branches() {
                     }}
                     className="cursor-pointer"
                   >
-                    <div className="bg-gradient-to-br border border-zinc-100/50 dark:from-zinc-800 dark:to-zinc-800/50 dark:border-zinc-800 from-zinc-100 to-zinc-200/50 h-32 w-60 mb-2.5 rounded-lg"></div>
+                    <BranchStatus id={item.id} />
 
                     <div className="flex items-center gap-1.5">
                       <BranchImage id={item.id} razao={item.razao} />

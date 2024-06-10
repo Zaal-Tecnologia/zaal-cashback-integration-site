@@ -223,7 +223,7 @@ export function BranchDetails({ className }: { className?: string }) {
 
               <CreateAnnouncement>
                 <DialogTrigger asChild>
-                  <button className="h-12 group flex items-center justify-start px-5 gap-2.5 w-52 bg-gradient-to-r from-[#305a96] to-sky-800 rounded-full hover:ring-4 hover:ring-[#305a96]/20">
+                  <button className="h-12 group flex items-center justify-start px-2.5 gap-2.5 w-52 bg-gradient-to-r from-[#305a96] to-sky-800 rounded-md ring-4 ring-[#305a96]/20">
                     <div className="h-12 w-6 flex items-center justify-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
