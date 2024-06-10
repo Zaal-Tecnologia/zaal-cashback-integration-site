@@ -43,7 +43,7 @@ export function BranchStatus(props: Props) {
           data-active={item === 'anunciosAtivos'}
           className="shadow-inner flex items-center justify-center border-zinc-400/50 dark:border-zinc-700 first:rounded-tl [&:nth-last-child(3n)]:rounded-tr [&:nth-child(4n)]:rounded-bl data-[inactive=true]:bg-zinc-400/20 data-[active=true]:bg-green-500/20 flex-1"
         >
-          <span className="text-sm font-urbanist font-bold text-zinc-700">
+          <span className="text-sm font-urbanist font-bold text-zinc-700 dark:text-white">
             {idx + 1}
           </span>
         </div>
